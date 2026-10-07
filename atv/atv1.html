@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texto de Apoio — Poder, direitos e participação: quem decide? | CERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#fdeef4;
+    --bg-alt:#f8d9e6;
+    --paper:#fffafc;
+    --ink:#2b1a22;
+    --ink-soft:#6b4a58;
+    --roxo:#c2185b;
+    --roxo-dark:#6d0f38;
+    --roxo-2:#d81b60;
+    --cobre:#8e244f;
+    --cobre-light:#f8bbd0;
+    --line:#f0d0de;
+    --shadow:0 10px 30px rgba(194,24,91,.18);
+    --radius:14px;
+    --font-title:'Playfair Display', serif;
+    --font-body:'Source Serif 4', serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    -webkit-user-select:none; -ms-user-select:none;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.7;
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  
+  .campo-resposta{user-select:text; -webkit-user-select:text;}
+
+  /* ===== CAPA / GATE ===== */
+  #capa{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(to bottom, #4a0a28, #c2185b, #e0709f);
+    padding:24px;
+  }
+  #capa .grade-centralizada{
+    position:absolute;
+    top:0; bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:896px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.08;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px);
+    background-size:40px 40px;
+  }
+  .capa-card{
+    position:relative;
+    z-index:1;
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    max-width:480px;
+    width:100%;
+    padding:36px 32px;
+    text-align:center;
+  }
+  .capa-card .tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.7rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(194,24,91,.1); padding:5px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .capa-card h1{font-family:var(--font-title); font-size:1.6rem; margin:0 0 10px; color:var(--roxo-dark);}
+  .capa-card p.desc{color:var(--ink-soft); font-size:.94rem; margin:0 0 22px;}
+  .capa-card input{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:1rem; margin-bottom:14px;
+  }
+  .capa-card button{
+    width:100%; padding:13px; border:none; border-radius:8px;
+    background:var(--roxo); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+    font-family:var(--font-body); transition:filter .15s ease;
+  }
+  .capa-card button:hover{filter:brightness(1.15);}
+  .capa-aviso{font-size:.78rem; color:#a33; margin-top:8px; display:none;}
+
+  /* ===== APP ===== */
+  #app{display:none;}
+  .sticky-header{
+    position:sticky; top:0; z-index:50;
+    background:var(--roxo-dark); color:#fde4ee;
+    padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    font-family:var(--font-mono); font-size:.82rem;
+  }
+  .sticky-header .aluno{font-family:var(--font-body); font-weight:600; font-size:.92rem;}
+  .barra-progresso-trilho{
+    flex:1; min-width:120px; height:8px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; margin:0 14px;
+  }
+  .barra-progresso-fill{height:100%; background:#f8bbd0; width:0%; transition:width .3s ease;}
+
+  .wrap{max-width:800px; margin:0 auto; padding:32px 24px 60px;}
+
+  header.topo{margin-bottom:28px;}
+  header.topo .hero-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(194,24,91,.1); padding:5px 12px; border-radius:999px; margin-bottom:12px;
+  }
+  header.topo h1{font-family:var(--font-title); font-size:clamp(1.5rem,4vw,2rem); margin:0 0 8px; color:var(--ink);}
+  header.topo p.sub{color:var(--ink-soft); margin:0; font-size:.98rem;}
+  .descritor-bar{
+    font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; margin-bottom:14px; display:inline-block;
+  }
+  .ficha-id{
+    display:flex; flex-wrap:wrap; gap:10px 26px;
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-top:12px; font-family:var(--font-mono); font-size:.84rem; color:var(--ink);
+  }
+  .ficha-id span b{color:var(--roxo-dark);}
+
+  /* ===== TEXTO DE APOIO ===== */
+  .texto-apoio{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:28px 30px; margin-bottom:30px;
+  }
+  .texto-apoio h2{font-family:var(--font-title); font-size:1.25rem; color:var(--roxo-dark); margin:0 0 4px;}
+  .texto-apoio h3{font-family:var(--font-title); font-size:1.05rem; color:var(--roxo-2); margin:22px 0 8px;}
+  .texto-apoio .fonte-tag{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-bottom:16px; display:block;}
+  .texto-apoio p{margin:0 0 14px; color:var(--ink);}
+  .texto-apoio p:last-of-type{margin-bottom:0;}
+  .texto-apoio .destaque{
+    background:var(--bg-alt); border-left:4px solid var(--cobre); border-radius:0 8px 8px 0;
+    padding:12px 16px; margin:0 0 14px; font-size:.95rem;
+  }
+  .texto-apoio .mito{
+    background:#fff5f9; border:1px solid var(--line); border-top:4px solid var(--roxo-2);
+    border-radius:10px; padding:16px 18px; margin:0 0 14px;
+  }
+  .texto-apoio .mito .rot{
+    font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--cobre); display:block; margin-bottom:6px;
+  }
+  .texto-apoio .mito p{font-size:.93rem;}
+
+  .tabela-lentes{width:100%; border-collapse:collapse; margin:6px 0 14px; font-size:.9rem;}
+  .tabela-lentes caption{
+    caption-side:top; text-align:left; font-family:var(--font-mono); font-size:.68rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--cobre); padding-bottom:6px;
+  }
+  .tabela-lentes th, .tabela-lentes td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top;}
+  .tabela-lentes th{background:var(--roxo); color:#fff; font-family:var(--font-title); font-weight:600; font-size:.9rem;}
+  .tabela-lentes tbody tr:nth-child(even){background:var(--bg-alt);}
+  .tabela-lentes td:first-child{font-weight:700; color:var(--roxo-dark); white-space:nowrap;}
+  .tabela-wrap{overflow-x:auto;}
+
+  .referencia-box{
+    margin-top:20px; padding:14px 16px;
+    background:var(--bg-alt); border-left:3px solid var(--cobre); border-radius:0 8px 8px 0;
+  }
+  .referencia-box .rot{
+    font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--roxo-dark); display:block; margin-bottom:6px;
+  }
+  .referencia-box p{margin:0 0 6px; font-size:.86rem; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.6;}
+  .referencia-box p:last-child{margin-bottom:0;}
+
+  /* ===== QUESTOES ===== */
+  .questoes-titulo{
+    font-family:var(--font-title); font-size:1.2rem; color:var(--roxo-dark);
+    margin:0 0 18px; display:flex; align-items:center; gap:10px;
+  }
+  .questao{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; margin-bottom:18px;
+  }
+  .questao .num-q{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--roxo);
+    color:#fff; font-family:var(--font-mono); font-size:.78rem; margin-right:8px; flex-shrink:0;
+  }
+  .questao .enunciado{font-weight:600; color:var(--ink); margin-bottom:12px; display:flex; align-items:flex-start;}
+  .questao textarea{
+    width:100%; min-height:100px; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--ink);
+  }
+  .questao textarea:focus{outline:2px solid var(--roxo-2); outline-offset:1px;}
+  .contador-chars{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-top:6px; text-align:right;}
+
+  .comentario-prof{
+    display:none; margin-top:14px; padding:14px 16px;
+    background:#fde4ee; border:1px solid #f2bcd2; border-radius:8px; font-size:.9rem; color:var(--roxo-dark);
+  }
+  .comentario-prof.show{display:block;}
+  .comentario-prof b{display:block; margin-bottom:4px; font-family:var(--font-title); font-size:.92rem;}
+
+  /* ===== ALERTA / FINALIZAR ===== */
+  .alerta-incompleto{
+    display:none; background:#fdf1e6; border:1px solid #f0d2b3; color:#8a4a10;
+    padding:12px 16px; border-radius:8px; font-size:.9rem; margin-bottom:16px;
+  }
+  .alerta-incompleto.show{display:block;}
+
+  .acoes-finais{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;}
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:.94rem; padding:12px 22px;
+    border-radius:8px; border:none; cursor:pointer; transition:filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.1);}
+  .btn-primario{background:var(--roxo); color:#fff;}
+  .btn-secundario{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-pdf{background:var(--cobre); color:#fff;}
+  .btn[disabled]{opacity:.5; cursor:not-allowed;}
+
+  /* ===== POPUP ===== */
+  .popup-overlay{
+    display:none; position:fixed; inset:0; background:rgba(74,10,40,.6);
+    align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .popup-overlay.show{display:flex;}
+  .popup-card{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    max-width:420px; width:100%; padding:32px 28px; text-align:center;
+  }
+  .popup-card .emoji{display:none;}
+  .popup-card h3{font-family:var(--font-title); margin:0 0 8px; color:var(--roxo-dark);}
+  .popup-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 20px;}
+
+  footer.rodape{text-align:center; padding:24px; color:var(--ink-soft); font-family:var(--font-mono); font-size:.8rem;}
+
+  @media (max-width:600px){
+    .wrap{padding:24px 16px 50px;}
+    .texto-apoio, .questao{padding:18px 18px;}
+  }
+
+  *{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+  textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:none}
+  .rosa-chip{display:inline-block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--roxo);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .btn-pdf{background:#8e244f}
+  .btn-pdf:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+  .questao .pessoal{display:inline-block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#8e244f;background:var(--cobre-light);border-radius:999px;padding:3px 10px;margin:0 0 10px 34px}
+  .texto-apoio .mito{border-top-color:var(--roxo-2)}
+</style>
+</head>
+<body>
+<div id="capa">
+  <div class="grade-centralizada"></div>
+  <div class="capa-card">
+    <span class="tag">2ª série · História · Outubro Rosa · CERO</span>
+    <h1>Poder, direitos e participação: quem decide?</h1>
+    <p class="desc">Texto de apoio e cinco questões dissertativas sobre poder, direitos e participação, com perguntas que ligam o conteúdo à sua vida. Preencha os dados para começar.</p>
+    <input type="text" id="nome-aluno" placeholder="Seu nome completo">
+    <input type="text" id="turma-aluno" placeholder="Turma (ex.: 2º A)">
+    <button onclick="iniciarAtividade()">Iniciar atividade</button>
+    <div class="capa-aviso" id="capa-aviso">Por favor, digite seu nome para continuar.</div>
+  </div>
+</div>
+<div id="app">
+  <div class="sticky-header">
+    <span class="aluno" id="header-nome"></span>
+    <div class="barra-progresso-trilho"><div class="barra-progresso-fill" id="barra-fill"></div></div>
+    <span id="contador-geral">Respondidas: 0/5</span>
+  </div>
+  <div class="wrap">
+    <header class="topo selecionavel">
+      <span class="descritor-bar">Ciências Humanas e Sociais Aplicadas / História · 2ª série do Ensino Médio &nbsp;|&nbsp; (GO-EMCHS602A) – Primeira República</span>
+      <span class="rosa-chip" style="display:block;width:max-content;margin-top:10px;">Outubro Rosa · Texto de Apoio</span>
+      <h1>Poder, direitos e participação: quem decide?</h1>
+      <p class="sub">Leia o texto com atenção e responda às cinco questões que vêm depois dele. Algumas pedem que você relacione o conteúdo com a sua própria experiência.</p>
+      <div class="ficha-id" id="ficha-id">
+        <span><b>NOME:</b> <span id="ficha-nome"></span></span>
+        <span><b>DATA:</b> <span id="ficha-data"></span></span>
+        <span><b>TURMA:</b> <span id="ficha-turma"></span></span>
+      </div>
+    </header>
+    <main>
+      <section class="texto-apoio selecionavel"><h2>Poder, direitos e participação</h2><span class="fonte-tag">Texto de apoio para a 2ª série do Ensino Médio · Parte 1 de 3</span><h3>O que é poder</h3><p>Poder é a capacidade de fazer com que decisões sejam obedecidas. Segundo o sociólogo Max Weber, o Estado se distingue por reivindicar o monopólio do uso legítimo da força dentro de um território. Os contratualistas Hobbes, Locke e Rousseau explicaram a origem desse poder por um pacto: as pessoas abrem mão de usar a força por conta própria e a entregam a uma autoridade, em troca de proteção para a vida, os bens e a liberdade. Eles divergiam quanto aos limites: Hobbes defendia um poder centralizado; Locke admitia que o povo rompesse o pacto se o governo abusasse; Rousseau pedia que o Estado servisse ao bem comum, e não só às classes dominantes. Já Hannah Arendt lembra que a política trata da convivência entre pessoas diferentes, o que exige argumentar e negociar. Na Primeira República, o poder estava concentrado em oligarquias e coronéis.</p></section>
+      <h2 class="questoes-titulo">Questões sobre o texto 1</h2>
+<div class="questao" data-questao="1"><div class="enunciado"><span class="num-q">1</span> Hobbes, Locke e Rousseau concordam que o poder nasce de um pacto, mas divergem sobre seus limites. Escolha um dos três e explique que atitude essa visão permitiria a uma pessoa que considera abusiva uma decisão do governo. Depois, diga com qual dos três você mais concorda ao pensar na sua cidade hoje e justifique com um exemplo do seu cotidiano.</div><textarea id="resp-1" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div><div class="comentario-prof"><b>Comentário do professor</b>Hobbes: poder centralizado para evitar a violência; a pessoa teria pouco espaço para contestar e deveria obedecer. Locke: o poder tem limites e, se o governo abusar, o povo pode romper o pacto (por exemplo, por rebeliões). Rousseau: o Estado deve servir ao bem comum; a pessoa poderia exigir que a decisão beneficie a todos, e não apenas a um grupo. A segunda parte é de aplicação pessoal: valorizar respostas que liguem o autor escolhido a uma situação concreta (transporte, escola, saneamento, segurança) e que justifiquem a escolha, sem exigir uma posição única.</div></div>
+<div class="questao" data-questao="2"><div class="enunciado"><span class="num-q">2</span> Segundo o pacto descrito no texto, as pessoas entregam o poder a uma autoridade em troca de proteção para todos. Explique por que a concentração do poder em oligarquias e coronéis, na Primeira República, contraria essa ideia e como Rousseau avaliaria essa situação.</div><textarea id="resp-2" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div><div class="comentario-prof"><b>Comentário do professor</b>No pacto, o poder é entregue a uma autoridade para proteger a vida, os bens e a liberdade de todos. Na Primeira República, o poder ficava com poucas famílias e chefes locais, que o usavam em benefício próprio e de seus aliados, e grande parte da população dependia deles. Para Rousseau, o Estado deveria atender à sociedade em geral, no sentido do bem comum, e não beneficiar somente as classes dominantes; logo, ele consideraria a situação uma deformação do pacto. Respostas mais elaboradas podem usar Locke (poder com limites) ou Arendt (a política exige argumentar e negociar entre diferentes, o que o voto aberto e a fraude impediam).</div></div>
+      <section class="texto-apoio selecionavel"><span class="fonte-tag">Parte 2 de 3</span><h3>O que são direitos</h3><p>Direitos são garantias que uma pessoa tem por ser membro de uma sociedade, e não por favor de quem governa. Para José Murilo de Carvalho, costuma-se dividi-los em civis (liberdade e igualdade perante a lei), políticos (votar e ser votado) e sociais (educação, saúde, trabalho); o cidadão pleno tem os três. Na Declaração dos Direitos da Mulher e da Cidadã (1791), Olympe de Gouges chamou-os de “direitos naturais, inalienáveis e sagrados”, para cobrar que as mulheres também fossem incluídas. Quando os direitos chegam como concessão de quem está no poder, e não como conquista, Carvalho fala em estadania.</p></section>
+      <h2 class="questoes-titulo">Questões sobre o texto 2</h2>
+<div class="questao" data-questao="3"><div class="enunciado"><span class="num-q">3</span> Use o conceito de estadania para explicar a diferença entre um direito e um favor. Depois, relate uma situação do seu cotidiano (na escola, no bairro ou em um serviço público) em que você ou alguém que você conhece recebeu como favor algo que deveria ser direito, ou conquistou um direito, e classifique-o como civil, político ou social.</div><textarea id="resp-3" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div><div class="comentario-prof"><b>Comentário do professor</b>Direito é uma garantia que a pessoa tem por ser membro da sociedade; favor é uma concessão que depende da vontade de quem está no poder e pode ser retirada. Estadania é a situação em que os direitos chegam como concessão, e não como conquista. A segunda parte é pessoal e aceita muitos exemplos: conseguir uma vaga ou uma consulta por indicação (social, tratado como favor), ser tratado de modo desigual pela polícia ou pela lei (civil), ter ou não acesso a informações para votar (político). Valorizar a classificação correta e a explicação de por que a situação é favor ou direito.</div></div>
+      <section class="texto-apoio selecionavel"><span class="fonte-tag">Parte 3 de 3</span><h3>O que é participação</h3><p>Participar é tomar parte nas decisões que afetam a vida coletiva. Existem duas ideias principais sobre como participar: a institucionalista, que defende instituições representativas conduzidas por uma elite preparada, e a participativista, que defende ampliar os canais de decisão da sociedade civil. Hoje se entende que a participação vai além do voto e dos partidos e inclui associações, coletivos e movimentos sociais, como as sufragistas, que conquistaram o voto feminino depois de muita mobilização. Na Primeira República, o voto era restrito e fraudado, e por isso parte da participação popular se deu por outros caminhos: greves, revoltas, imprensa e associações.</p></section>
+      <h2 class="questoes-titulo">Questões sobre o texto 3</h2>
+<div class="questao" data-questao="4"><div class="enunciado"><span class="num-q">4</span> Em 1791, Olympe de Gouges chamou os direitos de “naturais, inalienáveis e sagrados” e cobrou a inclusão das mulheres. Se esses direitos eram declarados para todos, por que foi preciso cobrar a inclusão de algumas pessoas? Relacione sua resposta com a Primeira República, em que o voto era restrito, e com a luta das sufragistas.</div><textarea id="resp-4" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div><div class="comentario-prof"><b>Comentário do professor</b>Declarar direitos como universais não garante que todos os exerçam: a lei ou a prática pode deixar grupos de fora, e foi isso que Gouges denunciou. Na Primeira República ocorreu algo parecido: o fim do voto censitário ampliou o direito apenas na aparência, pois mulheres, analfabetos e menores continuavam excluídos, e a fraude esvaziava o voto de quem podia votar. A distância entre o direito escrito e o direito vivido só diminui com mobilização, como a das sufragistas, que conquistaram o voto feminino depois de muita luta (no Brasil, em 1932). Valorizar respostas que distingam igualdade formal e igualdade efetiva.</div></div>
+<div class="questao" data-questao="5"><div class="enunciado"><span class="num-q">5</span> Compare as ideias institucionalista e participativista sobre a participação. Em seguida, considerando que na Primeira República o voto era restrito e fraudado, avalie qual das duas ideias ajuda mais a explicar por que greves, revoltas e imprensa viraram caminhos de participação. Por fim, proponha uma forma de participação, além do voto, que você poderia exercer hoje na sua escola ou comunidade e diga qual decisão tentaria influenciar.</div><textarea id="resp-5" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Institucionalista: instituições representativas conduzidas por uma elite preparada. Participativista: mais canais de decisão para a sociedade civil. Como os canais formais estavam fechados ou viciados, a ideia participativista ajuda mais a entender greves, revoltas e imprensa como tentativas de participar fora das urnas; a institucionalista mostra o que faltava: instituições representativas que funcionassem. A proposta pessoal deve indicar um canal real (grêmio estudantil, conselho escolar, abaixo-assinado, associação de bairro, coletivo, redes sociais com argumentos), a decisão que se quer influenciar e como a ação poderia ter efeito. Aceitar propostas diversas e valorizar as viáveis.</div></div>
+
+      <section class="texto-apoio selecionavel">
+        <div class="referencia-box" style="margin-top:0"><span class="rot">Fontes</span><p>AZEVEDO, Gislane; SERIACOPI, Reinaldo. Por toda parte: História. São Paulo: FTD, 2024. (sobre Hannah Arendt)</p><p>SM EDUCAÇÃO (org.). Ser protagonista: Ciências Humanas e Sociais Aplicadas — História. São Paulo: Edições SM, 2024. (sobre Weber, os contratualistas, a Declaração de Gouges e a participação política)</p><p>CARVALHO, José Murilo de. Cidadania no Brasil: o longo caminho. Rio de Janeiro: Civilização Brasileira, citado em CAMPOS, C.; FERREIRA, L. P.; SILVA, R. (coord.). História: democracia e protagonismo (Interação). São Paulo: Editora do Brasil, 2024, e em SM EDUCAÇÃO, Ser protagonista.</p><p>Ideias resumidas com palavras próprias.</p></div>
+      </section>
+      <div class="alerta-incompleto" id="alerta-incompleto">Ainda há questões incompletas. Revise o tamanho mínimo de cada resposta antes de finalizar.</div>
+      <div class="acoes-finais">
+        <button class="btn btn-primario" onclick="finalizarAtividade()">Finalizar e ver comentários</button>
+        <button class="btn btn-secundario" onclick="refazerAtividade()">Refazer</button>
+        <button class="btn btn-pdf" id="btn-pdf" onclick="exportarPDF()" disabled aria-disabled="true">Exportar em PDF</button>
+        <span id="dica-pdf" style="flex-basis:100%;font-size:.84rem;color:#6b4a58;">O botão de PDF é liberado quando todas as questões estiverem respondidas (tamanho mínimo de cada resposta).</span>
+      </div>
+    </main>
+  </div>
+  <footer class="rodape">Colégio Estadual Rodolfo de Oliveira · CERO · 2026</footer>
+</div>
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card">
+    <h3>Atividade concluída!</h3>
+    <p>Suas cinco respostas foram registradas. Os comentários do professor já estão disponíveis abaixo de cada questão para você comparar com o que escreveu.</p>
+    <button class="btn btn-primario" onclick="fecharPopup()">Continuar</button>
+  </div>
+</div>
+<script>
+/* ===== GATE DE NOME ===== */
+function iniciarAtividade(){
+  const nome = document.getElementById('nome-aluno').value.trim();
+  const turma = document.getElementById('turma-aluno').value.trim();
+  const aviso = document.getElementById('capa-aviso');
+  if(!nome){
+    aviso.style.display = 'block';
+    return;
+  }
+  aviso.style.display = 'none';
+  const hoje = new Date();
+  const dataFormatada = String(hoje.getDate()).padStart(2,'0') + '/' + String(hoje.getMonth()+1).padStart(2,'0') + '/' + hoje.getFullYear();
+  document.getElementById('header-nome').textContent = nome;
+  document.getElementById('ficha-nome').textContent = nome;
+  document.getElementById('ficha-data').textContent = dataFormatada;
+  document.getElementById('ficha-turma').textContent = turma || '—';
+  document.getElementById('capa').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+/* ===== CONTADOR DE CARACTERES E PROGRESSO ===== */
+const textareas = document.querySelectorAll('textarea.dissertativa');
+
+function atualizarProgresso(){
+  let respondidas = 0;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length >= min) respondidas++;
+  });
+  document.getElementById('contador-geral').textContent = 'Respondidas: ' + respondidas + '/' + textareas.length;
+  document.getElementById('barra-fill').style.width = (respondidas / textareas.length * 100) + '%';
+}
+
+textareas.forEach(function(t){
+  const contadorEl = t.parentElement.querySelector('.contador-chars');
+  const min = parseInt(t.dataset.min, 10);
+  t.addEventListener('input', function(){
+    contadorEl.textContent = t.value.length + ' caracteres (mínimo ' + min + ')';
+    atualizarProgresso();
+  });
+});
+
+/* ===== FINALIZAR ===== */
+function finalizarAtividade(){
+  let completo = true;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length < min) completo = false;
+  });
+
+  const alerta = document.getElementById('alerta-incompleto');
+  if(!completo){
+    alerta.classList.add('show');
+    alerta.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  alerta.classList.remove('show');
+
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.add('show');
+  });
+
+  document.getElementById('popup-overlay').classList.add('show');
+}
+
+function fecharPopup(){
+  document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function refazerAtividade(){
+  textareas.forEach(function(t){
+    t.value = '';
+    t.parentElement.querySelector('.contador-chars').textContent = '0 caracteres (mínimo ' + t.dataset.min + ')';
+  });
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.remove('show');
+  });
+  document.getElementById('alerta-incompleto').classList.remove('show');
+  atualizarProgresso();
+  window.scrollTo(0,0);
+}
+
+
+/* ===== EXPORTAR PDF ===== */
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function esc(str){ const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML.replace(/\n/g,'<br>'); }
+const QUESTOES = [{"num": "1", "enunc": "Hobbes, Locke e Rousseau concordam que o poder nasce de um pacto, mas divergem sobre seus limites. Escolha um dos três e explique que atitude essa visão permitiria a uma pessoa que considera abusiva uma decisão do governo. Depois, diga com qual dos três você mais concorda ao pensar na sua cidade hoje e justifique com um exemplo do seu cotidiano.", "id": "resp-1", "coment": "Hobbes: poder centralizado para evitar a violência; a pessoa teria pouco espaço para contestar e deveria obedecer. Locke: o poder tem limites e, se o governo abusar, o povo pode romper o pacto (por exemplo, por rebeliões). Rousseau: o Estado deve servir ao bem comum; a pessoa poderia exigir que a decisão beneficie a todos, e não apenas a um grupo. A segunda parte é de aplicação pessoal: valorizar respostas que liguem o autor escolhido a uma situação concreta (transporte, escola, saneamento, segurança) e que justifiquem a escolha, sem exigir uma posição única."}, {"num": "2", "enunc": "Segundo o pacto descrito no texto, as pessoas entregam o poder a uma autoridade em troca de proteção para todos. Explique por que a concentração do poder em oligarquias e coronéis, na Primeira República, contraria essa ideia e como Rousseau avaliaria essa situação.", "id": "resp-2", "coment": "No pacto, o poder é entregue a uma autoridade para proteger a vida, os bens e a liberdade de todos. Na Primeira República, o poder ficava com poucas famílias e chefes locais, que o usavam em benefício próprio e de seus aliados, e grande parte da população dependia deles. Para Rousseau, o Estado deveria atender à sociedade em geral, no sentido do bem comum, e não beneficiar somente as classes dominantes; logo, ele consideraria a situação uma deformação do pacto. Respostas mais elaboradas podem usar Locke (poder com limites) ou Arendt (a política exige argumentar e negociar entre diferentes, o que o voto aberto e a fraude impediam)."}, {"num": "3", "enunc": "Use o conceito de estadania para explicar a diferença entre um direito e um favor. Depois, relate uma situação do seu cotidiano (na escola, no bairro ou em um serviço público) em que você ou alguém que você conhece recebeu como favor algo que deveria ser direito, ou conquistou um direito, e classifique-o como civil, político ou social.", "id": "resp-3", "coment": "Direito é uma garantia que a pessoa tem por ser membro da sociedade; favor é uma concessão que depende da vontade de quem está no poder e pode ser retirada. Estadania é a situação em que os direitos chegam como concessão, e não como conquista. A segunda parte é pessoal e aceita muitos exemplos: conseguir uma vaga ou uma consulta por indicação (social, tratado como favor), ser tratado de modo desigual pela polícia ou pela lei (civil), ter ou não acesso a informações para votar (político). Valorizar a classificação correta e a explicação de por que a situação é favor ou direito."}, {"num": "4", "enunc": "Em 1791, Olympe de Gouges chamou os direitos de “naturais, inalienáveis e sagrados” e cobrou a inclusão das mulheres. Se esses direitos eram declarados para todos, por que foi preciso cobrar a inclusão de algumas pessoas? Relacione sua resposta com a Primeira República, em que o voto era restrito, e com a luta das sufragistas.", "id": "resp-4", "coment": "Declarar direitos como universais não garante que todos os exerçam: a lei ou a prática pode deixar grupos de fora, e foi isso que Gouges denunciou. Na Primeira República ocorreu algo parecido: o fim do voto censitário ampliou o direito apenas na aparência, pois mulheres, analfabetos e menores continuavam excluídos, e a fraude esvaziava o voto de quem podia votar. A distância entre o direito escrito e o direito vivido só diminui com mobilização, como a das sufragistas, que conquistaram o voto feminino depois de muita luta (no Brasil, em 1932). Valorizar respostas que distingam igualdade formal e igualdade efetiva."}, {"num": "5", "enunc": "Compare as ideias institucionalista e participativista sobre a participação. Em seguida, considerando que na Primeira República o voto era restrito e fraudado, avalie qual das duas ideias ajuda mais a explicar por que greves, revoltas e imprensa viraram caminhos de participação. Por fim, proponha uma forma de participação, além do voto, que você poderia exercer hoje na sua escola ou comunidade e diga qual decisão tentaria influenciar.", "id": "resp-5", "coment": "Institucionalista: instituições representativas conduzidas por uma elite preparada. Participativista: mais canais de decisão para a sociedade civil. Como os canais formais estavam fechados ou viciados, a ideia participativista ajuda mais a entender greves, revoltas e imprensa como tentativas de participar fora das urnas; a institucionalista mostra o que faltava: instituições representativas que funcionassem. A proposta pessoal deve indicar um canal real (grêmio estudantil, conselho escolar, abaixo-assinado, associação de bairro, coletivo, redes sociais com argumentos), a decisão que se quer influenciar e como a ação poderia ter efeito. Aceitar propostas diversas e valorizar as viáveis."}];
+const APOIO = [["O que é poder", "Poder é a capacidade de fazer com que decisões sejam obedecidas. Segundo o sociólogo Max Weber, o Estado se distingue por reivindicar o monopólio do uso legítimo da força dentro de um território. Os contratualistas Hobbes, Locke e Rousseau explicaram a origem desse poder por um pacto: as pessoas abrem mão de usar a força por conta própria e a entregam a uma autoridade, em troca de proteção para a vida, os bens e a liberdade. Eles divergiam quanto aos limites: Hobbes defendia um poder centralizado; Locke admitia que o povo rompesse o pacto se o governo abusasse; Rousseau pedia que o Estado servisse ao bem comum, e não só às classes dominantes. Já Hannah Arendt lembra que a política trata da convivência entre pessoas diferentes, o que exige argumentar e negociar. Na Primeira República, o poder estava concentrado em oligarquias e coronéis."], ["O que são direitos", "Direitos são garantias que uma pessoa tem por ser membro de uma sociedade, e não por favor de quem governa. Para José Murilo de Carvalho, costuma-se dividi-los em civis (liberdade e igualdade perante a lei), políticos (votar e ser votado) e sociais (educação, saúde, trabalho); o cidadão pleno tem os três. Na Declaração dos Direitos da Mulher e da Cidadã (1791), Olympe de Gouges chamou-os de “direitos naturais, inalienáveis e sagrados”, para cobrar que as mulheres também fossem incluídas. Quando os direitos chegam como concessão de quem está no poder, e não como conquista, Carvalho fala em estadania."], ["O que é participação", "Participar é tomar parte nas decisões que afetam a vida coletiva. Existem duas ideias principais sobre como participar: a institucionalista, que defende instituições representativas conduzidas por uma elite preparada, e a participativista, que defende ampliar os canais de decisão da sociedade civil. Hoje se entende que a participação vai além do voto e dos partidos e inclui associações, coletivos e movimentos sociais, como as sufragistas, que conquistaram o voto feminino depois de muita mobilização. Na Primeira República, o voto era restrito e fraudado, e por isso parte da participação popular se deu por outros caminhos: greves, revoltas, imprensa e associações."]];
+const GRUPOS = [[0,1],[2],[3,4]];
+function todasRespondidas(){
+  const tas=document.querySelectorAll('textarea.dissertativa');
+  if(!tas.length) return false;
+  return Array.prototype.every.call(tas,function(t){ return t.value.trim().length >= (parseInt(t.dataset.min,10)||1); });
+}
+function atualizarBotaoPDF(){
+  const b=document.getElementById('btn-pdf'); if(!b) return;
+  const ok=todasRespondidas();
+  b.disabled=!ok; b.setAttribute('aria-disabled',String(!ok));
+  b.title=ok?'':'Responda todas as questões para liberar a exportação.';
+  const d=document.getElementById('dica-pdf'); if(d) d.style.display=ok?'none':'block';
+}
+document.addEventListener('input',function(e){ if(e.target&&e.target.matches&&e.target.matches('textarea.dissertativa')) atualizarBotaoPDF(); });
+document.addEventListener('DOMContentLoaded',atualizarBotaoPDF);
+setTimeout(atualizarBotaoPDF,0);
+async function exportarPDF(){
+  if(!todasRespondidas()){ atualizarBotaoPDF(); const a=document.getElementById('alerta-incompleto'); if(a){a.classList.add('show');a.scrollIntoView({behavior:'smooth',block:'center'});} return; }
+  const overlay=document.createElement('div'); overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(74,10,40,.6);display:flex;align-items:center;justify-content:center;z-index:999;';
+  overlay.innerHTML='<div style="background:#fff;border-radius:14px;padding:32px 36px;text-align:center;max-width:300px;box-shadow:0 10px 30px rgba(194,24,91,.3);font-family:\'Source Serif 4\',serif;"><h4 style="margin:0 0 4px;color:#6d0f38;font-family:\'Playfair Display\',serif;">Gerando PDF…</h4><p style="margin:0 0 14px;color:#6b4a58;font-size:.86rem;">Aguarde alguns instantes.</p><div style="background:#f8d9e6;border-radius:6px;overflow:hidden;height:8px;"><div id="pdf-prog" style="height:100%;width:0%;background:#c2185b;transition:width .2s ease;"></div></div><div id="pdf-prog-txt" style="margin-top:8px;font-family:\'JetBrains Mono\',monospace;font-size:.74rem;color:#6b4a58;">0%</div></div>';
+  document.body.appendChild(overlay); await sleep(80);
+  function setP(pct,msg){ const pp=document.getElementById('pdf-prog'),pt=document.getElementById('pdf-prog-txt'); if(pp)pp.style.width=pct+'%'; if(pt)pt.textContent=msg||(pct+'%'); }
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:'a4',hotfixes:['px_scaling']});
+    const PW=pdf.internal.pageSize.getWidth(),PH=pdf.internal.pageSize.getHeight();
+    const ML=28,CW=PW-ML*2; let y=ML;
+    async function addImg(el){
+      const canvas=await html2canvas(el,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0,windowWidth:860});
+      const imgW=CW,imgH=(canvas.height/canvas.width)*imgW; const dataUrl=canvas.toDataURL('image/jpeg',.92),avail=PH-ML*2;
+      if(imgH<=avail){ if(y+imgH>PH-ML){pdf.addPage();y=ML;} pdf.addImage(dataUrl,'JPEG',ML,y,imgW,imgH); y+=imgH+8; }
+      else{
+        const pxPerPt=canvas.width/imgW; let srcY=0;
+        while(srcY<canvas.height){
+          const availPt=PH-y-ML,sliceH_pt=Math.min(availPt,avail);
+          const sliceH_px=Math.round(sliceH_pt*pxPerPt),actualH=Math.min(sliceH_px,canvas.height-srcY);
+          const tmp=document.createElement('canvas'); tmp.width=canvas.width; tmp.height=actualH;
+          tmp.getContext('2d').drawImage(canvas,0,srcY,canvas.width,actualH,0,0,canvas.width,actualH);
+          const sliceUrl=tmp.toDataURL('image/jpeg',.92),slicePt=(actualH/canvas.width)*imgW;
+          pdf.addImage(sliceUrl,'JPEG',ML,y,imgW,slicePt); srcY+=actualH; y+=slicePt;
+          if(srcY<canvas.height){pdf.addPage();y=ML;}
+        } y+=8;
+      }
+    }
+    async function band(tag,txt){
+      const b=document.createElement('div'); b.style.cssText='width:860px;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      b.innerHTML='<div style="background:linear-gradient(90deg,#c2185b,#6d0f38);border-radius:8px;padding:12px 22px;display:flex;align-items:center;gap:12px"><span style="background:rgba(255,255,255,.2);color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;border-radius:20px;padding:3px 12px">'+tag+'</span><span style="color:#fff;font-size:15px;font-weight:700">'+txt+'</span></div>';
+      document.body.appendChild(b); await sleep(20); await addImg(b); document.body.removeChild(b);
+    }
+    const nome=document.getElementById('header-nome').textContent||'Aluno(a)';
+    const turma=document.getElementById('ficha-turma').textContent||'—';
+    const now=new Date(); const dtStr=now.toLocaleDateString('pt-BR')+' às '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    setP(5,'Preparando capa…'); await sleep(40);
+    const coverEl=document.createElement('div'); coverEl.style.cssText='width:860px;font-family:Arial,sans-serif;overflow:hidden;position:absolute;left:-9999px;top:0';
+    coverEl.innerHTML='<div style="background:linear-gradient(135deg,#4a0a28 0%,#c2185b 60%,#e0709f 100%);padding:32px 48px 28px;color:white"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.85;font-weight:700;margin-bottom:6px">História · 2ª Série do Ensino Médio · GO-EMCHS602A · Outubro Rosa</div><div style="font-size:26px;font-weight:900;line-height:1.2;margin-bottom:5px">Poder, direitos e participação: quem decide?</div><div style="font-size:13px;opacity:.9;font-style:italic">Texto de apoio · Poder, direitos e participação · 5 questões dissertativas</div></div><div style="background:#fdeef4;padding:22px 48px 26px;border-bottom:3px solid #f8bbd0"><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#c2185b;font-weight:700;margin-bottom:5px">Aluno(a)</div><div style="font-size:20px;font-weight:700;color:#2b1a22;border-bottom:2.5px solid #c2185b;padding-bottom:6px;display:inline-block;margin-bottom:16px">'+esc(nome)+'</div><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#c2185b">'+esc(turma)+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Turma</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#8e244f">5</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Dissertativas</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:140px"><div style="font-size:13px;font-weight:700;color:#333">'+dtStr+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Gerado em</div></div></div><div style="font-size:9px;color:#bbb;margin-top:14px">Colégio Estadual Rodolfo de Oliveira · Goiás · 2026</div></div>';
+    document.body.appendChild(coverEl); await sleep(60); await addImg(coverEl); document.body.removeChild(coverEl);
+    setP(15,'Preparando texto de apoio…'); await sleep(20);
+    async function bloco(el){ document.body.appendChild(el); await sleep(20); await addImg(el); document.body.removeChild(el); }
+    for(let k=0;k<APOIO.length;k++){
+      await band('TEXTO '+(k+1)+' DE '+APOIO.length, APOIO[k][0]);
+      const textoEl=document.createElement('div'); textoEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #f0d0de;border-radius:10px;position:absolute;left:-9999px;top:0';
+      textoEl.innerHTML='<div style="padding:18px 24px;background:#fffafc"><p style="font-size:12.5px;color:#2b1a22;line-height:1.8;margin:0;text-align:justify">'+esc(APOIO[k][1])+'</p></div>';
+      await bloco(textoEl);
+      for(let j=0;j<GRUPOS[k].length;j++){
+        const i=GRUPOS[k][j]; const q=QUESTOES[i]; setP(20+Math.round(i/QUESTOES.length*65),'Questão '+q.num+'/'+QUESTOES.length+'…'); await sleep(12);
+      const valor=document.getElementById(q.id)?document.getElementById(q.id).value:'';
+      const qEl=document.createElement('div'); qEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #f0d0de;border-radius:10px;position:absolute;left:-9999px;top:0';
+      qEl.innerHTML='<div style="background:linear-gradient(90deg,#c2185b,#6d0f38);padding:10px 22px;display:flex;justify-content:space-between;align-items:center"><span style="color:white;font-weight:700;font-size:13px;letter-spacing:.8px">QUESTÃO '+q.num+'</span><span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;padding:3px 12px;border-radius:20px;font-weight:600">Dissertativa</span></div><div style="padding:18px 24px 16px;background:#fffafc"><div style="font-size:13px;font-weight:700;color:#2b1a22;line-height:1.6;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee">'+esc(q.enunc)+'</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:4px;height:15px;background:#c2185b;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#c2185b;text-transform:uppercase;letter-spacing:1.5px">Resposta do Aluno(a)</div></div><div style="background:#fde4ee;border:1.5px solid #eba9c4;border-radius:8px;padding:13px 16px;min-height:50px;margin-bottom:12px"><div style="font-size:12.5px;color:#2b1a22;line-height:1.8;white-space:pre-wrap">'+(esc(valor)||'<span style="color:#aaa">(sem resposta)</span>')+'</div></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div style="width:4px;height:15px;background:#8e244f;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#8e244f;text-transform:uppercase;letter-spacing:1.5px">Comentário do Professor</div></div><div style="background:#fff0f5;border:1.5px solid #f8bbd0;border-radius:8px;padding:13px 16px"><div style="font-size:12px;color:#4a1030;line-height:1.8">'+esc(q.coment)+'</div></div></div>';
+      document.body.appendChild(qEl); await sleep(12); await addImg(qEl); document.body.removeChild(qEl);
+      }
+    }
+    const fEl0=document.createElement('div'); fEl0.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #f0d0de;border-radius:10px;position:absolute;left:-9999px;top:0';
+    fEl0.innerHTML='<div style="padding:14px 24px;background:#fffafc"><div style="font-size:10px;color:#6b4a58;font-family:monospace">AZEVEDO, Gislane; SERIACOPI, Reinaldo. Por toda parte: História. São Paulo: FTD, 2024. (sobre Hannah Arendt) · SM EDUCAÇÃO (org.). Ser protagonista: Ciências Humanas e Sociais Aplicadas — História. São Paulo: Edições SM, 2024. (sobre Weber, os contratualistas, a Declaração de Gouges e a participação política) · CARVALHO, José Murilo de. Cidadania no Brasil: o longo caminho. Rio de Janeiro: Civilização Brasileira, citado em CAMPOS, C.; FERREIRA, L. P.; SILVA, R. (coord.). História: democracia e protagonismo (Interação). São Paulo: Editora do Brasil, 2024, e em SM EDUCAÇÃO, Ser protagonista.</div></div>';
+    await bloco(fEl0);
+    setP(92,'Finalizando…'); await sleep(30);
+    const totalPages=pdf.getNumberOfPages();
+    for(let p=1;p<=totalPages;p++){
+      pdf.setPage(p);
+      const fEl=document.createElement('div');
+      fEl.style.cssText='width:'+Math.round(CW)+'px;height:22px;background:#fdeef4;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:10px;color:#888;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      fEl.innerHTML='<span>Poder, direitos e participação · '+esc(nome)+'</span><span>Página '+p+' de '+totalPages+'</span>';
+      document.body.appendChild(fEl);
+      const fc=await html2canvas(fEl,{scale:2,logging:false,backgroundColor:'#fdeef4'}); document.body.removeChild(fEl);
+      const fUrl=fc.toDataURL('image/jpeg',.9),fH=(fc.height/fc.width)*CW;
+      pdf.setFillColor(253,238,244); pdf.rect(ML,PH-fH,CW,fH,'F'); pdf.addImage(fUrl,'JPEG',ML,PH-fH,CW,fH);
+    }
+    setP(100,'Salvando…'); await sleep(200);
+    pdf.save('Poder_direitos_participacao_'+nome.replace(/[^a-zA-Z0-9_\-]/g,'_')+'.pdf');
+  }catch(err){ console.error(err); alert('Erro ao gerar PDF: '+err.message); }
+  finally{ const ov=document.getElementById('pdf-overlay'); if(ov)document.body.removeChild(ov); }
+}
+
+/* ===== PROTEÇÃO ANTI-COLA E ANTI-CÓPIA (página inteira) ===== */
+(function () {
+  const LIMITE_BLOCO = 25;
+  const CAMPOS = document.querySelectorAll('textarea.dissertativa, .campo-resposta');
+  const ehCampo = function (el) { return el && el.closest && el.closest('textarea.dissertativa, .campo-resposta'); };
+
+  function mostrarToast(mensagem) {
+    let toast = document.getElementById('anti-cola-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'anti-cola-toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#6d0f38;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = mensagem;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function () { toast.style.opacity = '0'; }, 2500);
+  }
+  function bloquear(e, msg) { e.preventDefault(); e.stopPropagation(); mostrarToast(msg || 'Copiar e colar não são permitidos nesta atividade.'); return false; }
+
+  /* 1) Página inteira: copiar, recortar, colar, arrastar, selecionar e menu de contexto */
+  ['copy', 'cut', 'paste', 'dragstart', 'drop', 'dragover', 'contextmenu', 'selectstart'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      if (evt === 'selectstart' && ehCampo(e.target)) return;      /* permite posicionar o cursor no campo */
+      if (evt === 'selectstart') { e.preventDefault(); return; }
+      bloquear(e);
+    }, true);
+  });
+
+  /* 2) Atalhos de teclado */
+  document.addEventListener('keydown', function (e) {
+    const k = (e.key || '').toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    if (mod && ['c', 'x', 'v', 'a', 'p', 's', 'u'].indexOf(k) >= 0) return bloquear(e);
+    if (e.shiftKey && k === 'insert') return bloquear(e);                 /* Shift+Insert (colar) */
+    if (e.ctrlKey && k === 'insert') return bloquear(e);                  /* Ctrl+Insert (copiar) */
+    if (e.shiftKey && k === 'delete') return bloquear(e);                 /* Shift+Delete (recortar) */
+    if (k === 'f12' || (mod && e.shiftKey && ['i', 'j', 'c'].indexOf(k) >= 0)) return bloquear(e, 'Esta função está desativada nesta atividade.');
+    if (k === 'printscreen') {
+      try { navigator.clipboard.writeText(''); } catch (_) {}
+      mostrarToast('Captura de tela não recomendada nesta atividade.');
+    }
+  }, true);
+
+  /* 3) Campos de resposta: colar por qualquer via, texto em bloco e autocomplete */
+  CAMPOS.forEach(function (campo) {
+    campo.setAttribute('autocomplete', 'off');
+    campo.setAttribute('autocorrect', 'off');
+    campo.setAttribute('autocapitalize', 'off');
+    campo.setAttribute('spellcheck', 'false');
+
+    campo.addEventListener('beforeinput', function (e) {
+      const t = e.inputType || '';
+      if (t === 'insertFromPaste' || t === 'insertFromDrop' || t === 'insertFromYank' || t === 'insertFromPasteAsQuotation') {
+        bloquear(e);
+      }
+    });
+
+    let valorAnterior = campo.value;
+    campo.addEventListener('input', function (e) {
+      const diferenca = campo.value.length - valorAnterior.length;
+      if (diferenca >= LIMITE_BLOCO) {                                    /* texto entrou de uma vez só */
+        campo.value = valorAnterior;
+        mostrarToast('Escreva com suas palavras: texto colado foi removido.');
+        campo.dispatchEvent(new Event('input'));                          /* atualiza contador e progresso */
+      } else {
+        valorAnterior = campo.value;
+      }
+    });
+  });
+
+  /* 4) Impressão do conteúdo da página desativada (use o botão Exportar em PDF) */
+  const st = document.createElement('style');
+  st.textContent = '@media print{body *{visibility:hidden!important}body::before{content:"Impressão desativada. Use o botão Exportar em PDF.";visibility:visible!important;display:block;padding:40px;font:16px sans-serif}}';
+  document.head.appendChild(st);
+})();
+
+</script>
+</body>
+</html>

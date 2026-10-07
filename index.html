@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>República, Participação e Autoritarismo: da Primeira República à Era Vargas — História, 1ª série</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#12304a;--navy2:#1c4a6b;--teal:#1f6f78;--teal-bg:#e6f1f1;
+  --gold:#b8842b;--gold-bg:#f8efdc;--terra:#a8472a;--terra-bg:#f7e8e2;
+  --green:#2f6b52;--green-bg:#e5f0ea;
+  --ink:#1d2731;--muted:#5d6a74;--line:#dcd6c8;--paper:#fcfbf7;--stone:#efece4;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --display:"Fraunces",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --side:292px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--stone);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--teal)}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;border-radius:6px;z-index:100}
+.skip:focus{left:8px}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--gold),#e3b45a);z-index:60}
+
+/* ---------- sumário (gaveta à direita) ---------- */
+.toc-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;background:var(--navy);color:#fff;border:0;border-radius:12px 0 0 12px;padding:14px 11px;cursor:pointer;font:700 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;box-shadow:-4px 4px 18px #0004;display:flex;align-items:center;gap:8px}
+.toc-tab:hover{background:var(--navy2)}
+.toc-tab b{font-size:16px;writing-mode:horizontal-tb;color:#e3b45a}
+.toc-ov{position:fixed;inset:0;background:#0b1a2988;opacity:0;pointer-events:none;transition:opacity .25s;z-index:70}
+.toc-ov.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);background:var(--navy);color:#e9eef2;z-index:80;transform:translateX(102%);transition:transform .28s ease;display:flex;flex-direction:column;font-family:var(--sans);box-shadow:-10px 0 40px #0006}
+.drawer.open{transform:none}
+.dr-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:22px 22px 14px;border-bottom:1px solid #ffffff1f}
+.dr-head .k{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#e3b45a;font-weight:700}
+.dr-head .t{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.2;margin-top:5px;color:#fff}
+.dr-close{background:#ffffff14;border:1px solid #ffffff33;color:#fff;width:36px;height:36px;border-radius:9px;font-size:20px;cursor:pointer;flex:none}
+.dr-prog{padding:12px 22px 0;font-size:12px;color:#b6c6d3}
+.dr-prog i{display:block;height:5px;border-radius:3px;background:#ffffff1f;margin-top:7px;overflow:hidden}
+.dr-prog i span{display:block;height:100%;width:0;background:#e3b45a;transition:width .2s}
+.dr-body{flex:1;overflow:auto;padding:10px 12px 24px}
+.dr-link{display:block;padding:9px 12px;border-radius:8px;color:#cfd9e1;text-decoration:none;font-size:14px;line-height:1.35}
+.dr-link:hover{background:#ffffff12;color:#fff}
+.dr-link.on{background:#ffffff1c;color:#fff}
+.acc{border-top:1px solid #ffffff14;margin-top:6px}
+.acc>button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:none;border:0;color:#fff;font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;padding:14px 12px 8px;cursor:pointer;text-align:left}
+.acc>button:after{content:"";width:8px;height:8px;border-right:2px solid #e3b45a;border-bottom:2px solid #e3b45a;transform:rotate(45deg);transition:transform .2s;flex:none;margin-right:4px}
+.acc.open>button:after{transform:rotate(-135deg)}
+.acc>.panel{display:none}.acc.open>.panel{display:block}
+.item>.row{display:flex;align-items:center}
+.item>.row a{flex:1;display:flex;gap:11px;align-items:baseline;padding:9px 12px;border-radius:8px;color:#e1e9ef;text-decoration:none;font-size:14.5px;line-height:1.3}
+.item>.row a b{color:#e3b45a;min-width:16px;font-variant-numeric:tabular-nums}
+.item>.row a:hover{background:#ffffff12}
+.item>.row a.on{background:#ffffff1c;color:#fff}
+.item .row>button{background:none;border:0;cursor:pointer;padding:10px 14px;display:flex;align-items:center;justify-content:center;color:#e3b45a;font-size:14px;line-height:1}
+.item .row>button:after{content:"▾";width:auto;height:auto;border:0;transform:none;margin:0}
+.item.open .row>button:after{transform:rotate(180deg)}
+.item>.subs{display:none;margin:0 0 6px 38px;border-left:2px solid #ffffff22}
+.item.open>.subs{display:block}
+.subs a{display:block;padding:6px 12px;color:#aebfcc;text-decoration:none;font-size:13px;line-height:1.35}
+.subs a:hover{color:#fff}
+
+/* ---------- conteúdo ---------- */
+main{margin-left:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 40px}
+.sheet{background:var(--paper);box-shadow:0 1px 0 #0000000d,0 18px 44px -24px #1d27314d;margin:0 auto;max-width:980px}
+
+/* capa */
+.cover{background:var(--navy);margin:0;padding:0;line-height:0}
+.cover img{display:block;width:100%;height:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* bloco de abertura / seções */
+section.chapter{background:var(--paper);margin:28px auto;max-width:980px;box-shadow:0 1px 0 #0000000d,0 18px 44px -26px #1d27314d}
+.ch-head{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:end;padding:54px 64px 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#f4f1e8,var(--paper))}
+.ch-num{font-family:var(--display);font-weight:800;font-size:96px;line-height:.8;color:var(--navy);opacity:.14;letter-spacing:-.04em}
+.eyebrow{font:700 11.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 8px}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,4vw,42px);line-height:1.1;color:var(--navy);margin:0;letter-spacing:-.01em}
+.deck{font-size:19px;color:var(--muted);margin:12px 0 0;line-height:1.5}
+.body{padding:34px 64px 50px}
+.body>p:first-of-type:not(.nodrop)::first-letter{font-family:var(--display);font-weight:800;font-size:3.6em;float:left;line-height:.82;padding:6px 10px 0 0;color:var(--navy)}
+h3{font-family:var(--display);font-weight:700;font-size:25px;line-height:1.2;color:var(--navy);margin:38px 0 8px}
+h4{font:700 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin:26px 0 6px}
+p{margin:12px 0}
+.lead{font-size:20.5px;line-height:1.6;color:#2a3744}
+ul,ol{padding-left:1.3em}li{margin:6px 0}
+strong,b{font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 4px}
+.chip{font:700 11px var(--sans);letter-spacing:.04em;padding:5px 10px;border-radius:99px;background:var(--teal-bg);color:#14565d}
+.chip.g{background:var(--gold-bg);color:#7a5614}
+
+/* caixas */
+.callout{border-radius:12px;padding:18px 22px;margin:26px 0;border:1px solid var(--line);background:#fff;font-size:17px;line-height:1.6}
+.callout .lab{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px}
+.callout p{margin:6px 0}
+.callout.concept{background:var(--gold-bg);border-color:#ecd9ac}.callout.concept .lab{color:#8a5f12}
+.callout.teal{background:var(--teal-bg);border-color:#c4dede}.callout.teal .lab{color:#14565d}
+.callout.warn{background:var(--terra-bg);border-color:#ecc9bd}.callout.warn .lab{color:var(--terra)}
+.callout.green{background:var(--green-bg);border-color:#c5dccf}.callout.green .lab{color:var(--green)}
+.think{margin:30px 0;padding:22px 26px;border-radius:14px;background:var(--navy);color:#fff;font-family:var(--display);font-size:22px;line-height:1.35;font-weight:500}
+.think small{display:block;font:700 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#e3b45a;margin-bottom:8px}
+
+/* texto de apoio */
+.support{margin:34px 0;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.support>header{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--navy);color:#fff;font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.support>header i{width:8px;height:8px;border-radius:50%;background:#e3b45a;display:block}
+.support .in{padding:6px 24px 4px;font-size:17px;line-height:1.65}
+.support h5{font:700 17px var(--display);color:var(--navy);margin:16px 0 0}
+.support .src{font:500 12.5px/1.5 var(--sans);color:var(--muted);background:#f5f2ea;border-top:1px solid var(--line);padding:11px 24px}
+.support .src b{color:var(--ink);font-weight:700}
+
+/* fonte histórica */
+figure.doc{margin:30px 0;padding:6px 0 6px 26px;border-left:5px solid var(--gold)}
+figure.doc blockquote{margin:0;font-style:italic;font-size:19.5px;line-height:1.55;color:#2e3b47}
+figure.doc figcaption{font:500 12.5px/1.5 var(--sans);color:var(--muted);margin-top:10px}
+figure.doc figcaption b{font-weight:700;color:var(--ink)}
+
+/* números em destaque */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:28px 0}
+.stat{background:#fff;border:1px solid var(--line);border-top:4px solid var(--terra);border-radius:10px;padding:14px 16px}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:34px;line-height:1;color:var(--terra)}
+.stat span{display:block;font:500 12.5px/1.35 var(--sans);color:var(--muted);margin-top:7px}
+
+/* cartões e comparativos */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:24px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card .n{font:800 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.card h6{font:700 18px var(--display);color:var(--navy);margin:4px 0 4px}
+.card p{font-size:15.5px;line-height:1.5;margin:4px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.two .callout{margin:0}
+
+/* linha do tempo */
+.tl{list-style:none;padding:0;margin:30px 0;position:relative}
+.tl:before{content:"";position:absolute;left:96px;top:6px;bottom:6px;width:3px;background:linear-gradient(var(--gold),var(--teal));border-radius:2px}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:0 26px;margin:0 0 20px;position:relative}
+.tl li:before{content:"";position:absolute;left:90px;top:8px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:4px solid var(--navy)}
+.tl .y{font:800 14px var(--sans);color:var(--navy);text-align:right;padding-top:3px;padding-right:22px;font-variant-numeric:tabular-nums}
+.tl .t{padding-left:12px}
+.tl .t b{display:block;font:700 18px var(--display);color:var(--navy)}
+.tl .t span{font-size:16px;color:#3d4a55;line-height:1.5;display:block}
+.tl li.hl:before{background:var(--terra);border-color:var(--terra)}
+.tl li.hl .y{color:var(--terra)}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:26px 0;counter-reset:f}
+.flow div{position:relative;background:#fff;border:1px solid var(--line);padding:14px 14px 14px;margin-right:-1px;counter-increment:f}
+.flow div:first-child{border-radius:12px 0 0 12px}.flow div:last-child{border-radius:0 12px 12px 0}
+.flow div:before{content:counter(f);display:block;font:800 11px var(--sans);color:#fff;background:var(--teal);width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;margin-bottom:8px}
+.flow b{display:block;font:700 16px var(--display);color:var(--navy)}
+.flow span{font-size:14px;line-height:1.4;color:var(--muted);display:block;margin-top:3px}
+
+/* tabelas */
+table.tb{width:100%;border-collapse:collapse;margin:22px 0;font:400 15px/1.5 var(--sans);background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tb th{background:var(--navy);color:#fff;text-align:left;padding:11px 14px;font-weight:700;font-size:13px}
+.tb td{padding:11px 14px;border-top:1px solid var(--line);vertical-align:top}
+.tb tr:nth-child(even) td{background:#faf8f2}
+.tb td.fill{height:48px}
+.scroll{overflow-x:auto}
+
+/* atividades */
+.act{margin:34px 0;border:2px solid var(--gold);border-radius:14px;background:#fffdf6;padding:0;overflow:hidden}
+.act>header{background:var(--gold);color:#fff;padding:9px 22px;font:800 11px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.act .in{padding:16px 24px 20px;font-size:17px}
+.act h3{margin:6px 0 4px;font-size:22px}
+.lines{margin:12px 0}.lines i{display:block;border-bottom:1px solid #b9b5a6;height:30px}
+.act ol{margin:8px 0}
+.act li::marker{font-weight:700;color:var(--gold)}
+
+/* figura */
+figure.fig{margin:28px 0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+figure.fig figcaption{font:500 12.5px/1.5 var(--sans);color:var(--muted);margin-top:8px}
+.ch-end{display:flex;justify-content:space-between;gap:12px;padding:16px 64px;background:#f4f1e8;border-top:1px solid var(--line);font:600 12.5px var(--sans);color:var(--muted)}
+
+/* glossário */
+.gl{columns:2;column-gap:36px}
+.gl dt{font:700 17px var(--display);color:var(--navy);break-after:avoid;margin-top:14px}
+.gl dd{margin:2px 0 0;font-size:16px;line-height:1.55;break-inside:avoid}
+
+/* bibliografia */
+.refs{list-style:none;padding:0;counter-reset:r}
+.refs li{counter-increment:r;position:relative;padding-left:38px;margin:0 0 14px;font:400 14.5px/1.55 var(--sans)}
+.refs li:before{content:counter(r);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--teal-bg);color:#14565d;font:800 12px/26px var(--sans);text-align:center}
+.refs em{font-style:italic}
+details.prof{margin:18px 0;border:1px solid var(--line);border-radius:12px;background:#fff}
+details.prof summary{cursor:pointer;padding:14px 20px;font:700 14px var(--sans);color:var(--navy)}
+details.prof .in{padding:0 22px 16px;font-size:16px}
+.colophon{text-align:center;font:500 12px var(--sans);color:var(--muted);padding:26px 0 60px}
+
+
+/* cidadania: imagem + explicação */
+.cid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;margin:30px 0;align-items:start}
+.cid-fig{margin:0}
+.cid-thumb{position:relative;display:block;width:100%;padding:0;border:2px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;cursor:zoom-in;box-shadow:0 10px 28px -16px #1d273180}
+.cid-thumb img{display:block;width:100%;height:auto}
+.cid-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:var(--navy);color:#fff;font:700 12px var(--sans);padding:8px 14px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 14px #0005}
+.cid-thumb:hover .cid-hint,.cid-thumb:focus-visible .cid-hint{background:var(--gold)}
+.cid-thumb:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.cid-fig figcaption b{color:var(--ink)}
+.cid-fig figcaption{font:500 12.5px/1.5 var(--sans);color:var(--muted);margin-top:8px}
+.cid-txt{background:var(--teal-bg);border:1px solid #c4dede;border-radius:14px;padding:20px 24px;font-size:17px;line-height:1.6}
+.cid-txt .lab{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#14565d}
+.cid-txt h3{margin:4px 0 8px;font-size:26px}
+.cid-txt p{margin:8px 0}.cid-txt ul{margin:8px 0;padding-left:1.2em}.cid-txt li{margin:6px 0}
+.cid-key{background:#fff;border-left:5px solid var(--gold);border-radius:8px;padding:10px 14px}
+.cid-src{font:500 12px/1.5 var(--sans);color:var(--muted)}
+.cid-link{display:flex;gap:12px;align-items:flex-start;margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-decoration:none;color:var(--ink);font-family:var(--sans);transition:border-color .15s,box-shadow .15s}
+.cid-link:hover,.cid-link:focus-visible{border-color:var(--gold);box-shadow:0 6px 18px -10px #1d273190}
+.cid-link .ic{flex:none;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#e3b45a;display:grid;place-items:center;font-size:13px}
+.cid-link .tx{display:block;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.cid-link b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:2px}
+.cid-link em{display:block;font-style:normal;font-weight:700;color:var(--teal);margin-top:4px}
+@media(max-width:760px){.cid{grid-template-columns:1fr}}
+.atv-box{display:flex;align-items:center;gap:18px;margin:0 0 26px;padding:18px 24px;border-radius:14px;background:linear-gradient(100deg,var(--navy),var(--navy2));color:#fff;text-decoration:none;box-shadow:0 12px 28px -16px #12304acc;transition:transform .15s,box-shadow .15s;font-family:var(--sans)}
+.atv-box:hover,.atv-box:focus-visible{transform:translateY(-2px);box-shadow:0 16px 32px -14px #12304a}
+.atv-box:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.atv-ic{flex:none;width:52px;height:52px;border-radius:14px;background:#ffffff1c;border:1px solid #ffffff40;display:grid;place-items:center;font-size:24px;color:#e3b45a}
+.atv-tx{flex:1;display:block;min-width:0}
+.atv-k{display:block;font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#e3b45a}
+.atv-tx b{display:block;font:700 21px/1.25 var(--display);margin:3px 0 4px}
+.atv-d{display:block;font-size:13.5px;line-height:1.5;color:#d3dee7}
+.atv-go{flex:none;background:#e3b45a;color:var(--navy);font:800 13px var(--sans);padding:11px 18px;border-radius:99px;white-space:nowrap}
+.atv-box:hover .atv-go{background:#fff}
+@media(max-width:640px){.atv-box{flex-wrap:wrap;padding:16px}.atv-go{width:100%;text-align:center}}
+/* carrossel */
+.car{position:relative;outline:none}
+.car:focus-visible .car-view{outline:3px solid var(--gold);outline-offset:2px}
+.car-view{overflow:hidden;border-radius:14px}
+.car-track{display:flex;transition:transform .35s ease;touch-action:pan-y}
+.car-slide{flex:0 0 100%;min-width:0}
+.car-slide .cid-thumb{border-radius:14px}
+.car-nav{position:absolute;top:calc(50% - 22px);width:40px;height:40px;border-radius:50%;border:1px solid #ffffff80;background:#12304acc;color:#fff;font:700 24px/1 var(--sans);cursor:pointer;display:grid;place-items:center;padding:0 0 3px;z-index:2;box-shadow:0 4px 14px #0004}
+.car-nav:hover{background:var(--gold)}
+.car-nav.prev{left:8px}.car-nav.next{right:8px}
+.car-dots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.car-dot{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#c9c1ac;cursor:pointer}
+.car-dot.on{background:var(--navy);width:26px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){.car-track{transition:none}}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:#08121cf8;display:none;flex-direction:column}
+.lb.open{display:flex}
+.lb-bar{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 14px;color:#fff;font:600 13px var(--sans)}
+.lb-bar .grp{display:flex;gap:8px;align-items:center}
+.lb-bar button{background:#ffffff1a;border:1px solid #ffffff44;color:#fff;border-radius:9px;min-width:40px;height:40px;font:700 18px var(--sans);cursor:pointer;padding:0 12px}
+.lb-bar button:hover{background:#ffffff33}
+.lb-bar .pct{min-width:52px;text-align:center}
+.lb-stage{flex:1;overflow:auto;display:flex;padding:8px;cursor:grab;-webkit-overflow-scrolling:touch}
+.lb-stage.drag{cursor:grabbing}
+.lb-stage img{margin:auto;max-width:none;flex:none;user-select:none;-webkit-user-drag:none;background:#fff;border-radius:6px}
+.lb-help{text-align:center;color:#9fb3c3;font:500 12px var(--sans);padding:6px 10px 12px}
+
+/* responsivo */
+@media(max-width:1000px){
+  section.chapter,.cover{margin:14px 0;max-width:none}
+  
+  .ch-head{padding:56px 24px 22px;grid-template-columns:1fr;gap:6px}.ch-num{font-size:64px}
+  .body{padding:24px 22px 38px}.ch-end{padding:14px 22px}
+}
+@media(max-width:640px){
+  body{font-size:17px}
+  .two,.gl{grid-template-columns:1fr;columns:1}
+  .flow{grid-template-columns:1fr}.flow div,.flow div:first-child,.flow div:last-child{border-radius:0;margin:0 0 -1px}
+  .tl:before{left:14px}.tl li{grid-template-columns:1fr;padding-left:40px}.tl li:before{left:7px}.tl .y{text-align:left;padding:0}.tl .t{padding:0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.drawer{transition:none}}
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  body{background:#fff;font-size:11.5pt}
+  .toc-tab,.drawer,.toc-ov,#progress,.skip{display:none!important}
+  main{margin:0}
+  section.chapter,.cover{box-shadow:none;margin:0;max-width:none;page-break-after:always}
+  .cover img{max-height:none}
+  .ch-head{padding:0 0 14px;background:none}.body{padding:14px 0}.ch-end{display:none}
+  .callout,.support,.act,figure,.card,.stat,.tl li{break-inside:avoid}
+  .think,.support>header,.act>header,.tb th,.stat,.callout{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  details.prof{display:none}
+}
+
+.cover-art{line-height:1.3;color:#fff;padding:90px 64px 56px;background:radial-gradient(1200px 500px at 85% -10%,#1f6f78 0%,transparent 60%),linear-gradient(160deg,#12304a,#0c2236);position:relative}
+.cv-k{font:700 12px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#e3b45a;margin:0 0 18px}
+.cover-art h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,7vw,78px);line-height:1.02;margin:0;letter-spacing:-.02em;color:#fff}
+.cv-sub{font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:500;color:#cfe3e6;margin:14px 0 0}
+.cv-fio{max-width:640px;font:400 18px/1.55 var(--serif);color:#e4ecf0;margin:26px 0 0;border-left:4px solid #e3b45a;padding-left:18px}
+.cv-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:44px 0 30px}
+.cv-steps span{font:700 11px var(--sans);letter-spacing:.08em;color:#9fc4cb;border-top:3px solid #e3b45a;padding-top:10px;display:block}
+.cv-steps b{display:block;font:700 18px var(--display);letter-spacing:0;color:#fff;margin-top:4px}
+.cv-foot{font:500 12px var(--sans);letter-spacing:.06em;color:#9fb3c0;margin:0}
+.perguntas-box{margin:24px 0;border:1px solid #c4dede;border-left:6px solid var(--teal);border-radius:12px;background:var(--teal-bg);padding:16px 22px}
+.perguntas-box .lab,.goias-box .lab{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px}
+.perguntas-box .lab{color:#14565d}
+.perguntas-box ul{margin:6px 0 0;padding-left:20px}
+.goias-box{margin:30px 0;border:1px solid #ecd9ac;border-left:6px solid var(--gold);border-radius:12px;background:var(--gold-bg);padding:18px 24px;font-size:17px;line-height:1.62}
+.goias-box .lab{color:#8a5f12}
+.goias-box h4{font:700 19px var(--display);color:var(--navy);margin:16px 0 4px}
+.goias-box p{margin:6px 0}
+.seq{margin:26px 0;display:grid;gap:12px}
+.seq-row{display:grid;grid-template-columns:150px 1fr 1fr 1fr;gap:8px;align-items:stretch}
+.seq-l{font:700 14px var(--sans);color:var(--navy);align-self:center}
+.seq-l small{font-weight:500;color:var(--muted)}
+.seq-b{font:700 13.5px/1.35 var(--sans);padding:12px;border-radius:10px;text-align:center;display:flex;align-items:center;justify-content:center}
+.seq-b.c1{background:var(--teal-bg);color:#14565d}.seq-b.c2{background:var(--gold-bg);color:#7a5614}.seq-b.c3{background:var(--terra-bg);color:var(--terra)}
+.ch-end{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 64px;border-top:1px solid var(--line);background:#f4f1e8;font:600 12.5px var(--sans);color:var(--muted)}
+.callout ul,.goias-box ul{margin:6px 0 0;padding-left:20px}
+.tb th,.tb td{vertical-align:top}
+@media(max-width:760px){.cover-art{padding:60px 22px 40px}.cv-steps{grid-template-columns:1fr 1fr}.seq-row{grid-template-columns:1fr}.ch-end{padding:14px 22px}}
+
+/* ---------- alinhamento: títulos centralizados, texto justificado ---------- */
+.body p,.body li,.lead,.support .in p,.support .src,.callout p,.callout li,.goias-box p,.perguntas-box li,.card p,.tl .t span,.gl dd,.refs li,figure.doc blockquote,details.prof .in p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
+.eyebrow,.deck,h2,h3,h4,.goias-box h4{text-align:left}
+.chips,.card,.stat,.think,.callout .lab,.perguntas-box .lab,.goias-box .lab,.support>header,.colophon,figure.doc figcaption{text-align:center}
+.chips,.support>header{justify-content:center}
+.ch-end{justify-content:center;gap:10px 40px;text-align:center}
+.gl dt,.tb th,.tb td,.tl .t b{text-align:left}
+
+/* ---------- alinhamento: títulos à esquerda, texto justificado ---------- */
+.body p,.body li,.lead,.support .in p,.support .src,.callout p,.callout li,.goias-box p,.perguntas-box li,.card p,.tl .t span,.gl dd,.refs li,figure.doc blockquote,details.prof .in p,.panel-txt p,.viz .note{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
+.eyebrow,.deck,h2,h3,h4{text-align:left}
+.chips,.support>header{justify-content:center}
+.callout .lab,.perguntas-box .lab,.goias-box .lab,.support>header,.colophon,figure.doc figcaption{text-align:center}
+.ch-end{justify-content:center;gap:10px 40px;text-align:center}
+.gl dt,.tb th,.tb td,.tl .t b{text-align:left}
+
+/* ---------- gráficos interativos ---------- */
+:root{--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--mute:#e6e3da;--ink2:#52514e}
+.viz{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px 18px;margin:30px 0;box-shadow:0 10px 28px -22px #1d273180;scroll-margin-top:24px}
+.viz.pulse{animation:pulse 1.4s ease-out 1}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #b8842bcc}70%{box-shadow:0 0 0 14px #b8842b00}100%{box-shadow:0 10px 28px -22px #1d273180}}
+.viz-k{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 4px;text-align:left}
+.viz h4.vt{font:700 22px/1.2 var(--display);letter-spacing:0;text-transform:none;color:var(--navy);margin:0 0 4px}
+.viz .sub{font:500 14px/1.5 var(--sans);color:var(--muted);margin:0 0 12px;text-align:left}
+.viz .note{font:500 12.5px/1.55 var(--sans);color:var(--muted);margin:12px 0 0}
+.viz-ctl{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;align-items:center}
+.pill{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:99px;padding:7px 14px;font:600 13px var(--sans);cursor:pointer;display:inline-flex;gap:8px;align-items:center;transition:background .15s,color .15s,border-color .15s}
+.pill:hover{border-color:var(--navy)}
+.pill:focus-visible,.cell:focus-visible,.hit:focus-visible,.gbtn:focus-visible,.tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.pill[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pill i{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--k,var(--navy))}
+.pill[aria-pressed="false"] i{opacity:.35}
+.pill.ghost{margin-left:auto;background:#f4f1e8}
+
+/* waffle */
+.waffle-wrap{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:26px;align-items:center}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+.cell{aspect-ratio:1;border-radius:3px;background:var(--mute);border:0;padding:0;transition:background .3s ease,transform .15s;transition-delay:var(--d,0ms),0ms;cursor:default}
+.cell.on{background:var(--c,var(--c1))}
+.cell:hover{transform:scale(1.18);position:relative;z-index:1}
+.readout .big{font:800 64px/1 var(--display);color:var(--c,var(--c1));letter-spacing:-.02em}
+.readout .big small{font-size:28px;margin-left:2px}
+.readout .lb{font:700 18px var(--display);color:var(--navy);margin:6px 0 4px}
+.readout p{font:400 15.5px/1.55 var(--serif);margin:6px 0}
+.readout .src{font:500 12px/1.5 var(--sans);color:var(--muted)}
+
+/* barras SVG */
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:var(--sans)}
+.chart .ax{stroke:#cfcabb;stroke-width:1}
+.chart .gd{stroke:#ece8dc;stroke-width:1}
+.chart .tk{fill:var(--ink2);font-size:11.5px}
+.chart .vl{fill:var(--ink);font-size:12px;font-weight:700}
+.bar{transition:opacity .15s,y .35s,height .35s;cursor:pointer}
+.bar.dim{opacity:.45}
+.hit{fill:transparent;cursor:pointer}
+.stack{display:flex;height:54px;gap:2px;border-radius:10px;overflow:hidden;margin:10px 0 6px}
+.seg{flex:var(--w);display:flex;align-items:center;padding:0 14px;font:700 14px var(--sans);color:#fff;cursor:pointer;border:0;transition:filter .15s,flex .5s;min-width:6px}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12)}
+.hbars{display:grid;gap:10px;margin:8px 0}
+.hb{display:grid;grid-template-columns:minmax(120px,210px) 1fr 56px;gap:12px;align-items:center;background:none;border:0;padding:4px;border-radius:8px;cursor:pointer;text-align:left;font-family:var(--sans)}
+.hb:hover,.hb[aria-pressed="true"]{background:#f4f1e8}
+.hb .n{font:600 14px var(--sans);color:var(--ink)}
+.hb .tr{height:22px;background:var(--mute);border-radius:6px;overflow:hidden}
+.hb .fl{height:100%;width:0;background:var(--c,var(--c1));border-radius:0 6px 6px 0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.hb .v{font:800 16px var(--sans);color:var(--ink);text-align:right}
+.detail{margin-top:12px;border-left:5px solid var(--c,var(--c1));background:#faf8f2;border-radius:0 10px 10px 0;padding:12px 16px;font:400 15.5px/1.55 var(--serif)}
+.detail b{font-family:var(--display);color:var(--navy);font-size:18px}
+.detail .meta{font:700 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.detail p{margin:6px 0;text-align:justify}
+.tvw{display:none;overflow-x:auto}
+.viz.tbl-on .tvw{display:block}.viz.tbl-on .plot{display:none}
+
+/* timeline SVG */
+.tlrow{cursor:pointer}
+.tlrow .tr{fill:transparent}
+.tlrow:hover .tr,.tlrow.sel .tr{fill:#f4f1e8}
+.tlrow .lbl{font-size:12.5px;fill:var(--ink);font-weight:600}
+.tlrow .yr{font-size:11px;fill:var(--ink2)}
+.tlrow.off{display:none}
+.tlbar{rx:5px}
+.tlrow.sel .tlbar,.tlrow:hover .tlbar{stroke:var(--navy);stroke-width:2}
+.tlrow:focus-visible{outline:none}
+.tlrow:focus-visible .tr{fill:#f4f1e8;stroke:var(--gold);stroke-width:2}
+.axtxt{font-size:11.5px;fill:var(--ink2)}
+
+/* abas */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font:700 13.5px var(--sans);cursor:pointer;color:var(--ink);transition:all .15s}
+.tab:hover{border-color:var(--navy)}
+.tab[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 24px 18px;border-top:4px solid var(--gold);animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.panel-box[hidden]{display:none}
+.panel-box h5{font:700 21px var(--display);color:var(--navy);margin:14px 0 4px}
+.panel-box h6{font:800 10.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin:14px 0 2px}
+.panel-box p{margin:6px 0}
+.gbtn{border:1px solid var(--line);background:#f4f1e8;border-radius:99px;padding:6px 12px;font:700 12.5px var(--sans);cursor:pointer;color:var(--navy);margin:4px 6px 0 0}
+.gbtn:hover{border-color:var(--navy)}
+.who{font:700 12px var(--sans);color:var(--muted);display:block;margin:2px 0 6px}
+
+/* fraudes (details) */
+.fr{display:grid;gap:8px;margin:14px 0}
+.fr details{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.fr summary{cursor:pointer;padding:12px 18px;font:700 15px var(--sans);color:var(--navy);list-style:none;display:flex;gap:12px;align-items:center}
+.fr summary::-webkit-details-marker{display:none}
+.fr summary:before{content:"+";width:24px;height:24px;border-radius:50%;background:var(--gold-bg);color:#7a5614;display:grid;place-items:center;font-weight:800;flex:none}
+.fr details[open] summary:before{content:"−"}
+.fr details>div{padding:0 18px 14px 54px;font:400 16px/1.6 var(--serif)}
+.fr details>div p{margin:4px 0;text-align:justify}
+
+/* dica de interação e tooltip */
+.tip-hint{font:600 12.5px var(--sans);color:#7a5614;background:var(--gold-bg);border:1px solid #ecd9ac;border-radius:99px;display:inline-block;padding:5px 12px;margin:0 0 10px}
+#tip{position:fixed;z-index:120;pointer-events:none;background:var(--navy);color:#fff;border-radius:9px;padding:9px 12px;font:500 13px/1.45 var(--sans);box-shadow:0 10px 26px #0006;max-width:280px;opacity:0;transition:opacity .12s;left:0;top:0}
+#tip.on{opacity:1}
+#tip b{display:block;font:800 17px var(--sans);color:#fff}
+#tip span{color:#cfdbe5}
+#tip .k{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+@media(max-width:700px){.waffle-wrap{grid-template-columns:1fr}.hb{grid-template-columns:1fr 54px}.hb .tr{grid-column:1/-1;grid-row:2}.viz{padding:16px 14px}.fr details>div{padding-left:18px}}
+@media(prefers-reduced-motion:reduce){.cell,.bar,.seg,.hb .fl,.panel-box{transition:none;animation:none}.viz.pulse{animation:none}}
+@media print{.viz-ctl,.tabs,.tip-hint,#tip{display:none!important}.panel-box[hidden]{display:block!important}}
+.body p.viz-k,.body .viz .sub{text-align:left}
+@media(max-width:700px){#viz-resist .plot{overflow-x:auto}#viz-resist .plot svg{min-width:680px}#viz-eleicoes .plot{overflow-x:auto}#viz-eleicoes .plot svg{min-width:520px}}
+
+
+.card.lens{font:inherit;text-align:left;cursor:pointer;border:1px solid var(--line);border-top:4px solid var(--gold);transition:transform .15s,box-shadow .15s,border-color .15s;display:block;width:100%}
+.card.lens:hover,.card.lens:focus-visible{transform:translateY(-3px);box-shadow:0 12px 26px -16px #1d2731aa;border-color:var(--gold)}
+.card.lens:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card.lens .n{font:800 11px var(--sans);letter-spacing:.14em;color:var(--teal);text-align:left}
+.card.lens h6{font:700 24px var(--display);color:var(--navy);margin:6px 0 6px;text-align:left}
+.card.lens p{text-align:left}
+.lens-go{display:inline-block;margin-top:8px;font:700 12px var(--sans);color:#7a5614;background:var(--gold-bg);border-radius:99px;padding:5px 12px}
+#lens-dlg{border:0;border-radius:18px;padding:0;max-width:min(720px,92vw);width:100%;box-shadow:0 30px 80px #000a;color:var(--ink)}
+#lens-dlg::backdrop{background:#0b1a29b8}
+.lens-box{padding:30px 34px 24px;position:relative;background:var(--paper);border-top:6px solid var(--gold)}
+.lens-x{position:absolute;top:12px;right:14px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;font:400 26px/1 var(--sans);cursor:pointer;color:var(--navy)}
+.lens-x:hover{background:var(--gold-bg)}
+.lens-k{font:800 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 4px;text-align:left}
+#lens-t{margin:0 0 10px;font:800 34px/1.1 var(--display);color:var(--navy);text-align:left}
+#lens-p{font-size:18px;line-height:1.65;text-align:justify;hyphens:auto;margin:8px 0}
+.lens-src{font:500 12.5px/1.5 var(--sans);color:var(--muted);background:#f5f2ea;border-radius:8px;padding:9px 12px;margin:12px 0 0;text-align:left}
+.lens-nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.lens-b{border:2px solid var(--line);background:#fff;border-radius:99px;padding:9px 18px;font:700 14px var(--sans);color:var(--navy);cursor:pointer}
+.lens-b:hover{border-color:var(--navy)}
+@media(prefers-reduced-motion:no-preference){#lens-dlg[open]{animation:lensin .22s ease}@keyframes lensin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}}
+@media(max-width:640px){.lens-box{padding:24px 20px 20px}#lens-t{font-size:28px}#lens-p{font-size:17px}}
+@media print{#lens-dlg{display:none!important}}
+
+/* Linha do tempo ilustrada: aba interna com zoom */
+.timeline-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:38px 0 8px}.timeline-heading h3{margin:0}.timeline-launch{display:inline-grid;place-items:center;flex:none;width:34px;height:34px;margin:0;background:#12304a;color:#e3a52e;border:0;border-radius:9px;font:800 19px Arial,sans-serif;cursor:pointer;box-shadow:0 6px 18px #12304a33}
+.timeline-launch:hover,.timeline-launch:focus-visible{background:#1c4a6b;outline:3px solid #e3b45a;outline-offset:2px}
+.timeline-dialog{position:fixed;inset:0;z-index:200;background:#08121cf5;color:white;display:none;flex-direction:column;font-family:var(--sans)}
+.timeline-dialog.open{display:flex}
+.timeline-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#12304a;flex-wrap:wrap}
+.timeline-toolbar strong{font-size:15px}.timeline-controls{display:flex;align-items:center;gap:8px}
+.timeline-controls button{border:1px solid #ffffff55;border-radius:9px;background:#ffffff1b;color:#fff;min-width:42px;height:40px;cursor:pointer;font-size:20px}
+.timeline-controls button:hover{background:#ffffff35}
+.timeline-viewport{flex:1;overflow:auto;text-align:center;padding:18px;min-height:0}
+.timeline-viewport img{display:block;margin:auto;max-width:none;height:auto;box-shadow:0 10px 40px #0008;transform-origin:top center}
+.timeline-foot{text-align:center;font-size:12px;color:#cbd6e0;padding:8px}
+@media print{.timeline-launch,.timeline-dialog{display:none!important}}
+
+/* Janela de zoom: Três lentes */
+.lentesview-dialog{position:fixed;inset:0;z-index:250;background:rgba(8,18,28,.97);color:#fff;display:none;flex-direction:column;font-family:var(--sans)}
+.lentesview-dialog.open{display:flex}
+.lentesview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap;background:#12304a}
+.lentesview-toolbar strong{font-size:14px}
+.lentesview-controls{display:flex;align-items:center;gap:7px}
+.lentesview-controls button{background:#ffffff20;border:1px solid #ffffff55;color:#fff;border-radius:8px;min-width:38px;height:38px;font:700 19px Arial;cursor:pointer}
+.lentesview-controls button:hover{background:#ffffff44}
+#lentesview-percent{min-width:48px;text-align:center;font-size:13px}
+.lentesview-viewport{flex:1;min-height:0;overflow:auto;display:flex;padding:12px;overscroll-behavior:contain}
+.lentesview-viewport img{display:block;margin:auto;max-width:none;height:auto;flex:none;object-fit:contain;background:white}
+.lentesview-foot{text-align:center;padding:8px;color:#d1dce5;font-size:12px}
+@media print{.lentesview-dialog{display:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+<div id="progress" aria-hidden="true"></div>
+<div id="tip" role="status" aria-live="off"></div>
+<main id="conteudo">
+<section class="cover" id="capa">
+  <h1 class="sr">República, Participação e Autoritarismo — Primeira República (1889–1930) e Era Vargas (1930–1945)</h1>
+  <img src="img/capa.webp" alt="Capa do material: República, Participação e Autoritarismo. Primeira República (1889–1930) e Era Vargas (1930–1945). Colagem com a Primeira República, a bandeira do Brasil, Getúlio Vargas ao microfone e uma multidão de trabalhadores.">
+</section>
+
+<section class="chapter" id="habilidades">
+  <header class="ch-head"><div class="ch-num">H</div><div>
+    <p class="eyebrow">Antes de começar</p><h2>Habilidades e objetivos</h2>
+    <p class="deck">O que você vai desenvolver e aprender ao longo deste material.</p></div></header>
+  <div class="body">
+    <h3 style="margin-top:0">Descritores e objetivos de aprendizagem</h3>
+    <div class="scroll"><table class="tb">
+      <thead><tr><th style="width:55%">Descritor (DC-GO)</th><th>Objetivos de aprendizagem</th></tr></thead>
+      <tbody><tr><td><b>GO-EMCHS602A</b> · Primeira República<br>Identificar as características políticas, sociais e culturais na Primeira República Brasileira (1889–1930), entendendo as formas de organização e de articulação desta sociedade com as ideias de liberdade e democracia para compreender as origens do republicanismo brasileiro.</td><td><ul><li>Compreender os processos políticos, sociais e econômicos da Primeira República (1889–1930).</li><li>Avaliar as mudanças nas práticas democráticas, nos movimentos sociais e nas formas de participação cidadã, para entender a construção da sociedade brasileira contemporânea.</li></ul></td></tr><tr><td><b>GO-EMCHS602B</b> · Era Vargas<br>Assimilar as características do autoritarismo e do populismo durante a Era Vargas no Brasil, utilizando textos e análises sociológicas do período para verificar os limites da liberdade, da democracia e da cidadania no Brasil pós Revolução de 1930, dentro de um contexto influenciado pelo nazismo e fascismo.</td><td><ul><li>Compreender as características do autoritarismo e do populismo durante a Era Vargas no Brasil (1930–1945).</li></ul></td></tr></tbody></table></div>
+    <div class="callout teal"><span class="lab">Neste material você vai aprender</span>
+      <ul><li>quem podia votar na Primeira República e por que a República nasceu com a participação popular tão restrita;</li><li>como funcionavam as oligarquias, o coronelismo e a fraude eleitoral, e como o café, a indústria e as cidades mudaram a economia e a sociedade;</li><li>como operários, mulheres, população negra, sertanejos, marinheiros e militares de baixa patente se organizaram e reagiram;</li><li>como a Revolução de 1930, a Constituição de 1934 e o golpe de 1937 ampliaram e, depois, suspenderam direitos;</li><li>o que são autoritarismo, populismo e trabalhismo, e como os historiadores discutem esses conceitos;</li><li>de que modo o nazifascismo, a propaganda e a repressão marcaram o Estado Novo e como ele chegou ao fim.</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="abertura">
+  <header class="ch-head"><div class="ch-num"></div><div>
+    <p class="eyebrow">Para começar</p><h2>Poder, direitos e participação</h2>
+    <p class="deck">Antes dos capítulos, as lentes e a linha do tempo que organizam o percurso.</p></div></header>
+  <div class="body">
+    <p class="lead">Entre 1889 e 1945, o Brasil trocou de regime, de elites no poder e de formas de governar. A República nasceu prometendo liberdade e participação, mas por décadas ela funcionou para poucos; depois de 1930, o Estado passou a conceder direitos ao mesmo tempo que fechava as portas da participação livre. Estudar esse período é perguntar, a cada fase: <b>quem tinha voz, quem mandava e como os de baixo reagiram?</b></p>
+    <div class="timeline-heading"><h3>Três lentes para ler o período</h3><button type="button" class="timeline-launch" id="lentesview-open" aria-label="Abrir imagem das três lentes com zoom" title="Abrir imagem ampliada">↗</button></div>
+    <div class="cards lenses"><button type="button" class="card lens" data-lens="0"><span class="n">Lente 1 - PODER</span><h6>Poder</h6><p>Constituições, eleições, partidos, golpes e o modo como o poder se organizava na União, nos estados e nos municípios.</p><span class="lens-go">Clique para ler o texto</span></button><button type="button" class="card lens" data-lens="1"><span class="n">Lente 2 - DIREITOS</span><h6>Direitos</h6><p>Quem tinha direitos civis, políticos e sociais, e as desigualdades de classe, raça e gênero que atravessam o período.</p><span class="lens-go">Clique para ler o texto</span></button><button type="button" class="card lens" data-lens="2"><span class="n">Lente 3 - PARTICIPAÇÃO</span><h6>Participação</h6><p>Votar, mas também greves, revoltas, comunidades messiânicas, imprensa negra, sufragismo e a luta por direitos.</p><span class="lens-go">Clique para ler o texto</span></button></div>
+    <div class="callout concept"><span class="lab">Conceitos-chave para começar</span><p><b>Cidadania:</b> conjunto de direitos civis (liberdades e igualdade perante a lei), políticos (votar e ser votado) e sociais (trabalho, saúde, educação). Quem tem todos é cidadão pleno; quem tem só alguns é um cidadão incompleto.</p><p><b>Estadania:</b> termo do historiador José Murilo de Carvalho para a situação em que a maior parte da população fica à mercê de decisões tomadas por uma parcela pequena que ocupa o governo, e os direitos chegam como favor, não como conquista.</p></div>
+    <a class="atv-box" href="atv/atv1.html" target="_blank" rel="noopener"><span class="atv-ic" aria-hidden="true">✎</span><span class="atv-tx"><span class="atv-k">Atividade 1 · História</span><b>Poder, direitos e participação: quem decide?</b><span class="atv-d">Leia os textos e responda às questões da atividade interativa.</span></span><span class="atv-go">Fazer atividade ↗</span></a>
+    <div class="timeline-heading"><h3>Linha do tempo: 1889–1945</h3><button type="button" class="timeline-launch" id="timeline-open" aria-label="Abrir linha do tempo ilustrada com zoom" title="Abrir imagem ampliada">↗</button></div>
+    <ul class="tl"><li><div class="y">1889</div><div class="t"><b>Proclamação da República</b><span>Golpe articulado por militares e elites, sem participação popular.</span></div></li><li><div class="y">1891</div><div class="t"><b>Primeira Constituição republicana</b><span>Federalismo, Estado laico e fim do voto censitário, mas com votantes restritos.</span></div></li><li><div class="y">1894</div><div class="t"><b>Primeiro presidente civil</b><span>Prudente de Morais inaugura a República Oligárquica.</span></div></li><li class="hl"><div class="y">1904–1910</div><div class="t"><b>Vacina e Chibata</b><span>Duas revoltas urbanas contra a violência do Estado.</span></div></li><li class="hl"><div class="y">1917</div><div class="t"><b>Greve geral em São Paulo</b><span>O movimento operário pressiona por salário, jornada e fim do trabalho infantil.</span></div></li><li><div class="y">1922–1927</div><div class="t"><b>Tenentismo e Coluna Prestes</b><span>Jovens oficiais atacam fraudes e oligarquias; o PCB é fundado e o feminismo se organiza.</span></div></li><li><div class="y">1930</div><div class="t"><b>Revolução de 1930</b><span>Fim da Primeira República e início da Era Vargas.</span></div></li><li><div class="y">1932–1934</div><div class="t"><b>Código Eleitoral e Constituição</b><span>Voto secreto e feminino; Justiça Eleitoral; direitos trabalhistas na Constituição.</span></div></li><li class="hl"><div class="y">1935–1937</div><div class="t"><b>Polarização, repressão e golpe</b><span>AIB e ANL; Lei de Segurança Nacional; Plano Cohen; Estado Novo.</span></div></li><li><div class="y">1943–1945</div><div class="t"><b>CLT e queda do Estado Novo</b><span>Consolidação das Leis do Trabalho, redemocratização e deposição de Vargas.</span></div></li></ul>
+    
+  </div>
+  <div class="ch-end"><span>Abertura</span><span>Próximo: Uma República para poucos →</span></div>
+</section>
+
+<section class="chapter" id="etapa1">
+  <header class="ch-head"><div class="ch-num">1</div><div>
+    <p class="eyebrow">Primeira República · 1889–1930</p><h2>Uma República para poucos</h2>
+    <p class="deck">Como o poder foi organizado e quem estava autorizado a participar. Neste capítulo, os gráficos são interativos.</p></div></header>
+  <div class="body">
+    <div class="chips"><span class="chip">GO-EMCHS602A</span><span class="chip">Processos políticos</span><span class="chip g">Oligarquias · Coronelismo · Fraude eleitoral</span></div>
+    <p class="lead">A República foi proclamada em 1889 por um pequeno grupo de militares e de elites, e o povo, nas palavras do jornalista Aristides Lobo, assistiu “bestializado”. Sem apoio popular amplo, o novo regime precisou construir símbolos, escrever uma Constituição e decidir quem entraria na política. A resposta foi: muito poucos.</p>
+    <div class="perguntas-box"><span class="lab">Perguntas orientadoras</span><ul><li>Quem participou da fundação da República e quem ficou de fora?</li><li>Como funcionava o voto e por que ele não representava a vontade da população?</li><li>Como oligarquias e coronéis controlavam a política?</li></ul></div>
+    <h3>Quatro conceitos para ler a República</h3>
+    <div class="cards">
+      <div class="card"><span class="n">Conceito 1</span><h6>Cidadania</h6><p>Conjunto de direitos civis, políticos e sociais. Quem tem os três é cidadão pleno; quem tem só alguns é cidadão incompleto.</p></div>
+      <div class="card"><span class="n">Conceito 2</span><h6>Democracia</h6><p>Governo em que o poder vem do povo, por eleições livres e competitivas. Ter eleições não basta: é preciso que o voto seja livre e amplo.</p></div>
+      <div class="card"><span class="n">Conceito 3</span><h6>Participação popular</h6><p>Todas as formas pelas quais as pessoas influenciam decisões: votar, mas também organizar-se, fazer greve, escrever na imprensa e ocupar as ruas.</p></div>
+      <div class="card"><span class="n">Conceito 4</span><h6>Resistência</h6><p>Reação organizada ou espontânea contra uma ordem considerada injusta, dos sertões às fábricas e aos quartéis.</p></div>
+    </div>
+    
+    <p class="tip-hint">Como usar: passe o mouse (ou toque) nos elementos para ver detalhes; use os botões para trocar o recorte; todo gráfico tem uma versão em tabela ou lista.</p>
+    <figure class="doc"><blockquote>“O povo assistiu àquilo bestializado, atônito, surpreso, sem conhecer o que significava.”</blockquote><figcaption>Do jornalista republicano <b>Aristides Lobo</b>, sobre a Proclamação da República, 1889. Expressão discutida por José Murilo de Carvalho em <em>Os bestializados</em> (1987) e reproduzida em Moderna Plus e Interação.</figcaption></figure>
+    
+    <div class="think"><small>Para pensar</small>Se o povo assistiu à Proclamação sem participar, de que modo a República poderia ser “do povo”? E o que significa ser cidadão quando só alguns votam?</div>
+    <h3>Uma República sem o povo</h3>
+    <aside class="support"><header><i></i>Texto de apoio · O imaginário republicano</header><div class="in"><p>Como a proclamação foi um evento articulado por militares, donos de terras e uma elite liberal, o regime nasceu com pouca legitimidade: parte da população ainda se identificava com a família imperial ou, ao menos, não era contrária a D. Pedro II. Para ganhar reconhecimento, a República precisou fabricar um novo imaginário nacional.</p><p>Nesse esforço, a História foi mobilizada. Tiradentes, um militar enforcado pela Coroa portuguesa, foi transformado em mártir e herói do novo regime, e retratado em obras de arte que o aproximavam da imagem de Cristo.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de CAMPOS; FERREIRA; SILVA (coord.), <em>História: democracia e protagonismo</em> (Interação), cap. 18.</div></aside>
+    <h3>Três projetos de República</h3>
+    <p>Nos primeiros anos, três correntes disputavam o rumo do novo regime. Os <b>liberais</b>, ligados à elite agrária, defendiam o federalismo, isto é, mais autonomia para os estados, e o fim do voto censitário, mas também o voto aberto, que permitia a patrões e coronéis vigiar o voto de seus empregados. Os <b>positivistas</b>, fortes entre os militares, queriam um governo centralizado e conduzido por homens “preparados”, sem autonomia para a população nem para os estados: uma república autoritária. Os <b>jacobinos</b>, inspirados na Revolução Francesa, defendiam liberdades de expressão e de associação e até a reforma agrária.</p>
+    <p>Venceu a conciliação entre liberais e positivistas, afastando as propostas mais radicais. A República nascia, portanto, não de uma revolução, mas de acordos entre facções que tinham vínculos com o regime anterior e rejeitavam mudanças profundas.</p>
+    <div class="cards">
+      <div class="card"><span class="n">Liberais</span><h6>Poder para as elites regionais</h6><p>Defendiam federalismo e liberdades econômicas, sobretudo para as oligarquias cafeeiras.</p></div>
+      <div class="card"><span class="n">Positivistas</span><h6>Ordem e progresso</h6><p>Queriam um Estado forte e centralizado, conduzido por uma elite técnica e militar.</p></div>
+      <div class="card"><span class="n">Jacobinos</span><h6>República popular</h6><p>Pediam participação popular mais ampla, mas tinham pouco peso diante das oligarquias.</p></div>
+    </div>
+    
+    <h3>A Constituição de 1891: quem podia votar?</h3>
+    <p>A Constituição de 1891 separou a Igreja do Estado, extinguiu o Poder Moderador e o Senado vitalício, adotou o federalismo, criou o registro civil e acabou com o voto censitário. Mesmo assim, a cidadania política continuou muito estreita: só votavam homens brasileiros, adultos e alfabetizados. Mulheres, analfabetos, menores de 21 anos, mendigos, religiosos reclusos e militares de baixa patente ficavam de fora.</p>
+    <div class="stats"><div class="stat"><b>4,1%</b><span>da população adulta podia votar após a Constituição de 1891</span></div><div class="stat"><b>65%</b><span>dos adultos eram analfabetos e, por isso, excluídos do voto</span></div><div class="stat"><b>≈ 2%</b><span>da população votou na primeira eleição direta, em 1894</span></div></div>
+    <div class="viz" id="viz-voto">
+      <p class="viz-k">Gráfico 1 · Quem podia votar</p>
+      <h4 class="vt">Cada quadrado é 1% dos adultos</h4>
+      <p class="sub">Escolha um recorte e veja quantos quadrados acendem. Passe o mouse sobre os quadrados.</p>
+      <div class="viz-ctl">
+        <button class="pill" type="button" data-m="voto" aria-pressed="true"><i style="--k:var(--c1)"></i>Podiam votar</button>
+        <button class="pill" type="button" data-m="analf" aria-pressed="false"><i style="--k:var(--c2)"></i>Analfabetos</button>
+        <button class="pill" type="button" data-m="jovem" aria-pressed="false"><i style="--k:var(--c3)"></i>Menores de 21 anos</button>
+      </div>
+      <div class="waffle-wrap"><div class="waffle" role="group" aria-label="100 quadrados representando 100 adultos"></div><div class="readout" aria-live="polite"></div></div>
+      <p class="note">Os recortes se sobrepõem: uma mulher analfabeta e jovem aparece em mais de um. Por isso cada botão mostra um recorte por vez, e eles não somam 100%.</p>
+    </div>
+    
+    <div class="callout concept"><span class="lab">Ideia-chave</span><p>O fim do voto censitário foi uma ampliação apenas formal. Na prática, a exigência de saber ler e escrever, num país com cerca de 65% de analfabetos, excluía a grande maioria dos adultos.</p></div>
+    
+    <p>A tabela abaixo mostra que os vencedores recebiam percentuais enormes de votos válidos, mas que os votantes eram uma fração mínima da população. Eleição, naquele contexto, servia mais para repartir o poder entre elites do que para expressar a vontade geral.</p>
+    <div class="scroll"><table class="tb"><thead><tr><th>Ano</th><th>Candidato vencedor</th><th>% de votos válidos</th><th>% de votantes na população</th></tr></thead><tbody><tr><td><b>1894</b></td><td>Prudente de Morais</td><td>84,3</td><td>2,21</td></tr><tr><td><b>1902</b></td><td>Rodrigues Alves</td><td>91,7</td><td>3,44</td></tr><tr><td><b>1910</b></td><td>Hermes da Fonseca</td><td>57,1</td><td>3,19</td></tr><tr><td><b>1918</b></td><td>Rodrigues Alves</td><td>99,1</td><td>1,48</td></tr><tr><td><b>1922</b></td><td>Arthur Bernardes</td><td>56,0</td><td>2,90</td></tr><tr><td><b>1930</b></td><td>Júlio Prestes</td><td>57,7</td><td>5,65</td></tr></tbody></table></div><p style="font:500 12.5px/1.5 var(--sans);color:var(--muted);margin:-10px 0 18px">Seleção de eleições presidenciais. Fonte: dados reunidos em VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12.</p>
+    <div class="viz" id="viz-eleicoes">
+      <p class="viz-k">Gráfico 2 · As eleições presidenciais</p>
+      <h4 class="vt">Pouca gente votava, e o vencedor quase sempre “ganhava de lavada”</h4>
+      <p class="sub">Alterne a medida para comparar a participação com o resultado do vencedor.</p>
+      <div class="viz-ctl">
+        <button class="pill" type="button" data-m="vot" aria-pressed="true"><i style="--k:var(--c1)"></i>Votantes na população</button>
+        <button class="pill" type="button" data-m="val" aria-pressed="false"><i style="--k:var(--c1)"></i>Votos válidos do vencedor</button>
+        <button class="pill ghost" type="button" data-tbl aria-pressed="false">Ver como tabela</button>
+      </div>
+      <div class="plot"></div>
+      <div class="tvw"></div>
+      <p class="note"><b class="hint"></b> Fonte dos dados: Moderna Plus, cap. 12. Os percentuais de votos válidos seguem a tabela do livro.</p>
+    </div>
+    
+    <div class="callout teal"><span class="lab">Cidadania segundo José Murilo de Carvalho</span><p>Com voto aberto, poucos eleitores e a maioria sem direitos básicos, a Primeira República ilustra a ideia de estadania: o acesso a direitos dependia de relações pessoais com quem tinha poder, e não da participação autônoma dos cidadãos.</p></div>
+    <h3>Da República da Espada à República Oligárquica</h3>
+    <p>Os dois primeiros governos foram militares. <b>Deodoro da Fonseca</b> enfrentou oposição do Congresso e a crise do Encilhamento, uma bolha financeira provocada pela emissão desordenada de papel-moeda; em novembro de 1891 fechou o Congresso e decretou estado de sítio, mas a Marinha reagiu na Primeira Revolta da Armada e ele renunciou. <b>Floriano Peixoto</b> assumiu sem convocar novas eleições, prendeu opositores e enfrentou a Segunda Revolta da Armada e a Revolução Federalista, no Sul, que deixou cerca de 10 mil mortos. Mesmo nessa fase, o autoritarismo já aparecia como solução de governo.</p>
+    <p>Em 1894, o paulista <b>Prudente de Morais</b>, candidato dos cafeicultores, tornou-se o primeiro presidente civil. Começava a chamada República Oligárquica, em que um pequeno número de famílias e grupos econômicos controlava o governo.</p>
+    <div class="callout concept"><span class="lab">Conceito-chave</span><p><b>Oligarquia:</b> governo exercido por poucas pessoas ou grupos, em geral ligados pela riqueza e pela família. Na Primeira República, as oligarquias estaduais mais fortes eram as de São Paulo e Minas Gerais.</p></div>
+    <h3>O sistema que sustentava o poder oligárquico</h3>
+    <aside class="support"><header><i></i>Texto de apoio · Coronelismo e clientelismo</header><div class="in"><p>Os coronéis eram, em geral, grandes proprietários de terra e chefes políticos locais. A patente de coronel vinha da Guarda Nacional, criada ainda no Império, mas o título continuou a significar prestígio e poder depois da queda da monarquia. Em troca de votos, eles ofereciam favores: atendimento médico, uma vaga na escola, um emprego público, a nomeação de delegados e professores. Essa troca de favores por apoio político é o <b>clientelismo</b>.</p><p>Na outra ponta, o coronel garantia votos a candidatos a governador, e o governo estadual, em contrapartida, assegurava o poder do coronel no município. Esse sistema de negociações, muitas vezes fraudulentas, entre chefes locais, estados e União é o que os historiadores chamam de <b>coronelismo</b>.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; AZEVEDO; SERIACOPI, <em>Por toda parte: História</em> (2024), cap. 9, p. 178.</div></aside>
+    <p>Como o voto era aberto, o eleitor votava sob a vigilância de gente ligada ao coronel. As fraudes tinham nome: o <b>voto de cabresto</b>, em que o eleitor era conduzido como um animal; o <b>curral eleitoral</b>, em que votantes eram confinados e vigiados até o dia da votação; a <b>eleição a bico de pena</b>, em que atas e assinaturas eram falsificadas; e a <b>degola</b>, em que uma comissão da Câmara recusava o diploma de candidatos de oposição eleitos.</p>
+    <h4>Como a fraude funcionava, passo a passo</h4>
+    <div class="fr">
+      <details><summary>Voto de cabresto</summary><div><p>O eleitor era conduzido a votar no candidato indicado pelo coronel, como um animal puxado pelo cabresto. Quem dependia do coronel por trabalho, terra ou favores raramente ousava recusar.</p></div></details>
+      <details><summary>Voto aberto</summary><div><p>Sem sigilo, o voto podia ser fiscalizado. A pessoa sabia que a escolha seria conhecida por quem mandava na região.</p></div></details>
+      <details><summary>Curral eleitoral</summary><div><p>Redes de dependência faziam de cada fazenda ou município uma reserva de votos de um chefe local.</p></div></details>
+      <details><summary>Eleição a bico de pena</summary><div><p>Os resultados dependiam de quem, com pena e tinteiro, elaborava as atas: nomes de mortos, ausentes ou inexistentes eram registrados como eleitores.</p></div></details>
+      <details><summary>Degola</summary><div><p>Na verificação final dos poderes, a Câmara podia negar o diploma a candidatos da oposição eleitos, “degolando” seus mandatos.</p></div></details>
+      <details><summary>Política dos governadores</summary><div><p>Sistema desenhado no governo Campos Sales: o presidente apoiava as oligarquias estaduais, e elas elegiam deputados fiéis ao presidente. A oposição raramente chegava ao Congresso.</p></div></details>
+    </div>
+    
+    <aside class="support"><header><i></i>Texto de apoio · O que o historiador diz</header>
+      <div class="in"><p>O jurista Victor Nunes Leal, em estudo clássico sobre o coronelismo, mostrou que o fenômeno não era só a força de uma figura autoritária: era a troca entre o poder público, que precisava de votos, e os chefes locais, que ofereciam votos em troca de cargos, obras e favores. Nesse arranjo, o poder privado dos coronéis entrava na política. (Ideia resumida pelos autores de Por toda parte: História, 2024.)</p></div>
+      <div class="src"><b>Fonte:</b> LEAL, Victor Nunes. <em>Coronelismo, enxada e voto</em>, conforme apresentado em AZEVEDO; SERIACOPI, <em>Por toda parte: História</em>. São Paulo: FTD, 2024.</div>
+    </aside>
+    
+    <div class="think"><small>Para pensar</small>Se o resultado de uma eleição é conhecido antes da votação, a eleição cumpre a função da democracia? O que falta para que o voto seja livre?</div>
+    
+    <figure class="doc"><blockquote>“Cada povo tem a soberania que a sua indiferença merece!”</blockquote><figcaption>Fala da personagem República em charge de <b>Kalixto</b>, <em>O Malho</em>, 1915, sobre a soberania eleitoral do “Zé Povo”, reproduzida em VIEIRA et al., <em>Moderna Plus: História</em> (2024).</figcaption></figure>
+    <h3>A política dos governadores e o café com leite</h3>
+    <p>No governo de <b>Campos Sales</b> (1898-1902), o governo federal passou a apoiar os grupos dominantes de cada estado e a respeitar sua autonomia interna, em troca de sustentação no Congresso. Era a <b>política dos governadores</b>, que dificultava a atuação da oposição e mantinha no poder apenas políticos fiéis. Sobre essa base, as elites de São Paulo e Minas Gerais, donas da produção de café e de leite, alternaram-se na Presidência: a chamada <b>política do café com leite</b>, que durou, com conflitos, até 1930.</p>
+    <div class="think"><small>Para pensar</small>Se o voto era aberto e o eleitor dependia do coronel para viver, o voto era uma escolha livre? O que isso diz sobre a democracia da Primeira República?</div>
+    <h3>Quem ficou de fora</h3>
+    <p class="lead">A cidadania incompleta atingia grupos diferentes de maneiras diferentes. Em 1890, o país tinha mais de 14 milhões de habitantes, e a maior parte deles era formada por pessoas negras, recém-saídas da escravidão, sem terra, sem escola e sem voto efetivo.</p>
+    
+    <div class="viz" id="viz-censo">
+      <p class="viz-k">Gráfico 3 · A população em 1890</p>
+      <h4 class="vt">A maioria da população era negra</h4>
+      <p class="sub">Passe o mouse ou foque cada faixa. A largura é proporcional à população.</p>
+      <div class="stack" role="group" aria-label="Composição da população em 1890">
+        <button class="seg" type="button" style="--w:56;background:#1d5fb0" data-k="Pessoas negras" data-v="cerca de 56%" data-s="Censo de 1890" data-c="#6da7ec">Pessoas negras · 56%</button>
+        <button class="seg" type="button" style="--w:43;background:#a8472a" data-k="Pessoas brancas" data-v="pouco mais de 43%" data-s="Censo de 1890" data-c="#e58c70">Pessoas brancas · 43%</button>
+      </div>
+      <p class="note">Fonte: IBGE, Censo de 1890, em Moderna Plus, cap. 12. As categorias seguem a classificação do livro; os valores restantes correspondem a outras classificações.</p>
+    </div>
+    <h3>Seis grupos, seis exclusões</h3>
+    <div data-tabs>
+      <div class="tabs" role="tablist" aria-label="Grupos excluídos">
+        <button class="tab" role="tab" type="button">Mulheres</button><button class="tab" role="tab" type="button">Pobres</button><button class="tab" role="tab" type="button">Analfabetos</button><button class="tab" role="tab" type="button">Indígenas</button><button class="tab" role="tab" type="button">Imigrantes</button><button class="tab" role="tab" type="button">População negra</button>
+      </div>
+      <div class="panel-box" role="tabpanel"><h5>Mulheres</h5><h6>O que lhes faltava</h6><p>O voto. A Constituição de 1891 silenciava sobre as mulheres, e a interpretação dominante as excluía. Elas só conquistariam o voto em todo o país com o Código Eleitoral de 1932.</p><h6>Como reagiram</h6><p>Bertha Lutz fundou a Liga pela Emancipação Intelectual da Mulher (1919) e realizou o Primeiro Congresso Feminista (1922). Leolinda Daltro criou o Partido Republicano Feminino. O Rio Grande do Norte permitiu o voto feminino em 1926, e Alzira Soriano foi eleita prefeita de Lajes em 1929.</p><button class="gbtn" type="button" data-goto="viz-resist">Ver na linha do tempo</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Pobres</h5><h6>O que lhes faltava</h6><p>Dependiam de coronéis, patrões e donos de terra. O voto aberto e a violência tornavam arriscado votar contra quem controlava seu sustento.</p><h6>Como reagiram</h6><p>Entre fugas, greves, sociedades de resistência e revoltas como a da Vacina, os pobres mostraram que sabiam se organizar, mesmo sem canais formais de participação.</p><button class="gbtn" type="button" data-goto="viz-eleicoes">Voltar ao gráfico das eleições</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Analfabetos</h5><h6>O que lhes faltava</h6><p>O direito de se alistar como eleitores. Em 1900, cerca de 65% dos adultos eram analfabetos, o que deixava a maioria fora da política formal.</p><h6>Por que importa</h6><p>A exclusão pelo saber ler e escrever somava-se à falta de escolas públicas: o Estado negava a escola e depois usava a falta de escola como razão para negar o voto.</p><button class="gbtn" type="button" data-goto="viz-voto">Ver o gráfico do voto</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Indígenas</h5><h6>O que lhes faltava</h6><p>Reconhecimento, terra e proteção. Povos indígenas eram tratados como obstáculos ao avanço de ferrovias, fazendas e colonização, e sofriam violência e perda de território.</p><h6>Vozes e debates</h6><p>Leolinda Daltro foi pioneira na defesa dos direitos indígenas e, ao mesmo tempo, fundou o Partido Republicano Feminino. Seu caso mostra que lutas por gênero e por povos indígenas podiam se encontrar.</p></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Imigrantes</h5><h6>O que lhes faltava</h6><p>Muitos imigrantes chegaram em busca de trabalho e encontraram jornadas longas, salários baixos e pouca proteção. Nas fábricas, eram maioria entre operários têxteis paulistas.</p><h6>Como reagiram</h6><p>Trouxeram experiências do anarquismo, do socialismo e do sindicalismo revolucionário, e participaram de greves como a de 1917. Em resposta, o Estado reprimiu e expulsou muitos deles.</p><button class="gbtn" type="button" data-goto="viz-fabrica">Ver quem trabalhava nas fábricas</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>População negra</h5><h6>O que lhes faltava</h6><p>Terra, escola, emprego estável e igualdade perante a lei. O fim da escravidão, em 1888, não veio com políticas de integração, e o discurso oficial muitas vezes apagou a presença negra da nação republicana.</p><h6>Como reagiram</h6><p>Criaram jornais da imprensa negra, sociedades de resistência e participaram de greves e revoltas, como a dos carregadores do porto do Rio e a Revolta da Chibata.</p><button class="gbtn" type="button" data-goto="viz-resist">Ver na linha do tempo</button></div>
+    </div>
+    <div class="viz" id="viz-fabrica">
+      <p class="viz-k">Gráfico 4 · Nas fábricas têxteis paulistas</p>
+      <h4 class="vt">Quem fazia a indústria funcionar</h4>
+      <p class="sub">Clique em uma barra para ler o detalhe.</p>
+      <div class="hbars">
+        <button class="hb" type="button" data-k="ita" data-n="Italianos" data-v="60" aria-pressed="true"><span class="n">Italianos</span><span class="tr"><span class="fl" style="display:block"></span></span><span class="v">60%</span></button>
+        <button class="hb" type="button" data-k="mul" data-n="Mulheres" data-v="49" aria-pressed="false"><span class="n">Mulheres</span><span class="tr"><span class="fl" style="display:block"></span></span><span class="v">49%</span></button>
+        <button class="hb" type="button" data-k="cri" data-n="Crianças" data-v="22" aria-pressed="false"><span class="n">Crianças</span><span class="tr"><span class="fl" style="display:block"></span></span><span class="v">22%</span></button>
+      </div>
+      <div class="detail" aria-live="polite"></div>
+      <p class="note">As categorias se sobrepõem (uma mulher italiana aparece em duas barras). Fonte: Moderna Plus, cap. 12.</p>
+    </div>
+    <aside class="support"><header><i></i>Texto de apoio · A liberdade segundo Chalhoub</header>
+      <div class="in"><p>O historiador Sidney Chalhoub observou que, para escravizados e libertos, liberdade não significava apenas poder ir e vir ou vender trabalho no mercado. Podia significar escolher a quem servir, ou não servir a ninguém, e ter segurança para constituir laços afetivos. A ideia ajuda a entender por que a abolição, sem direitos, deixou a cidadania incompleta.</p></div>
+      <div class="src"><b>Fonte:</b> CHALHOUB, Sidney. <em>Visões da liberdade</em>. São Paulo: Companhia das Letras, 1990, conforme apresentado em SM EDUCAÇÃO, <em>Ser protagonista: História</em> (2024).</div>
+    </aside>
+    
+    <h3>Resistências: a participação fora das urnas</h3>
+    <p class="lead">A história da Primeira República não se resume ao controle das oligarquias. Do campo à cidade, do convés dos navios às redações da imprensa negra, muita gente reagiu. Use os filtros abaixo para separar os movimentos por tipo, clique em cada linha e leia o que reivindicavam e como terminaram.</p>
+    
+    <div class="viz" id="viz-resist">
+      <p class="viz-k">Gráfico 5 · Linha do tempo das resistências</p>
+      <h4 class="vt">Treze movimentos, 1889–1930</h4>
+      <p class="sub">Ligue e desligue os grupos; passe o mouse ou use as setas e Tab para navegar; clique (ou Enter) para abrir o detalhe.</p>
+      <div class="viz-ctl"></div>
+      <div class="plot"></div>
+      <div class="tvw"></div>
+      <div class="detail" aria-live="polite"></div>
+    </div>
+    <h3>Os números das resistências</h3>
+    <div class="stats">
+      <div class="stat" data-tk="Canudos" data-tip="Estimativa da população do arraial de Belo Monte."><b data-count="25" data-suf=" mil">0</b><span>pessoas, em média, em Canudos (20 a 30 mil)</span></div>
+      <div class="stat" data-tk="Canudos" data-tip="Soldados enviados na quarta e última expedição."><b data-count="8" data-suf=" mil">0</b><span>soldados na última expedição contra Canudos</span></div>
+      <div class="stat" data-tk="Contestado" data-tip="Estimativa mínima de mortos na Guerra do Contestado."><b data-count="10" data-pre="+" data-suf=" mil">0</b><span>mortos no Contestado</span></div>
+      <div class="stat" data-tk="Revolta da Chibata" data-tip="Marinheiros que tomaram os encouraçados em 1910."><b data-count="2" data-suf=" mil">0</b><span>marinheiros na Revolta da Chibata</span></div>
+      <div class="stat" data-tk="Chibata" data-tip="Castigo aplicado a um marinheiro, estopim da revolta."><b data-count="250">0</b><span>chibatadas, o estopim</span></div>
+      <div class="stat" data-tk="Greve de 1917" data-tip="As estimativas vão de 70 mil a 100 mil participantes."><b data-count="85" data-suf=" mil">0</b><span>grevistas, em média, em 1917 (70 a 100 mil)</span></div>
+      <div class="stat" data-tk="Coluna Prestes" data-tip="Percurso a pé da Coluna Prestes-Miguel Costa."><b data-count="25" data-suf=" mil km">0</b><span>percorridos pela Coluna</span></div>
+    </div>
+    <aside class="support"><header><i></i>Texto de apoio · O que as revoltas mostram</header>
+      <div class="in"><p>Segundo José Murilo de Carvalho, em episódios como a Revolta da Vacina as pessoas não contestavam o Estado nem pediam participação nas decisões; defendiam valores e direitos que sentiam ameaçados. O historiador chama atenção para um tipo de ação popular defensiva, fragmentada, sem programa político, o que a diferencia do movimento operário organizado. (Ideia resumida a partir dos livros didáticos.)</p></div>
+      <div class="src"><b>Fonte:</b> CARVALHO, José Murilo de. <em>Os bestializados</em>. São Paulo: Companhia das Letras, 1987, conforme apresentado em Moderna Plus: História (2024) e Interação (2024).</div>
+    </aside>
+    <details class="prof"><summary>Nota para o professor · recorte regional</summary><div class="in"><p>Os livros-base tratam pouco de Goiás. Para o recorte local (oligarquias goianas, passagem da Coluna Prestes, Santa Dica), é preciso consultar fontes regionais e conferir os dados antes de uso em avaliação.</p></div></details>
+    
+    <h3>Vozes dos autores</h3>
+    <p class="lead">Um mesmo período pode ser lido de várias maneiras. Escolha um autor e veja a ideia principal, como ela ajuda a ler os gráficos e onde ela aparece nos livros. As ideias estão resumidas com nossas palavras; as aspas aparecem apenas em fontes do período.</p>
+    
+    <div data-tabs>
+      <div class="tabs" role="tablist" aria-label="Autores">
+        <button class="tab" role="tab" type="button">Carvalho</button><button class="tab" role="tab" type="button">Aristides Lobo</button><button class="tab" role="tab" type="button">Boris Fausto</button><button class="tab" role="tab" type="button">Nunes Leal</button><button class="tab" role="tab" type="button">Chalhoub</button><button class="tab" role="tab" type="button">Lima Barreto e Schwarcz</button>
+      </div>
+      <div class="panel-box" role="tabpanel"><h5>José Murilo de Carvalho</h5><span class="who">Historiador · Cidadania no Brasil; Os bestializados</span><h6>Ideia principal</h6><p>A cidadania é feita de direitos civis, políticos e sociais, e no Brasil eles chegaram de forma desigual e em ordem própria. Na Primeira República, a maioria da população tinha poucos direitos e participava pouco da política formal.</p><h6>Como usar nos gráficos</h6><p>Os quadrados do gráfico 1 mostram a dimensão política da cidadania; as resistências do gráfico 5 mostram formas de participação fora das urnas.</p><span class="who">Nos livros: Interação e Ser Protagonista</span><button class="gbtn" type="button" data-goto="viz-voto">Ir ao gráfico 1</button><button class="gbtn" type="button" data-goto="viz-resist">Ir ao gráfico 5</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Aristides Lobo</h5><span class="who">Jornalista republicano · fonte do período, 1889</span><h6>Ideia principal</h6><p>Testemunha da Proclamação, registrou que o povo assistiu ao fato sem compreender o que ocorria. A frase tornou-se ponto de partida do debate sobre a República “sem o povo”.</p><h6>Como usar nos gráficos</h6><p>Compare a frase com o gráfico 5: o povo realmente ficou parado ou encontrou outros modos de agir?</p><span class="who">Nos livros: Moderna Plus e Interação</span><button class="gbtn" type="button" data-goto="viz-resist">Ir ao gráfico 5</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Boris Fausto</h5><span class="who">Historiador · História do Brasil</span><h6>Ideia principal</h6><p>Em sua leitura da política do início da República, o historiador mostra como as elites buscaram associar o novo regime à prosperidade dos negócios, o que revela a prioridade dada à economia sobre a participação.</p><h6>Como usar nos gráficos</h6><p>Observe o gráfico 2: a estabilidade eleitoral convivia com baixa participação.</p><span class="who">Nos livros: Moderna Plus</span><button class="gbtn" type="button" data-goto="viz-eleicoes">Ir ao gráfico 2</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Victor Nunes Leal</h5><span class="who">Jurista · Coronelismo, enxada e voto</span><h6>Ideia principal</h6><p>O coronelismo é um arranjo de trocas entre poder público e poder privado: o coronel entrega votos, e o governo entrega cargos, obras e proteção.</p><h6>Como usar nos gráficos</h6><p>Relacione com o gráfico 2: o resultado das eleições era produzido por redes de dependência, e não pela escolha livre.</p><span class="who">Nos livros: Por toda parte</span><button class="gbtn" type="button" data-goto="viz-eleicoes">Ir ao gráfico 2</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Sidney Chalhoub</h5><span class="who">Historiador · Visões da liberdade; Trabalho, lar e botequim</span><h6>Ideia principal</h6><p>Pessoas escravizadas e libertas tinham visões próprias de liberdade, e trabalhadores urbanos construíram seu cotidiano e suas formas de luta mesmo diante do descaso das autoridades.</p><h6>Como usar nos gráficos</h6><p>Leia o gráfico 4 e a linha do tempo com essa lente: trabalhadores não eram massa passiva, mas sujeitos da própria história.</p><span class="who">Nos livros: Moderna Plus, Por toda parte e Ser Protagonista</span><button class="gbtn" type="button" data-goto="viz-fabrica">Ir ao gráfico 4</button></div>
+      <div class="panel-box" role="tabpanel" hidden><h5>Lima Barreto e Lilia Schwarcz</h5><span class="who">Escritor carioca (1881–1922) e historiadora</span><h6>Ideia principal</h6><p>Lima Barreto usou a literatura para criticar o racismo, o nacionalismo ufanista e as promessas não cumpridas da República. Lilia Schwarcz, com o desenhista Spacca, recontou a Primeira República a partir de sua obra na HQ Triste República.</p><h6>Como usar nos gráficos</h6><p>Use o gráfico 3 para discutir como a desigualdade racial aparece na crítica do escritor.</p><span class="who">Nos livros: Moderna Plus e Interação (sugestões de leitura)</span><button class="gbtn" type="button" data-goto="viz-censo">Ir ao gráfico 3</button></div>
+    </div>
+    <h3>Síntese do tópico</h3>
+    <div class="scroll"><table class="tb">
+      <thead><tr><th>Conceito</th><th>Na teoria</th><th>Na prática (1889–1930)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Cidadania</b></td><td>Direitos civis, políticos e sociais para todos.</td><td>Cidadania incompleta: cerca de 4% dos adultos votavam; mulheres, analfabetos e pobres ficavam de fora.</td></tr>
+        <tr><td><b>Democracia</b></td><td>Eleições livres e competitivas.</td><td>Eleições com voto aberto, fraude e vitórias sem competição real; coronelismo e política dos governadores.</td></tr>
+        <tr><td><b>Participação popular</b></td><td>Influência do povo nas decisões.</td><td>Canais formais fechados; participação por greves, revoltas, imprensa e associações.</td></tr>
+        <tr><td><b>Resistência</b></td><td>Reação a uma ordem injusta.</td><td>Canudos, Contestado, Vacina, Chibata, greves, tenentismo, sufragismo e imprensa negra.</td></tr>
+      </tbody></table></div>
+    <div class="perguntas-box"><span class="lab">Para discutir em sala</span><ul><li>Quais grupos você acha que mais perderam com a Primeira República? Por quê?</li><li>Voto e participação são a mesma coisa? Dê um exemplo da linha do tempo.</li><li>O que mudou, e o que ainda persiste, na relação entre voto e desigualdade no Brasil de hoje?</li></ul></div>
+    
+  </div>
+  <div class="ch-end"><span>Primeira República · 1889–1930</span><span>Próximo: Café, indústria e exclusão →</span></div>
+</section>
+
+<section class="chapter" id="etapa2">
+  <header class="ch-head"><div class="ch-num">2</div><div>
+    <p class="eyebrow">Primeira República · 1889–1930</p><h2>Café, indústria e exclusão</h2>
+    <p class="deck">Os processos econômicos e sociais por trás da política oligárquica.</p></div></header>
+  <div class="body">
+    <div class="chips"><span class="chip">GO-EMCHS602A</span><span class="chip">Processos econômicos e sociais</span><span class="chip g">Café · Indústria · Imigração · Cidade · Exclusão</span></div>
+    <p class="lead">Por trás do jogo político, havia uma economia e uma sociedade em transformação. O café financiava o poder, a indústria começava a crescer, os imigrantes chegavam, as cidades se modernizavam. O progresso, porém, tinha dono: a modernização foi planejada pelas elites e, muitas vezes, contra os mais pobres, os negros e os indígenas.</p>
+    <div class="perguntas-box"><span class="lab">Perguntas orientadoras</span><ul><li>Como o café e a indústria se ligavam à política?</li><li>O que a modernização das cidades custou à população pobre?</li><li>Que ideias de “nação” e de “povo” a elite republicana defendia?</li></ul></div>
+    <h3>Do café à indústria</h3>
+    <aside class="support"><header><i></i>Texto de apoio · O café e o início da industrialização</header><div class="in"><p>A economia da Primeira República era agrário-exportadora, centrada no café. Com a pressão internacional contra o tráfico de escravizados e a abolição, os cafeicultores passaram a aplicar seu capital em outros negócios: casas de câmbio, beneficiamento, comércio de importação e exportação, ferrovias, portos e fábricas. Muitas vezes isso contou com capital estrangeiro e financiamento de banqueiros.</p><p>A Primeira Guerra Mundial interrompeu as importações europeias e estimulou a chamada substituição de importações: o país passou a produzir internamente o que antes comprava de fora. As fábricas, concentradas em São Paulo, no Rio de Janeiro e na Zona da Mata mineira, eram em geral pequenas e produziam tecidos, alimentos e bebidas. Mesmo assim, o Brasil continuou sendo um país agrário-exportador.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; CAMPOS; FERREIRA; SILVA (coord.), <em>Interação</em>, cap. 18.</div></aside>
+    <div class="stats"><div class="stat"><b>3,8 mi</b><span>imigrantes entraram no Brasil entre 1887 e 1930, ao menos</span></div><div class="stat"><b>60%</b><span>dos empregados nas fábricas paulistas de fiação e tecidos eram italianos, no início do século XX</span></div><div class="stat"><b>49%</b><span>das pessoas empregadas nas fábricas têxteis de São Paulo eram mulheres</span></div></div>
+    <div class="callout teal"><span class="lab">Café e política</span><p>O poder econômico dos cafeicultores sustentava o poder político de São Paulo e Minas Gerais. Quando a crise de 1929 derrubou o preço do café, a base econômica da política do café com leite ficou abalada, e isso pesou no fim da Primeira República.</p></div>
+    <h3>A borracha e a Amazônia</h3>
+    <p>Entre o fim do século XIX e o início do XX, a borracha tornou-se o segundo principal produto de exportação do país, atrás apenas do café, impulsionada pela demanda de bicicletas e automóveis. Milhares de nordestinos atingidos pela seca migraram para a Amazônia. A riqueza financiou a reforma de Belém e de Manaus, mas os seringueiros viviam em condições de miséria e trabalho forçado, e muitos povos indígenas morreram em conflitos, por doenças e pelo trabalho extenuante.</p>
+    <h3>A cidade “civilizada”: a reforma do Rio de Janeiro</h3>
+    <p>Entre 1902 e 1906, no governo de <b>Rodrigues Alves</b>, o Rio de Janeiro, então capital federal, foi remodelado pelo prefeito <b>Pereira Passos</b>, inspirado na reforma de Paris. O porto foi ampliado, abriu-se a Avenida Central e o sanitarista <b>Oswaldo Cruz</b> conduziu o combate às epidemias de febre amarela e varíola. Mas o custo humano foi alto: os responsáveis pelas obras tinham poderes ilimitados, os moradores eram avisados por simples cartaz, centenas de casas e cortiços foram demolidos e a população pobre foi empurrada para morros, mangues e subúrbios. O período ficou conhecido como a “ditadura Passos”, e o prefeito, como “Bota-abaixo”.</p>
+    <h3>Quem era o “povo” brasileiro?</h3>
+    <aside class="support"><header><i></i>Texto de apoio · Exclusão e racismo na Primeira República</header><div class="in"><p>No Censo de 1890, cerca de 56% da população era negra e pouco mais de 43%, branca. Ainda assim, as representações oficiais da nação deixavam de fora negros e indígenas. A pintura <em>A Pátria</em>, de Pedro Bruno, de 1919, é um exemplo: nela, a bandeira republicana é central, mas o povo retratado é branco.</p><p>A elite via no “branqueamento” uma estratégia de futuro, apostando que a imigração europeia e a miscigenação reduziriam a população negra. A tela <em>A redenção de Cam</em>, de Modesto Brocos, de 1895, traduz essa ideologia racista. O Código Penal de 1890 criminalizava práticas culturais de origem africana, como a capoeira, e punia a chamada “vadiagem”, o que permitia perseguir quem estava sem emprego ou sem moradia fixa. O resultado foi o controle do acesso aos espaços públicos e a marginalização da população negra e pobre.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; SM EDUCAÇÃO, <em>Ser protagonista: História</em> (2024), seção sobre a Primeira República.</div></aside>
+    <h3>Povos indígenas: integrar ou eliminar?</h3>
+    <p>O projeto de modernização atingiu os povos indígenas por meio da expansão das lavouras de café, da construção de ferrovias e da criação de colônias de imigrantes. Nos discursos oficiais falava-se em uma “marcha da civilização” sobre territórios supostamente “vazios”. Na construção da ferrovia Noroeste do Brasil, entre 1905 e 1914, os Kaingang foram violentamente deslocados e massacrados, e houve quem defendesse publicamente seu extermínio.</p>
+    <p>Em 1910 foi criado o <b>Serviço de Proteção aos Índios e Localização de Trabalhadores Nacionais</b> (SPILTN), chefiado pelo marechal Rondon, depois chamado Serviço de Proteção aos Índios (SPI). O órgão tinha como missão proteger a integridade dos povos indígenas, mas prevalecia a ideia de que eles deviam adotar os costumes dos não indígenas, e o próprio serviço chegou a autorizar o uso econômico de terras indígenas e deslocamentos forçados.</p>
+    <h3>Educação: um direito para poucos</h3>
+    <p>Em 1900, cerca de 65% da população acima de 15 anos era analfabeta, índice que quase não mudou em vinte anos. Setores urbanos viram nesse quadro um obstáculo à modernização, e ganhou força o movimento da <b>Escola Nova</b>, liderado por educadores como Anísio Teixeira, Fernando de Azevedo e Lourenço Filho, que defendia um sistema público, gratuito e para ambos os sexos, com currículo comum adaptado às realidades regionais.</p>
+    <div class="callout warn"><span class="lab">Em foco</span><p>A modernização da Primeira República foi seletiva: trouxe avenidas, ferrovias e fábricas, mas ampliou a exclusão. Quem não cabia no projeto de nação “civilizada” era removido, criminalizado ou ignorado.</p></div>
+    <div class="think"><small>Para pensar</small>A reforma urbana do Rio foi feita “para quem”? Que situações parecidas você conhece hoje, em cidades brasileiras?</div>
+  </div>
+  <div class="ch-end"><span>Primeira República · 1889–1930</span><span>Próximo: Quem resistiu: participação cidadã →</span></div>
+</section>
+
+<section class="chapter" id="etapa3">
+  <header class="ch-head"><div class="ch-num">3</div><div>
+    <p class="eyebrow">Primeira República · 1889–1930</p><h2>Quem resistiu: participação cidadã</h2>
+    <p class="deck">Revoltas, greves, mulheres, imprensa negra e tenentismo contra a ordem oligárquica.</p></div></header>
+  <div class="body">
+    <div class="chips"><span class="chip">GO-EMCHS602A</span><span class="chip">Participação cidadã</span><span class="chip g">Movimentos sociais · Greves · Revoltas · Sufragismo</span></div>
+    <p class="lead">A exclusão não foi aceita em silêncio. No campo, nas ruas, nos quartéis, nas fábricas e nos jornais, pessoas comuns criaram formas próprias de organização e de protesto. Muitas dessas lutas foram reprimidas com violência, mas deixaram marcas profundas e ajudaram a abalar a ordem oligárquica.</p>
+    <div class="perguntas-box"><span class="lab">Perguntas orientadoras</span><ul><li>Como camponeses, trabalhadores e mulheres se organizavam fora da política formal?</li><li>Como o Estado respondia a cada movimento?</li><li>O que esses movimentos revelam sobre a participação cidadã na época?</li></ul></div>
+    <h3>Fé e terra no sertão: os movimentos messiânicos</h3>
+    <aside class="support"><header><i></i>Texto de apoio · Canudos e Contestado</header><div class="in"><p>Em 1893, <b>Antônio Conselheiro</b> fundou o arraial de Belo Monte (Canudos), na Bahia, que chegou a reunir de 20 mil a 30 mil pessoas. A seca, a carestia e a violência dos coronéis aproximavam os sertanejos da comunidade, que vivia da agricultura e tinha como base o messianismo, a crença em um enviado que libertaria os oprimidos. O arraial incomodava o governo, a Igreja e os grandes proprietários porque representava uma organização independente. Entre 1896 e 1897, quatro expedições militares foram enviadas; na última, com cerca de 8 mil soldados, o arraial foi destruído e os sobreviventes foram executados.</p><p>No Contestado (1912-1916), região disputada pelo Paraná e por Santa Catarina, posseiros foram expulsos de suas terras para a construção de uma ferrovia e a exploração de madeira por uma empresa estrangeira. Em torno do monge José Maria, formaram-se redutos que resistiram até 1916, e mais de 10 mil pessoas morreram. Também no Ceará, em torno do padre Cícero, a religiosidade popular dava sentido a uma sociedade pobre e sem terra.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; CAMPOS; FERREIRA; SILVA (coord.), <em>Interação</em>, cap. 18.</div></aside>
+    <div class="callout concept"><span class="lab">Conceito-chave</span><p><b>Messianismo:</b> movimento religioso organizado em torno de uma liderança que anuncia a chegada de justiça e de uma vida melhor para os oprimidos. Em Canudos e no Contestado, ele se uniu à luta pela terra e foi tratado pelo Estado como ameaça à ordem.</p></div>
+    <h3>Quando a cidade reage: Vacina e Chibata</h3>
+    <p>Em novembro de 1904, o governo tornou a vacina contra a varíola obrigatória, com multa e demissão para quem recusasse. Além do medo da vacina, a população se revoltou contra a forma autoritária da campanha, associada às demolições da reforma urbana. A <b>Revolta da Vacina</b> durou dias; o governo decretou estado de sítio e deportou presos para o Acre.</p>
+    <p>Em novembro de 1910, cerca de 2 mil marinheiros, majoritariamente negros e pobres, tomaram navios de guerra na Baía de Guanabara, liderados por <b>João Cândido</b>. O estopim foi um castigo de 250 chibatadas a um marinheiro. Exigiram o fim dos castigos corporais, melhores salários e educação. O governo anistiou os revoltosos, mas depois expulsou da Marinha mais de mil deles, prendeu líderes e enviou parte dos presos para trabalhos forçados. As chibatadas, no entanto, deixaram de fazer parte dos códigos disciplinares da Marinha: a revolta, mesmo punida, mudou uma prática.</p>
+    <h3>O movimento operário</h3>
+    <aside class="support"><header><i></i>Texto de apoio · Greves, jornais e partidos</header><div class="in"><p>Com a industrialização, surgiu um operariado formado por imigrantes europeus, migrantes de outras regiões e, em muitos lugares, trabalhadores negros e nacionais: carregadores, ferroviários, portuários, lavadeiras. Muitos imigrantes traziam experiências de organização ligadas ao anarquismo, ao socialismo e ao sindicalismo revolucionário. Eles criaram sindicatos, associações e jornais como <em>A Voz do Trabalhador</em>, <em>A Plebe</em> e <em>A Lanterna</em>.</p><p>A <b>greve geral de 1917</b>, iniciada nas fábricas têxteis da Mooca e do Ipiranga, em São Paulo, reuniu dezenas de milhares de trabalhadores (as estimativas vão de 70 mil a 100 mil) contra o aumento do custo de vida e do trabalho infantil. A morte de um jovem sapateiro anarquista baleado pela polícia ampliou o movimento. Os grevistas conseguiram aumento salarial de 20% e a promessa de fiscalização das fábricas, mas a repressão policial, as prisões e a expulsão de imigrantes marcaram os anos seguintes. Em 1922, a criação do <b>Partido Comunista do Brasil</b> (PCB) deu novo fôlego ao movimento, mas o partido foi perseguido e posto na ilegalidade.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; CAMPOS; FERREIRA; SILVA (coord.), <em>Interação</em>, cap. 18.</div></aside>
+    <div class="callout teal"><span class="lab">Pautas da greve de 1917</span><ul><li>aumento de salários e garantia dos direitos de associação e de greve;</li><li>fim do trabalho de crianças e do trabalho noturno de menores e de mulheres;</li><li>jornada de oito horas e pagamento de horas extras.</li></ul></div>
+    <h3>Mulheres: do chão da fábrica ao voto</h3>
+    <p>As operárias enfrentavam jornadas de dez a catorze horas, assédio de patrões e salários menores. Mesmo assim, organizaram sindicatos e greves e usaram jornais operários e peças de teatro para denunciar a exploração e as desigualdades dentro do próprio movimento operário. Ao lado dessa luta, crescia o <b>sufragismo</b>: <b>Bertha Lutz</b> fundou a Liga para a Emancipação Intelectual da Mulher (1919) e promoveu o Primeiro Congresso Feminista do Brasil (1922); <b>Leolinda Daltro</b> criou o Partido Republicano Feminino e foi pioneira na defesa dos direitos indígenas. No Rio Grande do Norte, Alzira Soriano foi eleita prefeita de Lajes em 1929, depois de o estado abolir a restrição eleitoral por sexo.</p>
+    <h3>A imprensa negra e a resistência cultural</h3>
+    <p>Desde o Império e, com mais força, depois da abolição, jornais feitos por pessoas negras e dirigidos a elas denunciavam o racismo e reivindicavam igualdade de direitos: <em>O Baluarte</em>, <em>O Menelik</em>, <em>Clarim d’Alvorada</em> e muitos outros, em São Paulo, no Rio Grande do Sul e em outros estados. A população negra também atuou nas artes, como o pintor Arthur Timótheo da Costa, que retratou meninos e homens negros apagados das representações oficiais da nação.</p>
+    <h3>Tenentismo: militares contra as oligarquias</h3>
+    <p>Em 1922, jovens oficiais ocuparam o Forte de Copacabana, na Revolta dos 18 do Forte. Derrotados, voltaram a se rebelar em 1924 em várias regiões e formaram a <b>Coluna Prestes-Miguel Costa</b>, que entre 1925 e 1927 percorreu cerca de 25 mil quilômetros defendendo o voto secreto, o ensino primário obrigatório e o fim das fraudes e da corrupção. O tenentismo era um movimento de militares e não de massas, mas colocou na agenda temas que a oposição civil também defendia: moralização da política e fim do voto aberto.</p>
+    <h3>A crise e o fim da Primeira República</h3>
+    <p>Em 1922, a candidatura de Arthur Bernardes, apoiada por São Paulo e Minas, enfrentou a oposição de militares e de parte da elite, e o presidente Epitácio Pessoa fechou o Clube Militar. No governo de <b>Washington Luís</b>, a repressão ao movimento operário e ao tenentismo aumentou, e a <b>Lei Celerada</b> (1927) censurou a imprensa e limitou o direito de reunião. A crise de 1929 derrubou o preço do café. Em 1930, o Partido Republicano Paulista lançou Júlio Prestes à presidência, rompendo o acordo com Minas, que se uniu a Paraíba e Rio Grande do Sul na <b>Aliança Liberal</b>, com Getúlio Vargas como candidato. A Aliança defendia voto secreto e regulação dos direitos dos trabalhadores, mas perdeu em eleições fraudadas por ambos os lados. Em 3 de outubro de 1930, um movimento armado depôs Washington Luís e encerrou a Primeira República.</p>
+    <div class="goias-box"><span class="lab">Recorte regional · Goiás</span><h4>Oligarquias goianas</h4><p>A Primeira República em Goiás foi marcada pelo poder de famílias oligárquicas, entre elas os Caiado e os Bulhões, que se alternavam no controle do estado, em um modelo semelhante ao coronelismo estudado acima. Essa estrutura só foi abalada com a Revolução de 1930.</p><h4>A Coluna Prestes passou por Goiás</h4><p>Entre 1925 e 1926, a Coluna Prestes atravessou o interior goiano. O mapa de seu trajeto, reproduzido em <em>Por toda parte: História</em>, assinala cidades como Jataí, Niquelândia e Posse.</p><h4>Santa Dica</h4><p>No interior de Goiás, na região de Pirenópolis, a líder religiosa Benedita Cipriano Gomes, a Santa Dica, reuniu em torno de si uma comunidade de fiéis na década de 1920. Como em Canudos e no Contestado, a organização popular em torno de uma liderança religiosa foi vista pelas autoridades como ameaça e reprimida pelas forças do estado.</p></div>
+    <details class="prof"><summary>Nota para o professor · recorte regional</summary><div class="in"><p>Os livros didáticos de base tratam pouco de Goiás nesse período. Os dados sobre as oligarquias goianas e Santa Dica vêm de pesquisas regionais (ver “Para saber mais” na bibliografia) e devem ser conferidos com fontes locais antes de uso em avaliação.</p></div></details>
+    <div class="think"><small>Para pensar</small>Canudos, Contestado, Vacina e Chibata foram respondidos com violência. O que isso diz sobre como o Estado entendia a participação popular? Que diferenças você vê entre esses movimentos e a greve de 1917?</div>
+  </div>
+  <div class="ch-end"><span>Primeira República · 1889–1930</span><span>Próximo: Do golpe de 1930 ao Estado Novo →</span></div>
+</section>
+
+<section class="chapter" id="etapa4">
+  <header class="ch-head"><div class="ch-num">4</div><div>
+    <p class="eyebrow">Era Vargas · 1930–1937</p><h2>Do golpe de 1930 ao Estado Novo</h2>
+    <p class="deck">Centralização, polarização, nazifascismo e o caminho do autoritarismo.</p></div></header>
+  <div class="body">
+    <div class="chips"><span class="chip">GO-EMCHS602B</span><span class="chip">Autoritarismo</span><span class="chip g">1930–1937 · Nazifascismo · Estado Novo</span></div>
+    <p class="lead">A Revolução de 1930 derrubou a República das oligarquias, mas não instalou uma democracia. Em quinze anos, Vargas passou do governo provisório a um governo constitucional e, depois, a uma ditadura. Entender esse caminho é medir os limites da liberdade e da cidadania em um mundo em que o nazismo e o fascismo ganhavam força.</p>
+    <div class="perguntas-box"><span class="lab">Perguntas orientadoras</span><ul><li>Que medidas centralizaram o poder depois de 1930?</li><li>Que direitos políticos foram ampliados e quais foram suspensos?</li><li>Como o contexto internacional e a polarização política ajudaram a justificar o golpe de 1937?</li></ul></div>
+    <h3>O governo provisório (1930–1934): poder concentrado</h3>
+    <p>Ao assumir, Vargas suspendeu a Constituição de 1891, passou a governar por decretos, dissolveu o Congresso e as assembleias estaduais e municipais e substituiu os governadores eleitos por <b>interventores</b> de sua confiança. O objetivo era desarticular as oligarquias e concentrar o poder, mas a centralização desagradou elites estaduais, que a viam como ameaça ao federalismo. Foram criados também o Ministério do Trabalho, Indústria e Comércio e o Ministério da Educação e Saúde Pública, que seriam centrais em todo o período.</p>
+    <p>Em São Paulo, a insatisfação levou à <b>Revolução Constitucionalista de 1932</b>. Depois de manifestações em que quatro jovens foram mortos pela polícia (a sigla MMDC homenageia seus nomes), paulistas pegaram em armas em 9 de julho, exigindo eleições e uma Constituição. Foram derrotados em poucos meses. A resposta de Vargas combinou punição e acordo: prisões e exílios de lideranças, mas também a nomeação de um interventor civil e paulista e a convocação de uma Assembleia Constituinte.</p>
+    <h3>Voto secreto, voto feminino e Constituição de 1934</h3>
+    <aside class="support"><header><i></i>Texto de apoio · O Código Eleitoral de 1932</header><div class="in"><p>Em 1932, durante o governo provisório, o Código Eleitoral instituiu o voto secreto, criou a Justiça Eleitoral e reconheceu às mulheres o direito de votar e de ser votadas. A conquista foi fruto de décadas de pressão das organizações femininas, como a Federação Brasileira pelo Progresso Feminino, que promoveram congressos, divulgaram a causa e orientaram juridicamente mulheres que queriam se alistar. Em 1933, a médica Carlota Pereira de Queirós foi eleita para a Assembleia Constituinte, e em 1934 a professora Antonieta de Barros tornou-se a primeira mulher negra eleita deputada estadual, em Santa Catarina.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; SM EDUCAÇÃO, <em>Ser protagonista: História</em> (2024), p. 140.</div></aside>
+    <p>A <b>Constituição de 1934</b>, promulgada em julho, consolidou o ensino primário gratuito e obrigatório, a Justiça Eleitoral e a Justiça do Trabalho, e incorporou direitos como salário mínimo, férias remuneradas e jornada de oito horas, que não alcançavam os trabalhadores rurais. Também limitou o Executivo, que passou a ser fiscalizado pelo Legislativo e a não poder legislar por decretos, e fixou mandato de quatro anos sem reeleição. Vargas, que foi eleito de forma indireta para o novo mandato, escreveu em seu diário que o texto era “monstruoso”, porque reduzia o poder do Executivo.</p>
+    <div class="callout teal"><span class="lab">Cidadania segundo José Murilo de Carvalho</span><p>Direitos políticos e direitos sociais avançaram em 1932-1934, mas por caminhos diferentes: o voto feminino e a Constituição resultaram de pressão organizada, e a legislação trabalhista vinha de cima. Os direitos civis, como liberdade de expressão e de associação, continuaram frágeis.</p></div>
+    <h3>Polarização: integralistas e aliancistas</h3>
+    <p>Com a crise de 1929 ainda pesando, o clima político de 1934-1937 foi de polarização. A <b>Ação Integralista Brasileira</b> (AIB), fundada em 1932 por Plínio Salgado, era inspirada no fascismo italiano: defendia um Estado autoritário, o corporativismo, o culto ao líder, o lema “Deus, pátria e família” e era anticomunista e antissemita. Seus militantes usavam camisas verdes, a letra sigma e a saudação “anauê”, e chegaram a ter entre 100 mil e 200 mil adeptos. A <b>Aliança Nacional Libertadora</b> (ANL), de 1935, reunia comunistas, socialistas, tenentes de esquerda e católicos progressistas em uma frente antifascista, com lemas como “Pão, terra e liberdade!” e pautas como reforma agrária, nacionalização de empresas e luta contra o imperialismo; chegou a cerca de 100 mil filiados, com Luís Carlos Prestes como presidente de honra.</p>
+    <p>Paralelamente, a <b>Frente Negra Brasileira</b>, fundada em 1931 em São Paulo, organizou núcleos em vários estados, denunciou e boicotou estabelecimentos que barravam negros, manteve o jornal <em>A Voz da Raça</em>, ofereceu escolas e atendimento de saúde e, em 1936, tornou-se partido. Ele seria fechado com o Estado Novo.</p>
+    <div class="callout concept"><span class="lab">Conceito-chave</span><p><b>Fascismo:</b> ideologia surgida na Itália após a Primeira Guerra Mundial, que defende um Estado todo-poderoso, a eliminação da oposição, o nacionalismo extremo e o culto ao líder. O <b>nazismo</b> alemão é uma variante com forte racismo e antissemitismo. Nos anos 1930, ideias fascistas inspiraram movimentos em vários países, inclusive no Brasil.</p></div>
+    <h3>Repressão e o pretexto do “perigo comunista”</h3>
+    <p>A Lei de Segurança Nacional, de abril de 1935, passou a tratar como crime a participação em movimentos políticos e sociais e a publicação de materiais considerados “subversivos”. Com base nela, a ANL foi fechada em julho de 1935. Em novembro do mesmo ano, militares ligados ao Partido Comunista se levantaram em Natal, Recife e Rio de Janeiro: o levante, chamado pelo governo de <b>Intentona Comunista</b>, foi rapidamente derrotado, mas alimentou o anticomunismo. Seguiu-se perseguição em todo o país: Luís Carlos Prestes e sua esposa, Olga Benário, foram presos; servidores, professores, políticos e escritores como Graciliano Ramos e Pagu foram demitidos, cassados ou presos, mesmo sem acusação formal. Calcula-se que, no início de 1936, ao menos 20 mil pessoas estavam presas. Em setembro de 1936, foi criado o <b>Tribunal de Segurança Nacional</b>.</p>
+    <h3>10 de novembro de 1937: o golpe do Estado Novo</h3>
+    <p>As eleições presidenciais estavam marcadas para 1938. Em setembro de 1937, a imprensa divulgou o <b>Plano Cohen</b>, um suposto plano comunista de tomada do poder, na verdade um documento forjado por um capitão do Exército ligado à AIB, Olímpio Mourão Filho. Usando o pânico criado pelo falso plano, Vargas anunciou o golpe em 10 de novembro de 1937, fechou o Congresso e as assembleias, extinguiu os partidos (inclusive a AIB), impôs a censura à imprensa, nomeou interventores e passou o controle das polícias estaduais ao Exército. No mesmo dia, foi outorgada uma Constituição escrita previamente pelo jurista Francisco Campos, que ficou conhecida como <em>Polaca</em>, por inspirar-se na Constituição autoritária da Polônia e também na <em>Carta del Lavoro</em>, da Itália fascista.</p>
+    <figure class="doc"><blockquote>“Para reajustar o organismo político às necessidades econômicas do país […] não se oferecia outra alternativa além da que foi tomada, instaurando-se um regime forte, de paz, de justiça e de trabalho.”</blockquote><figcaption><b>Getúlio Vargas</b>, Proclamação ao povo brasileiro, 10 de novembro de 1937, reproduzida em VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12.</figcaption></figure>
+    <p>Poucos dias depois do golpe, em uma cerimônia cívica no Rio de Janeiro, as bandeiras dos estados foram queimadas, pois a nova Constituição previa apenas a bandeira nacional. O gesto simbolizava a eliminação das diferenças políticas entre os estados e a unidade imposta de cima.</p>
+    <h3>A máquina de controle do Estado Novo</h3>
+    <div class="cards"><div class="card"><span class="n">Polícia política</span><h6>DOPS e Delegacia Especial</h6><p>Órgãos como o Departamento de Ordem Política e Social, de 1924, e a Delegacia Especial de Segurança Política e Social, de 1933, vigiavam e prendiam opositores.</p></div><div class="card"><span class="n">Censura e propaganda</span><h6>DIP, 1939</h6><p>O Departamento de Imprensa e Propaganda exercia censura prévia à imprensa e ao rádio e produzia publicidade centrada na figura de Vargas.</p></div><div class="card"><span class="n">Lei e tribunal</span><h6>LSN e TSN</h6><p>A Lei de Segurança Nacional continuou em uso e o Tribunal de Segurança Nacional julgava crimes políticos.</p></div><div class="card"><span class="n">Ausência de representação</span><h6>Sem partidos e sem eleições</h6><p>A organização política e a representação autônoma de indivíduos e grupos eram proibidas.</p></div></div>
+    <h3>Um regime autoritário em guerra contra o nazifascismo</h3>
+    <p>Nos anos 1930, o governo brasileiro mostrou simpatia inicial pela Alemanha nazista, mas na Segunda Guerra Mundial alinhou-se aos Estados Unidos e, em 1942, juntou-se aos Aliados. A Força Expedicionária Brasileira (FEB), com cerca de 25 mil homens, lutou na Itália em 1944. A contradição era evidente: como um governo sem eleições e com censura poderia lutar ao lado das democracias contra o nazifascismo? A pergunta ajudou a minar a legitimidade do Estado Novo.</p>
+    <div class="callout warn"><span class="lab">Em foco: autoritarismo</span><p><b>Autoritarismo:</b> forma de poder que concentra as decisões em poucas mãos e limita a participação, a crítica e as liberdades. No Estado Novo, ele apareceu no fechamento do Congresso, na censura, na polícia política e na proibição dos partidos.</p></div>
+    <div class="think"><small>Para pensar</small>Vargas justificou o golpe com um perigo que, em grande parte, foi inventado. Que cuidados um cidadão deve ter diante de notícias que criam pânico e pedem “soluções fortes”?</div>
+  </div>
+  <div class="ch-end"><span>Era Vargas · 1930–1937</span><span>Próximo: Populismo, trabalhismo e propaganda →</span></div>
+</section>
+
+<section class="chapter" id="etapa5">
+  <header class="ch-head"><div class="ch-num">5</div><div>
+    <p class="eyebrow">Era Vargas · 1937–1945</p><h2>Populismo, trabalhismo e propaganda</h2>
+    <p class="deck">Direitos concedidos, liberdades suspensas e o fim do Estado Novo.</p></div></header>
+  <div class="body">
+    <div class="chips"><span class="chip">GO-EMCHS602B</span><span class="chip">Populismo</span><span class="chip g">Trabalhismo · Propaganda · Industrialização · Fim do Estado Novo</span></div>
+    <p class="lead">O mesmo governo que fechou o Congresso e censurou a imprensa também criou salário mínimo, férias e a CLT, e foi chamado de “pai dos pobres”. A Era Vargas combinou repressão com benefícios, e é por isso que ela é tão debatida: seria manipulação das massas, troca de direitos por apoio, ou uma mistura dos dois?</p>
+    <div class="perguntas-box"><span class="lab">Perguntas orientadoras</span><ul><li>Quais direitos trabalhistas foram criados e quais ficaram de fora?</li><li>Como o Estado controlava os sindicatos e a imagem de Vargas?</li><li>Por que o conceito de populismo é debatido pelos historiadores?</li></ul></div>
+    <h3>Trabalhismo: direitos com tutela</h3>
+    <aside class="support"><header><i></i>Texto de apoio · Sindicatos sob controle e a CLT</header><div class="in"><p>Desde cedo, Vargas percebeu que os trabalhadores urbanos eram um ator político crescente e procurou transformá-los em base de apoio, sem abrir mão da vigilância e da repressão. Em 1931, a Lei de Sindicalização estabeleceu que cada categoria teria um único sindicato, reconhecido pelo Ministério do Trabalho, e que só os filiados ao sindicato oficial poderiam usufruir das leis trabalhistas. Com isso, o Estado reduziu a autonomia dos sindicatos e suprimiu a estrutura independente construída antes por sindicalistas revolucionários e anarquistas, buscando a “colaboração de classes”.</p><p>Em 1º de maio de 1943, foi criada a <b>Consolidação das Leis do Trabalho</b> (CLT), que reuniu direitos como salário mínimo, férias remuneradas, jornada de oito horas, proibição do trabalho de menores de 14 anos e licença para gestantes. A CLT, porém, não alcançou os trabalhadores rurais, que continuaram em sua maioria sem direitos básicos, e a assistência médica ligada à Previdência atendia apenas os trabalhadores formais.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de CAMPOS; FERREIRA; SILVA (coord.), <em>Interação</em>, cap. 20; VIEIRA et al., <em>Moderna Plus: História</em> (2024), cap. 12; SM EDUCAÇÃO, <em>Ser protagonista: História</em> (2024), p. 142.</div></aside>
+    <div class="callout teal"><span class="lab">Cidadania segundo José Murilo de Carvalho</span><p>Os direitos sociais chegaram antes dos políticos e dos civis, em um período autoritário. Isso reforça a ideia de que o direito apareceu como presente do governante, a estadania, e não só como resultado de participação livre. Mas os historiadores lembram que muitas dessas garantias já eram reivindicadas por greves e movimentos anteriores a 1930.</p></div>
+    <h3>Propaganda e o mito do “pai dos pobres”</h3>
+    <p>O governo fez da imagem de Vargas um instrumento político. Os direitos reivindicados por décadas de lutas foram apresentados pela propaganda oficial como dádivas do presidente, “protetor dos trabalhadores, das crianças, dos vulneráveis”. A CLT foi criada em meio às comemorações do Dia do Trabalhador, e o Ministério da Educação distribuía cartilhas que reforçavam a suposta proximidade do presidente com as crianças. O DIP promovia uma ética de valorização do trabalho disciplinado.</p>
+    <p>O <b>rádio</b> teve papel central, em um país em que, em 1940, apenas 41% dos homens e 32% das mulheres eram alfabetizados. Desde 1938, o programa <em>Hora do Brasil</em> divulgava as realizações do governo; em 1940, a Rádio Nacional foi apropriada pelo Estado. A cultura popular foi incorporada de forma dirigida: o samba foi estimulado e censurado para exaltar o trabalho, desfiles de escolas de samba passaram a exigir temas nacionais, e a capoeira deixou de ser crime no Código Penal de 1940.</p>
+    <h3>O debate sobre o populismo</h3>
+    <aside class="support"><header><i></i>Texto de apoio · O que é populismo?</header><div class="in"><p>Populismo é um termo usado para designar líderes que se colocam como máximos representantes da nação, acima de instituições políticas e sociais, e que contam com o apoio e a admiração de uma parcela expressiva da população, vista por eles como “o povo”. Ao mesmo tempo em que acenam a anseios populares, silenciam e reprimem críticos e opositores. Foi comum na América Latina no século XX.</p><p>Para o sociólogo <b>Francisco Weffort</b>, o populismo foi manipulação de massas, mas nunca absoluta: foi também modo de expressão de insatisfações populares e a principal forma de entrada das classes populares na política em um país que se urbanizava e se industrializava. A historiadora <b>Angela de Castro Gomes</b> critica a ideia de que os trabalhadores teriam sido apenas passivos e manipulados; para ela, eles fizeram escolhas dentro de um campo de possibilidades, e o uso do conceito de populismo tende a enfatizar demais o controle do Estado sobre as massas.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de SM EDUCAÇÃO, <em>Ser protagonista: História</em> (2024), p. 141; WEFFORT, F. <em>O populismo na política brasileira</em>, 1980, p. 62-63, e GOMES, A. de C., <em>Tempo</em>, v. 1, n. 2, 1996, p. 14, ambos citados em CAMPOS; FERREIRA; SILVA (coord.), <em>Interação</em>, cap. 20.</div></aside>
+    <div class="callout concept"><span class="lab">Conceitos-chave</span><p><b>Paternalismo:</b> relação em que o poder trata os governados como tutelados, apresentando direitos como favores. <b>Populismo:</b> estilo de governo que se dirige às massas com apelo ao líder carismático; é conceito debatido. <b>Trabalhismo:</b> conjunto de ideias e leis que ligou o reconhecimento de direitos do trabalho ao Estado, a partir de 1930.</p></div>
+    <h3>Industrialização e Estado forte</h3>
+    <p>Em todas as suas fases, o governo Vargas incentivou a industrialização, o nacionalismo e a intervenção do Estado na economia, controlando preços, salários e câmbio. Setores estratégicos receberam empresas estatais: o Conselho Nacional do Petróleo (1939), a Companhia Siderúrgica Nacional, em Volta Redonda (1941), e a Companhia Vale do Rio Doce (1942). A CSN foi resultado da aproximação com os Estados Unidos na Segunda Guerra. Já a crise do café foi enfrentada com compra e queima de estoques, e entre 1930 e 1944 queimaram-se 78 milhões de sacas, o que custeou, com dinheiro público, a oligarquia cafeeira.</p>
+    <div class="stats"><div class="stat"><b>78 mi</b><span>de sacas de café queimadas entre 1930 e 1944</span></div><div class="stat"><b>25 mil</b><span>soldados enviados pela FEB à Itália, em 1944</span></div><div class="stat"><b>41% e 32%</b><span>dos homens e das mulheres alfabetizados em 1940</span></div></div>
+    <h3>Cultura, identidade e o debate sobre raça</h3>
+    <p>Nos anos 1930, intelectuais reinterpretaram o Brasil. Gilberto Freyre (<em>Casa-grande &amp; senzala</em>, 1933) propôs ver a miscigenação como algo positivo, contrapondo-se ao discurso do branqueamento, mas sua visão ajudou a consolidar o mito da democracia racial, que escondia o racismo e a violência da escravidão. Caio Prado Júnior analisou a economia e as classes; Sérgio Buarque de Holanda apontou, em <em>Raízes do Brasil</em> (1936), o patrimonialismo, isto é, a apropriação do Estado pela elite política. A literatura regionalista de Rachel de Queiroz, José Lins do Rego, Graciliano Ramos e Jorge Amado retratou as contradições da modernização.</p>
+    <h3>Marcha para o Oeste e povos indígenas</h3>
+    <aside class="support"><header><i></i>Texto de apoio · A política indigenista da Era Vargas</header><div class="in"><p>A política indigenista de Vargas foi ambígua. Por um lado, exaltava a figura do “índio” na formação do povo brasileiro; por outro, tratava os povos indígenas de forma genérica e buscava integrá-los à sociedade como agricultores ou sentinelas das fronteiras. A principal iniciativa foi a <b>Marcha para o Oeste</b>, que incentivava a migração de brasileiros para o interior, onde a ocupação e a integração do território pareciam estratégicas.</p><p>Os povos indígenas reagiram de formas diferentes. Na região hoje ocupada por Mato Grosso, Mato Grosso do Sul, Goiás e Tocantins, os Karajá e os Xerente, já pressionados pela presença não indígena, aproximaram-se do governo em busca de proteção; os Xavante reagiram com violência a uma expedição do SPI. As diferentes reações mostram que a história indígena não pode ser escrita sem considerar as escolhas dos próprios povos.</p></div><div class="src"><b>Fonte:</b> Elaborado a partir de CAMPOS; FERREIRA; SILVA (coord.), <em>Interação</em>, cap. 20.</div></aside>
+    <div class="goias-box"><span class="lab">Recorte regional · Goiás</span><h4>Pedro Ludovico e Goiânia</h4><p>Depois da Revolução de 1930, Pedro Ludovico Teixeira foi nomeado interventor em Goiás e governou o estado por anos durante a Era Vargas. Em 1933, foi lançada a pedra fundamental de Goiânia, nova capital planejada e símbolo de modernização e de integração do Centro-Oeste ao projeto da Marcha para o Oeste.</p><h4>A Colônia Agrícola Nacional de Goiás</h4><p>Em 1941, o governo federal criou a Colônia Agrícola Nacional de Goiás (CANG), na região de Ceres, como projeto de colonização dirigida. Ela ilustra o programa de ocupação do interior e de fixação de trabalhadores no Oeste.</p><h4>Povos indígenas em Goiás</h4><p>Karajá e Xerente, citados nos livros de base, estão entre os povos que viveram a Marcha para o Oeste na região que hoje abrange Goiás e Tocantins.</p></div>
+    <details class="prof"><summary>Nota para o professor · recorte regional</summary><div class="in"><p>As informações sobre Pedro Ludovico, Goiânia e a CANG vêm de pesquisas regionais (ver “Para saber mais”) e não dos quatro livros de base, que tratam de Goiás de modo breve. Conferir com fontes locais antes de uso em avaliação.</p></div></details>
+    <h3>O fim do Estado Novo</h3>
+    <p>A sociedade civil questionou a ditadura mesmo antes do fim da guerra. Em 1943, setores liberais da elite política, inclusive antigos apoiadores de Vargas, lançaram o <b>Manifesto dos Mineiros</b>, distribuído clandestinamente, em defesa da redemocratização. Houve também uma passeata estudantil duramente reprimida em São Paulo, em 1943, e, em 1945, o Primeiro Congresso Brasileiro de Escritores reivindicou liberdade de expressão e de voto. A volta da FEB, a vitória sobre o nazifascismo e o fim da censura abriram caminho à abertura política: o governo permitiu novos partidos (UDN, PSD e PTB) e convocou eleições para dezembro de 1945.</p>
+    <p>Em maio de 1945, grupos populares saíram às ruas com o lema “Queremos Getúlio!”, no movimento chamado <b>queremismo</b>, que reivindicava a permanência de Vargas no poder, o que mostra o prestígio que ele conquistou entre os trabalhadores. Mas, quando Vargas tentou trocar o chefe de polícia do Distrito Federal, comandantes militares usaram o episódio para forçá-lo a renunciar. Vargas foi deposto em outubro de 1945, pelas mãos dos militares que haviam ajudado a implantar o regime em 1937.</p>
+    <ul class="tl"><li><div class="y">1930</div><div class="t"><b>Governo provisório</b><span>Interventores, Congresso fechado, Constituição suspensa.</span></div></li><li><div class="y">1932</div><div class="t"><b>Código Eleitoral</b><span>Voto secreto, Justiça Eleitoral e voto feminino.</span></div></li><li><div class="y">1934</div><div class="t"><b>Constituição</b><span>Direitos trabalhistas, limites ao Executivo.</span></div></li><li class="hl"><div class="y">1935</div><div class="t"><b>LSN, ANL e levante</b><span>Repressão a partidos e sindicatos.</span></div></li><li class="hl"><div class="y">1937</div><div class="t"><b>Estado Novo</b><span>Golpe, Constituição Polaca, partidos extintos.</span></div></li><li><div class="y">1939–1943</div><div class="t"><b>DIP, rádio e CLT</b><span>Propaganda, censura e legislação trabalhista.</span></div></li><li><div class="y">1945</div><div class="t"><b>Redemocratização</b><span>Queremismo, eleições marcadas e deposição de Vargas.</span></div></li></ul>
+    <div class="think"><small>Para pensar</small>Vargas deu direitos e também retirou liberdades. É possível avaliar um governo só por um desses lados? Como o conceito de populismo ajuda e atrapalha essa avaliação?</div>
+  </div>
+  <div class="ch-end"><span>Era Vargas · 1937–1945</span><span>Próximo: Síntese →</span></div>
+</section>
+
+<section class="chapter" id="sintese">
+  <header class="ch-head"><div class="ch-num">S</div><div>
+    <p class="eyebrow">Para fechar</p><h2>Síntese: da República oligárquica ao Estado Novo</h2>
+    <p class="deck">Os dois períodos lado a lado.</p></div></header>
+  <div class="body">
+    <p class="lead">A passagem da Primeira República à Era Vargas muda o jeito de exercer o poder, mas mantém uma pergunta central: quanto de participação autônoma existe quando o Estado ou as elites controlam o acesso aos direitos? O quadro abaixo reúne os dois períodos lado a lado.</p>
+    <div class="scroll"><table class="tb"><thead><tr><th>Dimensão</th><th>Primeira República (1889–1930)</th><th>Era Vargas (1930–1945)</th></tr></thead><tbody><tr><td><b>Poder</b></td><td>Oligarquias estaduais; coronelismo; política do café com leite</td><td>Centralização; interventores; Estado Novo (1937–1945)</td></tr><tr><td><b>Participação política</b></td><td>Voto aberto e restrito; fraude eleitoral; mulheres e analfabetos excluídos</td><td>Voto secreto e feminino (1932); depois, fechamento do Congresso e fim dos partidos (1937)</td></tr><tr><td><b>Economia</b></td><td>Café como base; industrialização inicial; imigração e borracha</td><td>Industrialização com intervenção do Estado; estatais; crise do café</td></tr><tr><td><b>Trabalho e direitos</b></td><td>Sem leis trabalhistas; greves reprimidas como “caso de polícia”</td><td>Trabalhismo, CLT e sindicato oficial; trabalhadores rurais de fora</td></tr><tr><td><b>Controle e propaganda</b></td><td>Código Penal de 1890, “vadiagem”, reforma urbana excludente</td><td>DIP, censura, rádio, polícia política e mito do “pai dos pobres”</td></tr><tr><td><b>Resistência</b></td><td>Canudos, Contestado, Vacina, Chibata, greve de 1917, tenentismo, sufragismo</td><td>Constitucionalismo de 1932, ANL, Frente Negra, queremismo, Manifesto dos Mineiros</td></tr></tbody></table></div><p style="font:500 12.5px/1.5 var(--sans);color:var(--muted);margin:-10px 0 18px">Síntese elaborada a partir do conteúdo dos capítulos.</p>
+    <div class="think"><small>Para pensar</small>Em que aspectos a Era Vargas rompeu com a Primeira República e em que aspectos manteve práticas parecidas? Pense em voto, trabalho e liberdade de expressão.</div>
+  </div>
+  <div class="ch-end"><span>Síntese</span><span>Próximo: Glossário →</span></div>
+</section>
+
+<section class="chapter" id="glossario">
+  <header class="ch-head"><div class="ch-num">A</div><div><p class="eyebrow">Para consultar</p><h2>Glossário</h2><p class="deck">Os conceitos centrais do material em linguagem direta.</p></div></header>
+  <div class="body"><dl class="gl">
+    <dt>Aliança Liberal</dt><dd>Coligação que lançou Getúlio Vargas candidato em 1930, reunindo Minas Gerais, Paraíba e Rio Grande do Sul.</dd>
+    <dt>Aliança Nacional Libertadora (ANL)</dt><dd>Frente antifascista de 1935, com programa reformista, fechada pelo governo no mesmo ano.</dd>
+    <dt>Ação Integralista Brasileira (AIB)</dt><dd>Movimento de inspiração fascista fundado em 1932, extinto em 1937.</dd>
+    <dt>Autoritarismo</dt><dd>Forma de poder que concentra decisões em poucas mãos e limita a participação, a crítica e as liberdades.</dd>
+    <dt>Café com leite</dt><dd>Alternância na Presidência entre as elites de São Paulo (café) e Minas Gerais (leite).</dd>
+    <dt>Cidadania</dt><dd>Condição de quem exerce direitos civis, políticos e sociais e participa da vida pública.</dd>
+    <dt>Clientelismo</dt><dd>Troca de favores entre quem tem poder e quem precisa de proteção ou benefício, em geral em troca de apoio político.</dd>
+    <dt>CLT</dt><dd>Consolidação das Leis do Trabalho, de 1943, que reuniu direitos trabalhistas em uma só legislação.</dd>
+    <dt>Coronelismo</dt><dd>Sistema político da Primeira República em que grandes proprietários controlavam votos e autoridades locais em troca de favores.</dd>
+    <dt>Curral eleitoral</dt><dd>Prática de confinar e vigiar eleitores até o momento do voto.</dd>
+    <dt>Degola</dt><dd>Recusa do diploma de candidatos de oposição eleitos, pela comissão de verificação de poderes.</dd>
+    <dt>DIP</dt><dd>Departamento de Imprensa e Propaganda, criado em 1939, responsável por censura e propaganda.</dd>
+    <dt>Encilhamento</dt><dd>Crise financeira do início da República, causada pela emissão desordenada de papel-moeda.</dd>
+    <dt>Estadania</dt><dd>Termo de José Murilo de Carvalho para a cidadania vista como favor do Estado, e não como resultado da ação dos cidadãos.</dd>
+    <dt>Estado Novo</dt><dd>Ditadura de Vargas entre 1937 e 1945.</dd>
+    <dt>Fascismo</dt><dd>Ideologia que defende Estado todo-poderoso, nacionalismo extremo e culto ao líder.</dd>
+    <dt>Interventor</dt><dd>Representante nomeado por Vargas para governar um estado, no lugar de governadores eleitos.</dd>
+    <dt>Messianismo</dt><dd>Movimento religioso em torno de um líder visto como enviado para guiar e proteger a comunidade.</dd>
+    <dt>Oligarquia</dt><dd>Governo exercido por poucas pessoas ou grupos.</dd>
+    <dt>Paternalismo</dt><dd>Relação em que o poder trata os governados como tutelados, apresentando direitos como favores.</dd>
+    <dt>Plano Cohen</dt><dd>Documento forjado em 1937 que atribuía aos comunistas um plano de tomada do poder.</dd>
+    <dt>Polaca</dt><dd>Nome dado à Constituição de 1937, por inspirar-se na Constituição autoritária da Polônia.</dd>
+    <dt>Política dos governadores</dt><dd>Pacto entre o presidente e as oligarquias estaduais, criado no governo Campos Sales: o governo federal apoiava as elites de cada estado em troca de apoio no Congresso.</dd>
+    <dt>Populismo</dt><dd>Estilo de governo dirigido às massas com apelo ao líder carismático; é um conceito debatido pelos historiadores.</dd>
+    <dt>Queremismo</dt><dd>Movimento popular de 1945 com o lema “Queremos Getúlio!”.</dd>
+    <dt>República Oligárquica</dt><dd>Nome da Primeira República (1889–1930), dominada por oligarquias estaduais e coronéis.</dd>
+    <dt>Sufragismo</dt><dd>Movimento pelo direito de voto das mulheres.</dd>
+    <dt>Tenentismo</dt><dd>Conjunto de revoltas de jovens oficiais nos anos 1920, contra as oligarquias e a fraude eleitoral.</dd>
+    <dt>Trabalhismo</dt><dd>Conjunto de ideias e leis que ligou o reconhecimento de direitos do trabalho ao Estado, a partir de 1930.</dd>
+    <dt>Voto censitário</dt><dd>Voto condicionado à renda; foi abolido em 1891.</dd>
+    <dt>Voto de cabresto</dt><dd>Controle do voto dos eleitores pelos chefes políticos locais.</dd>
+  </dl></div>
+</section>
+
+<section class="chapter" id="fontes">
+  <header class="ch-head"><div class="ch-num">§</div><div><p class="eyebrow">Referências</p><h2>Bibliografia e fontes</h2><p class="deck">De onde vêm os textos de apoio, as citações e os recortes regionais.</p></div></header>
+  <div class="body">
+    <h4>Livros didáticos de base</h4>
+    <ol class="refs" start="1">
+      <li>AZEVEDO, Gislane; SERIACOPI, Reinaldo. <em>Por toda parte: História</em>. São Paulo: FTD, 2024.</li>
+      <li>CAMPOS, Cristiano; FERREIRA, Lier Pires; SILVA, Renata (coord.). <em>História: democracia e protagonismo</em> (Interação). São Paulo: Editora do Brasil, 2024.</li>
+      <li>SM EDUCAÇÃO (org.). <em>Ser protagonista: Ciências Humanas e Sociais Aplicadas — História</em>. 1. ed. São Paulo: Edições SM, 2024.</li>
+      <li>VIEIRA, Felipe de Paula Góis; BACKX, Isabela; FERNANDES, Luiz Estevam de Oliveira; ABREU, Marcelo. <em>Moderna Plus: História</em>. São Paulo: Moderna, 2024.</li>
+    </ol>
+    <h4>Obras e fontes citadas nos livros</h4>
+    <ol class="refs" start="5">
+      <li>CARVALHO, José Murilo de. <em>Cidadania no Brasil: o longo caminho</em>. Rio de Janeiro: Civilização Brasileira, 2001 (citada em Interação e Ser protagonista).</li>
+      <li>WEFFORT, Francisco. <em>O populismo na política brasileira</em>. Rio de Janeiro: Paz e Terra, 1980. p. 62-63 (citado em Interação).</li>
+      <li>GOMES, Angela de Castro. O populismo e as ciências sociais no Brasil: notas sobre a trajetória de um conceito. <em>Tempo</em>, Rio de Janeiro, v. 1, n. 2, p. 14, 1996 (citado em Interação).</li>
+      <li>FAUSTO, Boris. <em>História do Brasil</em>. São Paulo: Edusp, 1995 (citado em Moderna Plus).</li>
+      <li>SCHWARCZ, Lilia Moritz; STARLING, Heloisa Murgel. <em>Brasil: uma biografia</em>. São Paulo: Companhia das Letras, 2015 (citado em Moderna Plus).</li>
+      <li>BRASIL. Presidência da República. <em>Proclamação ao povo brasileiro</em>, 10 nov. 1937 (citada em Moderna Plus).</li>
+      <li>CARVALHO, José Murilo de. <em>Os bestializados: o Rio de Janeiro e a República que não foi</em>. São Paulo: Companhia das Letras, 1987 (citado em Moderna Plus e Interação).</li>
+      <li>CHALHOUB, Sidney. <em>Visões da liberdade</em>. São Paulo: Companhia das Letras, 1990 (citado em Ser protagonista).</li>
+      <li>LEAL, Victor Nunes. <em>Coronelismo, enxada e voto</em> (apresentado em Por toda parte).</li>
+      <li>SCHWARCZ, Lilia Moritz; SPACCA. <em>Triste República: a Primeira República comentada por Lima Barreto</em>. Quadrinhos na Cia, 2022 (indicado em Interação).</li>
+          <li>ARENDT, Hannah. <em>A condição humana</em>, 1958 (citada em Por toda parte).</li>
+      <li>GOUGES, Olympe de. <em>Declaração dos Direitos da Mulher e da Cidadã</em>, 1791 (reproduzida em Ser protagonista).</li>
+      <li>WEBER, Max. Texto sobre o monopólio da violência física legítima (citado em Ser protagonista).</li>
+    </ol>
+    <h4>Para saber mais (recorte regional)</h4>
+    <ol class="refs" start="18">
+      <li>CPDOC/FGV, verbetes sobre a Primeira República, a Coluna Prestes e a Revolução de 1930.</li>
+      <li>Materiais regionais sobre as oligarquias goianas, Santa Dica, Pedro Ludovico Teixeira, a fundação de Goiânia e a Colônia Agrícola Nacional de Goiás.</li>
+    </ol>
+    
+  </div>
+</section>
+<div class="colophon">HISTÓRIA · 1ª SÉRIE · REPÚBLICA, PARTICIPAÇÃO E AUTORITARISMO · CERO · 2026<br>Colégio Estadual Rodolfo de Oliveira · CERO · 2026</div>
+
+</main>
+<script>
+(function(){
+'use strict';
+var NS='http://www.w3.org/2000/svg';
+var tip=document.getElementById('tip');
+function $(s,r){return (r||document).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+function S(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs){e.setAttribute(k,attrs[k])}if(parent)parent.appendChild(e);return e}
+function H(tag,attrs,text,parent){var e=document.createElement(tag);for(var k in (attrs||{})){e.setAttribute(k,attrs[k])}if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e}
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- tooltip (textContent apenas) ---------- */
+function showTip(x,y,key,val,sub,color){
+  tip.textContent='';
+  if(key){var s=H('span',null,null,tip);if(color){var k=H('i',{'class':'k'},null,s);k.style.background=color}s.appendChild(document.createTextNode(key))}
+  if(val)H('b',null,val,tip);
+  if(sub){var t=H('span',null,sub,tip);t.style.display='block'}
+  tip.classList.add('on');
+  var w=tip.offsetWidth,h=tip.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+  var px=x+16,py=y+16;if(px+w>vw-8)px=x-w-16;if(py+h>vh-8)py=y-h-16;
+  tip.style.left=Math.max(8,px)+'px';tip.style.top=Math.max(8,py)+'px';
+}
+function hideTip(){tip.classList.remove('on')}
+function bindTip(el,fn){
+  el.addEventListener('pointermove',function(e){var d=fn();showTip(e.clientX,e.clientY,d[0],d[1],d[2],d[3])});
+  el.addEventListener('pointerleave',hideTip);
+  el.addEventListener('focus',function(){var r=el.getBoundingClientRect();var d=fn();showTip(r.left+r.width/2,r.top,d[0],d[1],d[2],d[3])});
+  el.addEventListener('blur',hideTip);
+}
+
+/* ---------- 1. waffle: quem podia votar ---------- */
+(function(){
+  var root=$('#viz-voto');if(!root)return;
+  var grid=$('.waffle',root),out=$('.readout',root);
+  var modes={
+    voto:{n:4,pct:'4,1',c:'var(--c1)',lb:'Podiam votar',t:'De cada 100 adultos, cerca de 4 estavam autorizados a votar após o fim do voto censitário.',from:0,src:'Fonte: FGV, Atlas histórico do Brasil, em Interação, cap. 18.'},
+    analf:{n:65,pct:'65',c:'var(--c2)',lb:'Analfabetos',t:'Cerca de 65 em cada 100 adultos eram analfabetos e, por isso, não podiam se alistar como eleitores.',from:35,src:'Fonte: FGV, Atlas histórico do Brasil, em Interação, cap. 18. O Inep indica 65,3% de analfabetos acima de 15 anos em 1900 (Por toda parte).'},
+    jovem:{n:24,pct:'24',c:'var(--c3)',lb:'Menores de 21 anos',t:'Cerca de 24 em cada 100 adultos tinham de 16 a 20 anos e ficavam de fora, pois o alistamento exigia 21 anos ou mais.',from:50,src:'Fonte: FGV, Atlas histórico do Brasil, em Interação, cap. 18.'}
+  };
+  var cells=[];
+  for(var i=0;i<100;i++){var b=H('button',{'class':'cell','type':'button','aria-label':'Pessoa '+(i+1)+' de 100 adultos'},null,grid);b.style.setProperty('--d',(i*6)+'ms');cells.push(b);
+    (function(b,i){bindTip(b,function(){return ['Cada quadrado = 1% dos adultos',b.classList.contains('on')?'Incluído neste recorte':'Fora deste recorte','']})})(b,i)}
+  function set(m){
+    var d=modes[m];
+    cells.forEach(function(c,i){var on=(m==='voto')?i<d.n:(i>=d.from&&i<d.from+d.n);c.classList.toggle('on',on);c.style.setProperty('--c',d.c)});
+    out.style.setProperty('--c',d.c);out.textContent='';
+    var big=H('div',{'class':'big'},d.pct,out);H('small',null,'%',big);
+    H('div',{'class':'lb'},d.lb,out);H('p',null,d.t,out);H('p',{'class':'src'},d.src,out);
+    $$('.pill[data-m]',root).forEach(function(p){p.setAttribute('aria-pressed',p.getAttribute('data-m')===m)});
+  }
+  $$('.pill[data-m]',root).forEach(function(p){p.addEventListener('click',function(){set(p.getAttribute('data-m'))})});
+  set('voto');
+})();
+
+/* ---------- 2. eleições 1894-1930 ---------- */
+(function(){
+  var root=$('#viz-eleicoes');if(!root)return;
+  var D=[[1894,'Prudente de Morais',84.3,2.21],[1898,'Campos Sales',90.9,2.70],[1902,'Rodrigues Alves',91.7,3.44],[1906,'Afonso Pena',97.9,1.44],[1910,'Hermes da Fonseca',57.1,3.19],[1914,'Wenceslau Braz',91.6,2.40],[1918,'Rodrigues Alves',99.1,1.48],[1919,'Epitácio Pessoa',71.0,1.50],[1922,'Arthur Bernardes',56.0,2.90],[1926,'Washington Luís',98.0,2.27],[1930,'Júlio Prestes',57.7,5.65]];
+  var M={vot:{i:3,lb:'Votantes na população total',max:6,step:1,fmt:function(v){return v.toFixed(2).replace('.',',')+'%'},hint:'Mesmo no melhor ano, 1930, só 5,65% da população votou.'},
+         val:{i:2,lb:'Votos válidos do vencedor',max:100,step:25,fmt:function(v){return v.toFixed(1).replace('.',',')+'%'},hint:'Vitórias com quase 100% dos votos revelam disputa fraudada ou controlada, não ampla participação.'}};
+  var mode='vot';
+  var plot=$('.plot',root),svg=S('svg',{'class':'chart',viewBox:'0 0 760 330',role:'img','aria-label':'Gráfico de barras das eleições presidenciais de 1894 a 1930'},plot);
+  var tv=$('.tvw',root);
+  var L=46,R=10,T=18,B=40,W=760-L-R,Hh=330-T-B,bw=W/D.length;
+  var bars=[],vls=[];
+  var g=S('g',{},svg);
+  function draw(){
+    g.textContent='';bars=[];
+    var m=M[mode];
+    for(var v=0;v<=m.max;v+=m.step){var y=T+Hh-v/m.max*Hh;S('line',{'class':v?'gd':'ax',x1:L,x2:L+W,y1:y,y2:y},g);var t=S('text',{'class':'tk',x:L-8,y:y+4,'text-anchor':'end'},g);t.textContent=v+'%'}
+    D.forEach(function(d,k){
+      var x=L+k*bw+bw*.16,w=bw*.68,val=d[m.i],h=val/m.max*Hh,y=T+Hh-h;
+      var r=S('rect',{'class':'bar',x:x,y:y,width:w,height:h,rx:4,fill:'var(--c1)'},g);
+      bars.push(r);
+      var xl=S('text',{'class':'tk',x:x+w/2,y:T+Hh+18,'text-anchor':'middle'},g);xl.textContent=d[0];
+      if(k===0||k===D.length-1||val===Math.max.apply(null,D.map(function(q){return q[m.i]}))){var vl=S('text',{'class':'vl',x:x+w/2,y:y-6,'text-anchor':'middle'},g);vl.textContent=m.fmt(val).replace('%','')+'%'}
+      var hit=S('rect',{'class':'hit',x:L+k*bw,y:T,width:bw,height:Hh+B,tabindex:0,role:'img','aria-label':d[0]+', '+d[1]+': '+m.lb+' '+m.fmt(val)},g);
+      function tipf(){return [d[0]+' · '+d[1],m.fmt(val),m.lb,'var(--c1)']}
+      hit.addEventListener('pointermove',function(e){bars.forEach(function(b,j){b.classList.toggle('dim',j!==k)});var q=tipf();showTip(e.clientX,e.clientY,q[0],q[1],q[2],'#6da7ec')});
+      hit.addEventListener('pointerleave',function(){bars.forEach(function(b){b.classList.remove('dim')});hideTip()});
+      hit.addEventListener('focus',function(){bars.forEach(function(b,j){b.classList.toggle('dim',j!==k)});var r2=hit.getBoundingClientRect();var q=tipf();showTip(r2.left+r2.width/2,r2.top+40,q[0],q[1],q[2],'#6da7ec')});
+      hit.addEventListener('blur',function(){bars.forEach(function(b){b.classList.remove('dim')});hideTip()});
+    });
+    $('.hint',root).textContent=m.hint;
+    $$('.pill[data-m]',root).forEach(function(p){p.setAttribute('aria-pressed',p.getAttribute('data-m')===mode)});
+    // tabela
+    tv.textContent='';
+    var tb=H('table',{'class':'tb'},null,tv);var tr=H('tr',null,null,H('thead',null,null,tb));['Ano','Vencedor','Votos válidos do vencedor','Votantes na população'].forEach(function(h){H('th',null,h,tr)});
+    var bd=H('tbody',null,null,tb);D.forEach(function(d){var r=H('tr',null,null,bd);H('td',null,String(d[0]),r);H('td',null,d[1],r);H('td',null,M.val.fmt(d[2]),r);H('td',null,M.vot.fmt(d[3]),r)});
+  }
+  $$('.pill[data-m]',root).forEach(function(p){p.addEventListener('click',function(){mode=p.getAttribute('data-m');draw()})});
+  $('.pill[data-tbl]',root).addEventListener('click',function(e){var on=root.classList.toggle('tbl-on');e.currentTarget.setAttribute('aria-pressed',on);e.currentTarget.textContent=on?'Ver como gráfico':'Ver como tabela'});
+  draw();
+})();
+
+/* ---------- 3. censo 1890 (barra empilhada) ---------- */
+(function(){
+  var root=$('#viz-censo');if(!root)return;
+  $$('.seg',root).forEach(function(s){bindTip(s,function(){return [s.getAttribute('data-k'),s.getAttribute('data-v'),s.getAttribute('data-s'),s.getAttribute('data-c')]})});
+})();
+
+/* ---------- 4. barras horizontais com detalhe (fábricas) ---------- */
+(function(){
+  var root=$('#viz-fabrica');if(!root)return;
+  var det=$('.detail',root);
+  var info={
+    ita:['Italianos','Entre os empregados das fábricas paulistas de fiação e tecidos, 60% eram italianos. Muitos trouxeram experiências de organização sindical ligadas ao anarquismo, ao socialismo e ao sindicalismo revolucionário, o que influenciou os métodos de luta do movimento operário.'],
+    mul:['Mulheres','Cerca de 49% das pessoas empregadas nas fábricas têxteis de São Paulo eram mulheres. Trabalhavam de dez a catorze horas, sofriam ameaças e assédio de patrões e supervisores e recebiam menos que os homens. Mesmo assim, organizaram sindicatos e greves e denunciaram a exploração em jornais e peças de teatro.'],
+    cri:['Crianças','Cerca de 22% da mão de obra das fábricas têxteis paulistas eram crianças. O fim do trabalho infantil e do trabalho noturno de menores estava entre as reivindicações da greve geral de 1917.']
+  };
+  var bars=$$('.hb',root);
+  function pick(k){bars.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-k')===k)});var d=info[k];det.textContent='';H('span',{'class':'meta'},'Em detalhe',det);H('b',null,d[0],det);H('p',null,d[1],det)}
+  bars.forEach(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-k'))});
+    bindTip(b,function(){return [b.getAttribute('data-n'),b.getAttribute('data-v')+'%','Clique para ver o detalhe','var(--c1)']});
+  });
+  function fill(){bars.forEach(function(b){$('.fl',b).style.width=b.getAttribute('data-v')+'%'})}
+  if('IntersectionObserver' in window&&!reduce){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){fill();io.disconnect()}})},{threshold:.3});io.observe(root)}else fill();
+  pick('ita');
+})();
+
+/* ---------- 5. linha do tempo das resistências ---------- */
+(function(){
+  var root=$('#viz-resist');if(!root)return;
+  var CATS={campo:['Campo e fé','var(--c1)'],cidade:['Cidade e trabalho','var(--c2)'],mil:['Militares e marinheiros','var(--c3)'],mul:['Mulheres e imprensa negra','var(--c4)']};
+  var E=[
+   ['canudos','Canudos (Belo Monte)',1893,1897,'campo','Comunidade fundada por Antônio Conselheiro, na Bahia, que reuniu de 20 mil a 30 mil pessoas. Vivia da agricultura e do messianismo e não dependia nem da Igreja nem dos coronéis. Seca, carestia e violência dos coronéis aproximavam os sertanejos do arraial.','Quatro expedições militares entre 1896 e 1897; na última, cerca de 8 mil soldados. O arraial foi queimado e dinamitado e os prisioneiros foram executados.','Moderna Plus, cap. 12; Interação, cap. 18'],
+   ['contestado','Guerra do Contestado',1912,1916,'campo','Posseiros foram expulsos de terras no Paraná e em Santa Catarina para a construção de uma ferrovia e a exploração de madeira por uma empresa estrangeira. Em torno do monge José Maria, formaram-se redutos de justiça divina.','Fome, epidemias e a truculência do governo derrotaram os últimos rebeldes. Mais de 10 mil pessoas morreram.','Moderna Plus, cap. 12'],
+   ['vacina','Revolta da Vacina',1904,1904,'cidade','Em novembro de 1904, a vacina contra a varíola foi tornada obrigatória, com multa e demissão para quem recusasse. Somada à reforma urbana que demolia moradias populares, a imposição autoritária levou a população às ruas.','O governo decretou estado de sítio, prendeu pessoas e deportou presos para o Acre.','Moderna Plus, cap. 12; Por toda parte, cap. 12'],
+   ['trapiche','Greve dos carregadores de café',1906,1906,'cidade','Carregadores de café e empregados dos trapiches do porto do Rio, muitos deles negros, reuniram-se na Sociedade de Resistência dos Trabalhadores em Trapiche e Café e fizeram greves que atingiram diretamente o setor cafeeiro.','O episódio mostra que a classe operária brasileira não era só de imigrantes: havia muitos trabalhadores nacionais, vários descendentes de lutadores pela abolição.','Moderna Plus, cap. 12'],
+   ['greve','Greve geral de 1917',1917,1917,'cidade','Começou nas fábricas têxteis da Mooca e do Ipiranga, em São Paulo, em meio à alta de alimentos e aluguéis. Pedia aumento de salários, direito de associação e de greve, fim do trabalho infantil e do trabalho noturno de mulheres e menores, jornada de oito horas e horas extras. As estimativas vão de 70 mil a 100 mil participantes.','Aumento salarial de 20% e promessa de fiscalização das fábricas, seguidos de repressão policial, prisões, espancamentos e expulsão de imigrantes.','Moderna Plus, cap. 12; Interação, cap. 18; Ser Protagonista, p. 142'],
+   ['pcb','Fundação do PCB',1922,1922,'cidade','Do debate entre militantes anarquistas após a Revolução Russa e os poucos resultados da greve de 1917 nasceu o Partido Comunista do Brasil, que defendia disputar eleições e organizar sindicatos.','Foi perseguido pelo Estado e posto na ilegalidade em diferentes momentos, mas deu novo fôlego ao movimento operário.','Moderna Plus e Interação'],
+   ['chibata','Revolta da Chibata',1910,1910,'mil','Cerca de 2 mil marinheiros, majoritariamente negros e pobres, tomaram encouraçados na Baía de Guanabara, sob a liderança de João Cândido. O estopim foi o castigo de 250 chibatadas a um colega. Exigiam o fim dos castigos corporais, reforma do código da Marinha, educação e aumento do soldo.','O governo anistiou os rebeldes, mas depois expulsou mais de 1.200 marinheiros, prendeu líderes e mandou parte dos presos a trabalhos forçados. Mesmo assim, as chibatadas deixaram de integrar os códigos disciplinares.','Moderna Plus, cap. 12; Ser Protagonista'],
+   ['copacabana','Revolta dos 18 do Forte',1922,1922,'mil','Jovens oficiais do Exército tomaram o Forte de Copacabana. O tenentismo defendia a moralização da política e um Estado centralizado que modernizasse o país.','A revolta foi derrotada, mas outras se seguiram em 1924, em diferentes partes do país.','Moderna Plus, cap. 12'],
+   ['coluna','Coluna Prestes-Miguel Costa',1925,1927,'mil','Os rebeldes percorreram cerca de 25 mil quilômetros a pé, buscando apoio da população rural e defendendo o voto secreto, a obrigatoriedade do ensino primário e o combate às fraudes eleitorais e à corrupção.','Os remanescentes se refugiaram na Bolívia e no Paraguai em 1927.','Moderna Plus, cap. 12; Por toda parte, cap. 12'],
+   ['imprensa','Imprensa negra',1889,1930,'mul','Jornais feitos por pessoas negras e dirigidos a elas denunciavam o racismo e reivindicavam igualdade de direitos. Em São Paulo houve títulos como O Menelik e Clarim d’Alvorada; no Rio Grande do Sul, O Exemplo e A Alvorada, esta publicada até os anos 1960.','Foi um espaço de sociabilidade e de crítica ao discurso oficial republicano que apagava a população negra.','Moderna Plus, cap. 12'],
+   ['liga','Liga pela Emancipação Intelectual da Mulher',1919,1919,'mul','Fundada por Bertha Lutz, bióloga e ativista, foi um dos marcos do movimento sufragista brasileiro.','Em 1922, Bertha Lutz realizou o Primeiro Congresso Feminista do Brasil.','Moderna Plus, cap. 12'],
+   ['congresso','Primeiro Congresso Feminista',1922,1922,'mul','Reuniu a luta pelo sufrágio feminino, que também teve em Leolinda Daltro a fundadora do Partido Republicano Feminino e pioneira na defesa dos direitos indígenas.','As organizações femininas seguiram promovendo congressos e debates, o que pesaria na conquista do voto em 1932.','Moderna Plus, cap. 12'],
+   ['alzira','Alzira Soriano, prefeita de Lajes (RN)',1929,1929,'mul','O Rio Grande do Norte já havia abolido a restrição eleitoral por sexo em 1926. Alzira Soriano foi eleita prefeita de Lajes, resultado de um longo processo de mobilização das mulheres.','Foi um caso pioneiro, ainda antes do Código Eleitoral de 1932, que reconheceu o voto feminino em todo o país.','Moderna Plus, cap. 12']
+  ];
+  var order=['campo','cidade','mil','mul'];
+  E.sort(function(a,b){return order.indexOf(a[4])-order.indexOf(b[4])||a[2]-b[2]});
+  var active={campo:true,cidade:true,mil:true,mul:true};
+  var plot=$('.plot',root),det=$('.detail',root),tv=$('.tvw',root);
+  var X0=1889,X1=1930,LW=236,RW=18,W=900,rowH=34,T=8,Bm=34;
+  var svg,sx=function(y){return LW+(y-X0)/(X1-X0+1)*(W-LW-RW)};
+  var sel=null;
+  function render(){
+    plot.textContent='';
+    var vis=E.filter(function(e){return active[e[4]]});
+    var Hh=T+vis.length*rowH+Bm;
+    svg=S('svg',{'class':'chart',viewBox:'0 0 '+W+' '+Hh,role:'list','aria-label':'Linha do tempo das resistências, de 1889 a 1930'},plot);
+    for(var y=1890;y<=1930;y+=5){var x=sx(y);S('line',{'class':'gd',x1:x,x2:x,y1:T,y2:T+vis.length*rowH},svg);var t=S('text',{'class':'axtxt',x:x,y:T+vis.length*rowH+18,'text-anchor':'middle'},svg);t.textContent=y}
+    S('line',{'class':'ax',x1:LW,x2:W-RW,y1:T+vis.length*rowH,y2:T+vis.length*rowH},svg);
+    vis.forEach(function(e,i){
+      var y0=T+i*rowH,c=CATS[e[4]][1];
+      var g=S('g',{'class':'tlrow'+(sel===e[0]?' sel':''),tabindex:0,role:'listitem','aria-label':e[1]+', '+(e[2]===e[3]?e[2]:e[2]+' a '+e[3])+'. '+CATS[e[4]][0]},svg);
+      S('rect',{'class':'tr',x:0,y:y0,width:W,height:rowH,rx:6},g);
+      var l=S('text',{'class':'lbl',x:LW-12,y:y0+rowH/2+4,'text-anchor':'end'},g);l.textContent=e[1].length>34?e[1].slice(0,33)+'…':e[1];
+      var x1=sx(e[2]),x2=sx(e[3]+1);
+      S('rect',{'class':'tlbar',x:x1,y:y0+8,width:Math.max(x2-x1,10),height:rowH-16,fill:c,rx:5},g);
+      var lab=e[2]===e[3]?String(e[2]):e[2]+'–'+e[3],lx=x2+8,anc='start';
+      if(lx>W-58){if(x2-x1>150){lx=x1+10;anc='start'}else{lx=x1-8;anc='end'}}
+      var yt=S('text',{'class':'yr',x:lx,y:y0+rowH/2+4,'text-anchor':anc},g);yt.textContent=lab;
+      if(anc==='start'&&lx===x1+10)yt.setAttribute('style','fill:#1d1d1b;font-weight:700');
+      function pick(){sel=e[0];show(e);$$('.tlrow',svg).forEach(function(r){r.classList.remove('sel')});g.classList.add('sel')}
+      g.addEventListener('click',pick);g.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();pick()}});
+      g.addEventListener('pointermove',function(ev){showTip(ev.clientX,ev.clientY,CATS[e[4]][0],e[1],(e[2]===e[3]?e[2]:e[2]+' a '+e[3])+' · clique para detalhes',c)});
+      g.addEventListener('pointerleave',hideTip);
+      g.addEventListener('focus',function(){var r=g.getBoundingClientRect();showTip(r.left+r.width/2,r.top,CATS[e[4]][0],e[1],(e[2]===e[3]?e[2]:e[2]+' a '+e[3]),c)});
+      g.addEventListener('blur',hideTip);
+    });
+    // lista (tabela)
+    tv.textContent='';
+    var tb=H('table',{'class':'tb'},null,tv);var tr=H('tr',null,null,H('thead',null,null,tb));['Movimento','Período','Grupo','O que reivindicava ou mostrava'].forEach(function(h){H('th',null,h,tr)});
+    var bd=H('tbody',null,null,tb);E.forEach(function(e){var r=H('tr',null,null,bd);H('td',null,e[1],r);H('td',null,e[2]===e[3]?String(e[2]):e[2]+'–'+e[3],r);H('td',null,CATS[e[4]][0],r);H('td',null,e[5],r)});
+  }
+  function show(e){
+    det.style.setProperty('--c',CATS[e[4]][1]);det.textContent='';
+    H('span',{'class':'meta'},CATS[e[4]][0]+' · '+(e[2]===e[3]?e[2]:e[2]+' a '+e[3]),det);
+    H('b',null,e[1],det);H('p',null,e[5],det);var p=H('p',null,null,det);H('b',{style:'font:700 14px var(--sans)'},'Desfecho. ',p);p.appendChild(document.createTextNode(e[6]));
+    var s=H('span',{'class':'meta',style:'margin-top:6px'},'Nos livros: '+e[7],det);
+  }
+  var fl=$('.viz-ctl',root);
+  Object.keys(CATS).forEach(function(k){
+    var b=H('button',{'class':'pill','type':'button','aria-pressed':'true'},null,fl);var i=H('i',null,null,b);i.style.setProperty('--k',CATS[k][1]);b.appendChild(document.createTextNode(CATS[k][0]));
+    b.addEventListener('click',function(){var n=Object.keys(active).filter(function(q){return active[q]}).length;if(active[k]&&n===1)return;active[k]=!active[k];b.setAttribute('aria-pressed',active[k]);render()});
+  });
+  var tb=H('button',{'class':'pill ghost','type':'button','aria-pressed':'false'},'Ver como lista',fl);
+  tb.addEventListener('click',function(){var on=root.classList.toggle('tbl-on');tb.setAttribute('aria-pressed',on);tb.textContent=on?'Ver como linha do tempo':'Ver como lista'});
+  render();show(E.filter(function(e){return e[0]==='chibata'})[0]);sel='chibata';render();
+})();
+
+/* ---------- 6. números com contagem ---------- */
+(function(){
+  var items=$$('[data-count]');if(!items.length)return;
+  function run(el){
+    var to=parseFloat(el.getAttribute('data-count')),dec=(el.getAttribute('data-dec')||0)*1,pre=el.getAttribute('data-pre')||'',suf=el.getAttribute('data-suf')||'';
+    function fmt(v){return pre+v.toFixed(dec).replace('.',',')+suf}
+    if(reduce){el.textContent=fmt(to);return}
+    var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1100,1),e=1-Math.pow(1-p,3);el.textContent=fmt(to*e);if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)
+  }
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run(e.target);io.unobserve(e.target)}})},{threshold:.6});items.forEach(function(i){io.observe(i)})}else items.forEach(run);
+  $$('.stat[data-tip]').forEach(function(s){s.tabIndex=0;bindTip(s,function(){return [s.getAttribute('data-tk'),'',s.getAttribute('data-tip')]})});
+})();
+
+/* ---------- 7. abas (grupos e autores) ---------- */
+$$('[data-tabs]').forEach(function(wrap){
+  var tabs=$$('.tab',wrap),panels=$$('.panel-box',wrap);
+  function go(i,focus){tabs.forEach(function(t,j){t.setAttribute('aria-selected',j===i);t.tabIndex=j===i?0:-1});panels.forEach(function(p,j){p.hidden=j!==i});if(focus)tabs[i].focus()}
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){go(i)});
+    t.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();go((i+1)%tabs.length,true)}else if(e.key==='ArrowLeft'){e.preventDefault();go((i+tabs.length-1)%tabs.length,true)}});
+  });
+  go(0);
+});
+
+/* ---------- 8. ir para o gráfico ---------- */
+$$('[data-goto]').forEach(function(b){b.addEventListener('click',function(){
+  var t=document.getElementById(b.getAttribute('data-goto'));if(!t)return;
+  t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});t.classList.remove('pulse');void t.offsetWidth;t.classList.add('pulse');
+})});
+})();
+
+</script>
+<script>
+(function(){
+  var bar=document.getElementById('progress');
+  function onScroll(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);bar.style.width=(p*100)+'%'}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  var tab=document.createElement('button');tab.className='toc-tab';tab.setAttribute('aria-label','Abrir sumário');tab.setAttribute('aria-expanded','false');tab.innerHTML='<b>\u2630</b> Sumário';
+  var ov=document.createElement('div');ov.className='toc-ov';
+  var dr=document.createElement('aside');dr.className='drawer';dr.setAttribute('aria-label','Sumário');dr.setAttribute('aria-hidden','true');
+  dr.innerHTML='<div class="dr-head"><div><div class="k">História \u00b7 1\u00aa série</div><div class="t">República, Participação e Autoritarismo</div></div><button class="dr-close" aria-label="Fechar sumário">\u00d7</button></div><div class="dr-prog"><span id="drLbl">Capa</span><i><span id="drBar"></span></i></div><div class="dr-body" id="drBody"></div>';
+  document.body.append(tab,ov,dr);
+  var body=dr.querySelector('#drBody');
+  function slug(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+  function sec(id){return document.getElementById(id)}
+  function title(id){var h=sec(id).querySelector('h2');return h?h.textContent:'Capa'}
+  function num(id){var n=sec(id).querySelector('.ch-num');return n?n.textContent:'\u00b7'}
+  function subs(id){var out=[];sec(id).querySelectorAll('.body h3').forEach(function(h){if(!h.id)h.id=id+'-'+slug(h.textContent);out.push(h)});return out}
+  var links={};
+  function link(id,cls){var a=document.createElement('a');a.href='#'+id;a.className=cls;links[id]=a;return a}
+  [['capa','Capa'],['habilidades','Habilidades e objetivos'],['abertura','Para começar']].forEach(function(p){var a=link(p[0],'dr-link');a.textContent=p[1];body.appendChild(a)});
+  function group(label,ids,open){
+    var g=document.createElement('div');g.className='acc'+(open?' open':'');
+    var b=document.createElement('button');b.textContent=label;b.setAttribute('aria-expanded',open?'true':'false');
+    var pn=document.createElement('div');pn.className='panel';
+    ids.forEach(function(id){
+      var it=document.createElement('div');it.className='item';
+      var row=document.createElement('div');row.className='row';
+      var a=link(id,'');a.innerHTML='<b>'+num(id)+'</b><span>'+title(id)+'</span>';row.appendChild(a);
+      var ss=subs(id);
+      if(ss.length){
+        var tb=document.createElement('button');tb.setAttribute('aria-label','Mostrar tópicos');tb.setAttribute('aria-expanded','false');
+        tb.addEventListener('click',function(e){e.stopPropagation();var o=it.classList.toggle('open');tb.setAttribute('aria-expanded',o)});
+        row.appendChild(tb);
+        var sb=document.createElement('div');sb.className='subs';
+        ss.forEach(function(h){var s=document.createElement('a');s.href='#'+h.id;s.textContent=h.textContent;sb.appendChild(s)});
+        it.append(row,sb);
+      } else it.appendChild(row);
+      pn.appendChild(it);
+    });
+    b.addEventListener('click',function(){var o=!g.classList.contains('open');
+      body.querySelectorAll('.acc').forEach(function(x){x.classList.remove('open');x.firstChild.setAttribute('aria-expanded','false')});
+      if(o){g.classList.add('open');b.setAttribute('aria-expanded','true')}});
+    g.append(b,pn);body.appendChild(g);return g;
+  }
+  var chIds=['etapa1','etapa2','etapa3','etapa4','etapa5','sintese'];
+  var g1=group('Capítulos',chIds,true);
+  var g2=group('Para consultar',['glossario','fontes'],false);
+  function open(){dr.classList.add('open');ov.classList.add('open');tab.setAttribute('aria-expanded','true');dr.setAttribute('aria-hidden','false')}
+  function close(){dr.classList.remove('open');ov.classList.remove('open');tab.setAttribute('aria-expanded','false');dr.setAttribute('aria-hidden','true')}
+  tab.addEventListener('click',open);ov.addEventListener('click',close);dr.querySelector('.dr-close').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+  body.addEventListener('click',function(e){if(e.target.closest('a'))close()});
+  var order=['capa','habilidades','abertura'].concat(chIds,['glossario','fontes']);
+  var lbl=dr.querySelector('#drLbl'),pbar=dr.querySelector('#drBar');
+  function setActive(id){
+    Object.keys(links).forEach(function(k){links[k].classList.remove('on')});
+    if(links[id])links[id].classList.add('on');
+    var ci=chIds.indexOf(id);
+    lbl.textContent=(ci>=0&&ci<5)?'Capítulo '+(ci+1)+' de 5 \u00b7 '+title(id):title(id)||'Capa';
+    pbar.style.width=((order.indexOf(id)+1)/order.length*100)+'%';
+    var grp=ci>=0?g1:(['glossario','fontes'].indexOf(id)>=0?g2:null);
+    if(grp&&!grp.classList.contains('open')&&!dr.classList.contains('open')){body.querySelectorAll('.acc').forEach(function(x){x.classList.remove('open')});grp.classList.add('open')}
+  }
+  setActive('capa');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)setActive(e.target.id)})},{rootMargin:'-30% 0px -60% 0px'});
+    order.forEach(function(k){io.observe(sec(k))});
+  }
+})();
+</script>
+<dialog id="lens-dlg" aria-labelledby="lens-t"><div class="lens-box"><button type="button" class="lens-x" aria-label="Fechar">×</button><p class="lens-k" id="lens-k"></p><h3 id="lens-t"></h3><p id="lens-p"></p><p class="lens-src" id="lens-s"></p><div class="lens-nav"><button type="button" class="lens-b" data-d="-1">← Anterior</button><button type="button" class="lens-b" data-d="1">Próxima →</button></div></div></dialog>
+<script>(function(){var D=[{"k": "Lente 1 - PODER", "t": "Poder", "p": "Poder é a capacidade de fazer com que decisões sejam obedecidas. Segundo o sociólogo Max Weber, o Estado se distingue por reivindicar o monopólio do uso legítimo da força dentro de um território. Os contratualistas Hobbes, Locke e Rousseau explicaram a origem desse poder por um pacto: as pessoas abrem mão de usar a força por conta própria e a entregam a uma autoridade, em troca de proteção para a vida, os bens e a liberdade. Eles divergiam quanto aos limites: Hobbes defendia um poder centralizado; Locke admitia que o povo rompesse o pacto se o governo abusasse; Rousseau pedia que o Estado servisse ao bem comum, e não só às classes dominantes. Já Hannah Arendt lembra que a política trata da convivência entre pessoas diferentes, o que exige argumentar e negociar. Na Primeira República, o poder estava concentrado em oligarquias e coronéis.", "s": "Fontes: Ser protagonista: História (2024), sobre Weber e os contratualistas; Por toda parte: História (2024), sobre Arendt. Ideias resumidas com palavras próprias."}, {"k": "Lente 2 - DIREITOS", "t": "Direitos", "p": "Direitos são garantias que uma pessoa tem por ser membro de uma sociedade, e não por favor de quem governa. Para José Murilo de Carvalho, costuma-se dividi-los em civis (liberdade e igualdade perante a lei), políticos (votar e ser votado) e sociais (educação, saúde, trabalho); o cidadão pleno tem os três. Na Declaração dos Direitos da Mulher e da Cidadã (1791), Olympe de Gouges chamou-os de “direitos naturais, inalienáveis e sagrados”, para cobrar que as mulheres também fossem incluídas. Quando os direitos chegam como concessão de quem está no poder, e não como conquista, Carvalho fala em estadania.", "s": "Fontes: Carvalho, Cidadania no Brasil, conforme citado em Interação e Ser protagonista; Declaração dos Direitos da Mulher e da Cidadã (1791), reproduzida em Ser protagonista. Ideias resumidas com palavras próprias."}, {"k": "Lente 3 - PARTICIPAÇÃO", "t": "Participação", "p": "Participar é tomar parte nas decisões que afetam a vida coletiva. Existem duas ideias principais sobre como participar: a institucionalista, que defende instituições representativas conduzidas por uma elite preparada, e a participativista, que defende ampliar os canais de decisão da sociedade civil. Hoje se entende que a participação vai além do voto e dos partidos e inclui associações, coletivos e movimentos sociais, como as sufragistas, que conquistaram o voto feminino depois de muita mobilização. Na Primeira República, o voto era restrito e fraudado, e por isso parte da participação popular se deu por outros caminhos: greves, revoltas, imprensa e associações.", "s": "Fontes: Ser protagonista: História (2024), capítulo sobre participação política e democracia. Ideias resumidas com palavras próprias."}];var dlg=document.getElementById("lens-dlg");if(!dlg)return;var cur=0;function f(k){cur=(k+3)%3;document.getElementById("lens-k").textContent=D[cur].k;document.getElementById("lens-t").textContent=D[cur].t;document.getElementById("lens-p").textContent=D[cur].p;document.getElementById("lens-s").textContent=D[cur].s}function open(k){f(k);if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","")}Array.prototype.forEach.call(document.querySelectorAll(".card.lens"),function(b){b.addEventListener("click",function(){open(+b.getAttribute("data-lens"))})});dlg.querySelector(".lens-x").addEventListener("click",function(){dlg.close()});Array.prototype.forEach.call(dlg.querySelectorAll(".lens-b"),function(b){b.addEventListener("click",function(){f(cur+(+b.getAttribute("data-d")))})});dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()})})();</script>
+
+<div class="timeline-dialog" id="timeline-dialog" role="dialog" aria-modal="true" aria-label="Linha do tempo ilustrada de 1889 a 1945" aria-hidden="true">
+ <div class="timeline-toolbar"><strong>Linha do tempo ilustrada · 1889–1945</strong><div class="timeline-controls"><button type="button" id="timeline-minus" aria-label="Diminuir zoom">−</button><span id="timeline-percent" aria-live="polite">100%</span><button type="button" id="timeline-plus" aria-label="Aumentar zoom">+</button><button type="button" id="timeline-reset" aria-label="Ajustar imagem à tela" title="Ajustar">⤢</button><button type="button" id="timeline-close" aria-label="Fechar imagem">×</button></div></div>
+ <div class="timeline-viewport" id="timeline-viewport"><img id="timeline-image" src="img/timeline1.webp" alt="Linha do tempo ilustrada: da Proclamação da República, em 1889, ao fim do Estado Novo, em 1945"></div>
+ <div class="timeline-foot">Use + e − ou Ctrl + roda do mouse para ampliar. Pressione Esc para fechar.</div>
+</div>
+<script>
+(function(){
+ const dialog=document.getElementById('timeline-dialog'), viewport=document.getElementById('timeline-viewport'), img=document.getElementById('timeline-image');
+ const pct=document.getElementById('timeline-percent');let scale=1,base=900,previous=null;
+ function paint(){img.style.width=Math.round(base*scale)+'px';pct.textContent=Math.round(scale*100)+'%'}
+ function fit(){base=Math.min(img.naturalWidth||1215,Math.max(280,viewport.clientWidth-36));scale=1;paint();viewport.scrollTop=0;viewport.scrollLeft=0}
+ function zoom(f){scale=Math.max(.4,Math.min(5,scale*f));paint()}
+ function close(){dialog.classList.remove('open');dialog.setAttribute('aria-hidden','true');document.body.style.overflow='';if(previous)previous.focus()}
+ document.getElementById('timeline-open').addEventListener('click',function(){previous=this;dialog.classList.add('open');dialog.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';if(img.complete)fit();else img.onload=fit;document.getElementById('timeline-close').focus()});
+ document.getElementById('timeline-close').addEventListener('click',close);
+ document.getElementById('timeline-plus').addEventListener('click',()=>zoom(1.25));
+ document.getElementById('timeline-minus').addEventListener('click',()=>zoom(.8));
+ document.getElementById('timeline-reset').addEventListener('click',fit);
+ document.addEventListener('keydown',e=>{if(!dialog.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='+')zoom(1.25);if(e.key==='-')zoom(.8)});
+ viewport.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();zoom(e.deltaY<0?1.12:1/1.12)},{passive:false});
+ dialog.addEventListener('click',e=>{if(e.target===dialog)close()});
+})();
+</script>
+<div class="lentesview-dialog" id="lentesview-dialog" role="dialog" aria-modal="true" aria-label="Infográfico das três lentes para ler o período" aria-hidden="true">
+ <div class="lentesview-toolbar"><strong>Três lentes para ler o período</strong><div class="lentesview-controls"><button type="button" id="lentesview-minus" aria-label="Diminuir zoom">−</button><span id="lentesview-percent" aria-live="polite">100%</span><button type="button" id="lentesview-plus" aria-label="Aumentar zoom">+</button><button type="button" id="lentesview-reset" aria-label="Ajustar imagem à tela" title="Ajustar">⤢</button><button type="button" id="lentesview-close" aria-label="Fechar imagem">×</button></div></div>
+ <div class="lentesview-viewport" id="lentesview-viewport"><img id="lentesview-image" src="img/t1.webp" alt="Infográfico: poder, direitos e participação"></div>
+ <div class="lentesview-foot">Use + e − ou Ctrl + roda do mouse para ampliar. Pressione Esc para fechar.</div>
+</div>
+<script>
+(function(){
+ const dialog=document.getElementById('lentesview-dialog'), viewport=document.getElementById('lentesview-viewport'), img=document.getElementById('lentesview-image');
+ const pct=document.getElementById('lentesview-percent');let scale=1,base=900,previous=null;
+ function paint(){img.style.width=Math.round(base*scale)+'px';pct.textContent=Math.round(scale*100)+'%'}
+ function fit(){base=Math.min(img.naturalWidth||1215,Math.max(280,viewport.clientWidth-36));scale=1;paint();viewport.scrollTop=0;viewport.scrollLeft=0}
+ function zoom(f){scale=Math.max(.4,Math.min(5,scale*f));paint()}
+ function close(){dialog.classList.remove('open');dialog.setAttribute('aria-hidden','true');document.body.style.overflow='';if(previous)previous.focus()}
+ document.getElementById('lentesview-open').addEventListener('click',function(){previous=this;dialog.classList.add('open');dialog.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';if(img.complete)fit();else img.onload=fit;document.getElementById('lentesview-close').focus()});
+ document.getElementById('lentesview-close').addEventListener('click',close);
+ document.getElementById('lentesview-plus').addEventListener('click',()=>zoom(1.25));
+ document.getElementById('lentesview-minus').addEventListener('click',()=>zoom(.8));
+ document.getElementById('lentesview-reset').addEventListener('click',fit);
+ document.addEventListener('keydown',e=>{if(!dialog.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='+')zoom(1.25);if(e.key==='-')zoom(.8)});
+ viewport.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();zoom(e.deltaY<0?1.12:1/1.12)},{passive:false});
+ dialog.addEventListener('click',e=>{if(e.target===dialog)close()});
+})();
+</script>
+</body>
+</html>
