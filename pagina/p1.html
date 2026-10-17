@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quatro conceitos para entender a República brasileira — História, 2ª série</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#12304a;--navy2:#1c4a6b;--teal:#1f6f78;--teal-bg:#e6f1f1;
+  --gold:#b8842b;--gold-bg:#f8efdc;--terra:#a8472a;--terra-bg:#f7e8e2;
+  --green:#2f6b52;--green-bg:#e5f0ea;
+  --ink:#1d2731;--muted:#5d6a74;--line:#dcd6c8;--paper:#fcfbf7;--stone:#efece4;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --display:"Fraunces",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --side:292px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--stone);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--teal)}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;border-radius:6px;z-index:100}
+.skip:focus{left:8px}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--gold),#e3b45a);z-index:60}
+
+/* ---------- sumário (gaveta à direita) ---------- */
+.toc-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;background:var(--navy);color:#fff;border:0;border-radius:12px 0 0 12px;padding:14px 11px;cursor:pointer;font:700 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;box-shadow:-4px 4px 18px #0004;display:flex;align-items:center;gap:8px}
+.toc-tab:hover{background:var(--navy2)}
+.toc-tab b{font-size:16px;writing-mode:horizontal-tb;color:#e3b45a}
+.toc-ov{position:fixed;inset:0;background:#0b1a2988;opacity:0;pointer-events:none;transition:opacity .25s;z-index:70}
+.toc-ov.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);background:var(--navy);color:#e9eef2;z-index:80;transform:translateX(102%);transition:transform .28s ease;display:flex;flex-direction:column;font-family:var(--sans);box-shadow:-10px 0 40px #0006}
+.drawer.open{transform:none}
+.dr-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:22px 22px 14px;border-bottom:1px solid #ffffff1f}
+.dr-head .k{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#e3b45a;font-weight:700}
+.dr-head .t{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.2;margin-top:5px;color:#fff}
+.dr-close{background:#ffffff14;border:1px solid #ffffff33;color:#fff;width:36px;height:36px;border-radius:9px;font-size:20px;cursor:pointer;flex:none}
+.dr-prog{padding:12px 22px 0;font-size:12px;color:#b6c6d3}
+.dr-prog i{display:block;height:5px;border-radius:3px;background:#ffffff1f;margin-top:7px;overflow:hidden}
+.dr-prog i span{display:block;height:100%;width:0;background:#e3b45a;transition:width .2s}
+.dr-body{flex:1;overflow:auto;padding:10px 12px 24px}
+.dr-link{display:block;padding:9px 12px;border-radius:8px;color:#cfd9e1;text-decoration:none;font-size:14px;line-height:1.35}
+.dr-link:hover{background:#ffffff12;color:#fff}
+.dr-link.on{background:#ffffff1c;color:#fff}
+.acc{border-top:1px solid #ffffff14;margin-top:6px}
+.acc>button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:none;border:0;color:#fff;font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;padding:14px 12px 8px;cursor:pointer;text-align:left}
+.acc>button:after{content:"";width:8px;height:8px;border-right:2px solid #e3b45a;border-bottom:2px solid #e3b45a;transform:rotate(45deg);transition:transform .2s;flex:none;margin-right:4px}
+.acc.open>button:after{transform:rotate(-135deg)}
+.acc>.panel{display:none}.acc.open>.panel{display:block}
+.item>.row{display:flex;align-items:center}
+.item>.row a{flex:1;display:flex;gap:11px;align-items:baseline;padding:9px 12px;border-radius:8px;color:#e1e9ef;text-decoration:none;font-size:14.5px;line-height:1.3}
+.item>.row a b{color:#e3b45a;min-width:16px;font-variant-numeric:tabular-nums}
+.item>.row a:hover{background:#ffffff12}
+.item>.row a.on{background:#ffffff1c;color:#fff}
+.item .row>button{background:none;border:0;cursor:pointer;padding:10px 14px;display:flex;align-items:center;justify-content:center;color:#e3b45a;font-size:14px;line-height:1}
+.item .row>button:after{content:"▾";width:auto;height:auto;border:0;transform:none;margin:0}
+.item.open .row>button:after{transform:rotate(180deg)}
+.item>.subs{display:none;margin:0 0 6px 38px;border-left:2px solid #ffffff22}
+.item.open>.subs{display:block}
+.subs a{display:block;padding:6px 12px;color:#aebfcc;text-decoration:none;font-size:13px;line-height:1.35}
+.subs a:hover{color:#fff}
+
+/* ---------- conteúdo ---------- */
+main{margin-left:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 40px}
+.sheet{background:var(--paper);box-shadow:0 1px 0 #0000000d,0 18px 44px -24px #1d27314d;margin:0 auto;max-width:980px}
+
+/* capa */
+.cover{background:var(--navy);margin:0;padding:0;line-height:0}
+.cover img{display:block;width:100%;height:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* bloco de abertura / seções */
+section.chapter{background:var(--paper);margin:28px auto;max-width:980px;box-shadow:0 1px 0 #0000000d,0 18px 44px -26px #1d27314d}
+.ch-head{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:end;padding:54px 64px 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#f4f1e8,var(--paper))}
+.ch-num{font-family:var(--display);font-weight:800;font-size:96px;line-height:.8;color:var(--navy);opacity:.14;letter-spacing:-.04em}
+.eyebrow{font:700 11.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 8px}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,4vw,42px);line-height:1.1;color:var(--navy);margin:0;letter-spacing:-.01em}
+.deck{font-size:19px;color:var(--muted);margin:12px 0 0;line-height:1.5}
+.body{padding:34px 64px 50px}
+.body>p:first-of-type:not(.nodrop)::first-letter{font-family:var(--display);font-weight:800;font-size:3.6em;float:left;line-height:.82;padding:6px 10px 0 0;color:var(--navy)}
+h3{font-family:var(--display);font-weight:700;font-size:25px;line-height:1.2;color:var(--navy);margin:38px 0 8px}
+h4{font:700 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin:26px 0 6px}
+p{margin:12px 0}
+.lead{font-size:20.5px;line-height:1.6;color:#2a3744}
+ul,ol{padding-left:1.3em}li{margin:6px 0}
+strong,b{font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 4px}
+.chip{font:700 11px var(--sans);letter-spacing:.04em;padding:5px 10px;border-radius:99px;background:var(--teal-bg);color:#14565d}
+.chip.g{background:var(--gold-bg);color:#7a5614}
+
+/* caixas */
+.callout{border-radius:12px;padding:18px 22px;margin:26px 0;border:1px solid var(--line);background:#fff;font-size:17px;line-height:1.6}
+.callout .lab{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px}
+.callout p{margin:6px 0}
+.callout.concept{background:var(--gold-bg);border-color:#ecd9ac}.callout.concept .lab{color:#8a5f12}
+.callout.teal{background:var(--teal-bg);border-color:#c4dede}.callout.teal .lab{color:#14565d}
+.callout.warn{background:var(--terra-bg);border-color:#ecc9bd}.callout.warn .lab{color:var(--terra)}
+.callout.green{background:var(--green-bg);border-color:#c5dccf}.callout.green .lab{color:var(--green)}
+.think{margin:30px 0;padding:22px 26px;border-radius:14px;background:var(--navy);color:#fff;font-family:var(--display);font-size:22px;line-height:1.35;font-weight:500}
+.think small{display:block;font:700 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#e3b45a;margin-bottom:8px}
+
+/* texto de apoio */
+.support{margin:34px 0;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.support>header{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--navy);color:#fff;font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.support>header i{width:8px;height:8px;border-radius:50%;background:#e3b45a;display:block}
+.support .in{padding:6px 24px 4px;font-size:17px;line-height:1.65}
+.support h5{font:700 17px var(--display);color:var(--navy);margin:16px 0 0}
+.support .src{font:500 12.5px/1.5 var(--sans);color:var(--muted);background:#f5f2ea;border-top:1px solid var(--line);padding:11px 24px}
+.support .src b{color:var(--ink);font-weight:700}
+
+/* fonte histórica */
+figure.doc{margin:30px 0;padding:6px 0 6px 26px;border-left:5px solid var(--gold)}
+figure.doc blockquote{margin:0;font-style:italic;font-size:19.5px;line-height:1.55;color:#2e3b47}
+figure.doc figcaption{font:500 12.5px/1.5 var(--sans);color:var(--muted);margin-top:10px}
+figure.doc figcaption b{font-weight:700;color:var(--ink)}
+
+/* números em destaque */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:28px 0}
+.stat{background:#fff;border:1px solid var(--line);border-top:4px solid var(--terra);border-radius:10px;padding:14px 16px}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:34px;line-height:1;color:var(--terra)}
+.stat span{display:block;font:500 12.5px/1.35 var(--sans);color:var(--muted);margin-top:7px}
+
+/* cartões e comparativos */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:24px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card .n{font:800 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.card h6{font:700 18px var(--display);color:var(--navy);margin:4px 0 4px}
+.card p{font-size:15.5px;line-height:1.5;margin:4px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.two .callout{margin:0}
+
+/* linha do tempo */
+.tl{list-style:none;padding:0;margin:30px 0;position:relative}
+.tl:before{content:"";position:absolute;left:96px;top:6px;bottom:6px;width:3px;background:linear-gradient(var(--gold),var(--teal));border-radius:2px}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:0 26px;margin:0 0 20px;position:relative}
+.tl li:before{content:"";position:absolute;left:90px;top:8px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:4px solid var(--navy)}
+.tl .y{font:800 14px var(--sans);color:var(--navy);text-align:right;padding-top:3px;padding-right:22px;font-variant-numeric:tabular-nums}
+.tl .t{padding-left:12px}
+.tl .t b{display:block;font:700 18px var(--display);color:var(--navy)}
+.tl .t span{font-size:16px;color:#3d4a55;line-height:1.5;display:block}
+.tl li.hl:before{background:var(--terra);border-color:var(--terra)}
+.tl li.hl .y{color:var(--terra)}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:26px 0;counter-reset:f}
+.flow div{position:relative;background:#fff;border:1px solid var(--line);padding:14px 14px 14px;margin-right:-1px;counter-increment:f}
+.flow div:first-child{border-radius:12px 0 0 12px}.flow div:last-child{border-radius:0 12px 12px 0}
+.flow div:before{content:counter(f);display:block;font:800 11px var(--sans);color:#fff;background:var(--teal);width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;margin-bottom:8px}
+.flow b{display:block;font:700 16px var(--display);color:var(--navy)}
+.flow span{font-size:14px;line-height:1.4;color:var(--muted);display:block;margin-top:3px}
+
+/* tabelas */
+table.tb{width:100%;border-collapse:collapse;margin:22px 0;font:400 15px/1.5 var(--sans);background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tb th{background:var(--navy);color:#fff;text-align:left;padding:11px 14px;font-weight:700;font-size:13px}
+.tb td{padding:11px 14px;border-top:1px solid var(--line);vertical-align:top}
+.tb tr:nth-child(even) td{background:#faf8f2}
+.tb td.fill{height:48px}
+.scroll{overflow-x:auto}
+
+/* atividades */
+.act{margin:34px 0;border:2px solid var(--gold);border-radius:14px;background:#fffdf6;padding:0;overflow:hidden}
+.act>header{background:var(--gold);color:#fff;padding:9px 22px;font:800 11px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.act .in{padding:16px 24px 20px;font-size:17px}
+.act h3{margin:6px 0 4px;font-size:22px}
+.lines{margin:12px 0}.lines i{display:block;border-bottom:1px solid #b9b5a6;height:30px}
+.act ol{margin:8px 0}
+.act li::marker{font-weight:700;color:var(--gold)}
+
+/* figura */
+figure.fig{margin:28px 0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+figure.fig figcaption{font:500 12.5px/1.5 var(--sans);color:var(--muted);margin-top:8px}
+.ch-end{display:flex;justify-content:space-between;gap:12px;padding:16px 64px;background:#f4f1e8;border-top:1px solid var(--line);font:600 12.5px var(--sans);color:var(--muted)}
+
+/* glossário */
+.gl{columns:2;column-gap:36px}
+.gl dt{font:700 17px var(--display);color:var(--navy);break-after:avoid;margin-top:14px}
+.gl dd{margin:2px 0 0;font-size:16px;line-height:1.55;break-inside:avoid}
+
+/* bibliografia */
+.refs{list-style:none;padding:0;counter-reset:r}
+.refs li{counter-increment:r;position:relative;padding-left:38px;margin:0 0 14px;font:400 14.5px/1.55 var(--sans)}
+.refs li:before{content:counter(r);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--teal-bg);color:#14565d;font:800 12px/26px var(--sans);text-align:center}
+.refs em{font-style:italic}
+details.prof{margin:18px 0;border:1px solid var(--line);border-radius:12px;background:#fff}
+details.prof summary{cursor:pointer;padding:14px 20px;font:700 14px var(--sans);color:var(--navy)}
+details.prof .in{padding:0 22px 16px;font-size:16px}
+.colophon{text-align:center;font:500 12px var(--sans);color:var(--muted);padding:26px 0 60px}
+
+
+/* cidadania: imagem + explicação */
+.cid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;margin:30px 0;align-items:start}
+.cid-fig{margin:0}
+.cid-thumb{position:relative;display:block;width:100%;padding:0;border:2px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;cursor:zoom-in;box-shadow:0 10px 28px -16px #1d273180}
+.cid-thumb img{display:block;width:100%;height:auto}
+.cid-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:var(--navy);color:#fff;font:700 12px var(--sans);padding:8px 14px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 14px #0005}
+.cid-thumb:hover .cid-hint,.cid-thumb:focus-visible .cid-hint{background:var(--gold)}
+.cid-thumb:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.cid-fig figcaption b{color:var(--ink)}
+.cid-fig figcaption{font:500 12.5px/1.5 var(--sans);color:var(--muted);margin-top:8px}
+.cid-txt{background:var(--teal-bg);border:1px solid #c4dede;border-radius:14px;padding:20px 24px;font-size:17px;line-height:1.6}
+.cid-txt .lab{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#14565d}
+.cid-txt h3{margin:4px 0 8px;font-size:26px}
+.cid-txt p{margin:8px 0}.cid-txt ul{margin:8px 0;padding-left:1.2em}.cid-txt li{margin:6px 0}
+.cid-key{background:#fff;border-left:5px solid var(--gold);border-radius:8px;padding:10px 14px}
+.cid-src{font:500 12px/1.5 var(--sans);color:var(--muted)}
+.cid-link{display:flex;gap:12px;align-items:flex-start;margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-decoration:none;color:var(--ink);font-family:var(--sans);transition:border-color .15s,box-shadow .15s}
+.cid-link:hover,.cid-link:focus-visible{border-color:var(--gold);box-shadow:0 6px 18px -10px #1d273190}
+.cid-link .ic{flex:none;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#e3b45a;display:grid;place-items:center;font-size:13px}
+.cid-link .tx{display:block;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.cid-link b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:2px}
+.cid-link em{display:block;font-style:normal;font-weight:700;color:var(--teal);margin-top:4px}
+@media(max-width:760px){.cid{grid-template-columns:1fr}}
+.atv-box{display:flex;align-items:center;gap:18px;margin:0 0 26px;padding:18px 24px;border-radius:14px;background:linear-gradient(100deg,#0f3d26,#2e7d4f);color:#fff;text-decoration:none;box-shadow:0 12px 28px -16px #0f3d26cc;transition:transform .15s,box-shadow .15s;font-family:var(--sans)}
+.atv-box:hover,.atv-box:focus-visible{transform:translateY(-2px);box-shadow:0 16px 32px -14px #0f3d26}
+.atv-box:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.atv-ic{flex:none;width:52px;height:52px;border-radius:14px;background:#ffffff1c;border:1px solid #ffffff40;display:grid;place-items:center;font-size:24px;color:#e3b45a}
+.atv-tx{flex:1;display:block;min-width:0}
+.atv-k{display:block;font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#e3b45a}
+.atv-tx b{display:block;font:700 21px/1.25 var(--display);margin:3px 0 4px}
+.atv-d{display:block;font-size:13.5px;line-height:1.5;color:#d3dee7}
+.atv-go{flex:none;background:#ffffff;color:#0f3d26;font:800 13px var(--sans);padding:11px 18px;border-radius:99px;white-space:nowrap}
+.atv-box:hover .atv-go{background:#e3f2e8}
+@media(max-width:640px){.atv-box{flex-wrap:wrap;padding:16px}.atv-go{width:100%;text-align:center}}
+/* carrossel */
+.car{position:relative;outline:none}
+.car:focus-visible .car-view{outline:3px solid var(--gold);outline-offset:2px}
+.car-view{overflow:hidden;border-radius:14px}
+.car-track{display:flex;transition:transform .35s ease;touch-action:pan-y}
+.car-slide{flex:0 0 100%;min-width:0}
+.car-slide .cid-thumb{border-radius:14px}
+.car-nav{position:absolute;top:calc(50% - 22px);width:40px;height:40px;border-radius:50%;border:1px solid #ffffff80;background:#12304acc;color:#fff;font:700 24px/1 var(--sans);cursor:pointer;display:grid;place-items:center;padding:0 0 3px;z-index:2;box-shadow:0 4px 14px #0004}
+.car-nav:hover{background:var(--gold)}
+.car-nav.prev{left:8px}.car-nav.next{right:8px}
+.car-dots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.car-dot{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#c9c1ac;cursor:pointer}
+.car-dot.on{background:var(--navy);width:26px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){.car-track{transition:none}}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:#08121cf8;display:none;flex-direction:column}
+.lb.open{display:flex}
+.lb-bar{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 14px;color:#fff;font:600 13px var(--sans)}
+.lb-bar .grp{display:flex;gap:8px;align-items:center}
+.lb-bar button{background:#ffffff1a;border:1px solid #ffffff44;color:#fff;border-radius:9px;min-width:40px;height:40px;font:700 18px var(--sans);cursor:pointer;padding:0 12px}
+.lb-bar button:hover{background:#ffffff33}
+.lb-bar .pct{min-width:52px;text-align:center}
+.lb-stage{flex:1;overflow:auto;display:flex;padding:8px;cursor:grab;-webkit-overflow-scrolling:touch}
+.lb-stage.drag{cursor:grabbing}
+.lb-stage img{margin:auto;max-width:none;flex:none;user-select:none;-webkit-user-drag:none;background:#fff;border-radius:6px}
+.lb-help{text-align:center;color:#9fb3c3;font:500 12px var(--sans);padding:6px 10px 12px}
+
+/* responsivo */
+@media(max-width:1000px){
+  section.chapter,.cover{margin:14px 0;max-width:none}
+  
+  .ch-head{padding:56px 24px 22px;grid-template-columns:1fr;gap:6px}.ch-num{font-size:64px}
+  .body{padding:24px 22px 38px}.ch-end{padding:14px 22px}
+}
+@media(max-width:640px){
+  body{font-size:17px}
+  .two,.gl{grid-template-columns:1fr;columns:1}
+  .flow{grid-template-columns:1fr}.flow div,.flow div:first-child,.flow div:last-child{border-radius:0;margin:0 0 -1px}
+  .tl:before{left:14px}.tl li{grid-template-columns:1fr;padding-left:40px}.tl li:before{left:7px}.tl .y{text-align:left;padding:0}.tl .t{padding:0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.drawer{transition:none}}
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  body{background:#fff;font-size:11.5pt}
+  .toc-tab,.drawer,.toc-ov,#progress,.skip{display:none!important}
+  main{margin:0}
+  section.chapter,.cover{box-shadow:none;margin:0;max-width:none;page-break-after:always}
+  .cover img{max-height:none}
+  .ch-head{padding:0 0 14px;background:none}.body{padding:14px 0}.ch-end{display:none}
+  .callout,.support,.act,figure,.card,.stat,.tl li{break-inside:avoid}
+  .think,.support>header,.act>header,.tb th,.stat,.callout{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  details.prof{display:none}
+}
+
+.cover-art{line-height:1.3;color:#fff;padding:90px 64px 56px;background:radial-gradient(1200px 500px at 85% -10%,#1f6f78 0%,transparent 60%),linear-gradient(160deg,#12304a,#0c2236);position:relative}
+.cv-k{font:700 12px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#e3b45a;margin:0 0 18px}
+.cover-art h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,7vw,78px);line-height:1.02;margin:0;letter-spacing:-.02em;color:#fff}
+.cv-sub{font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:500;color:#cfe3e6;margin:14px 0 0}
+.cv-fio{max-width:640px;font:400 18px/1.55 var(--serif);color:#e4ecf0;margin:26px 0 0;border-left:4px solid #e3b45a;padding-left:18px}
+.cv-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:44px 0 30px}
+.cv-steps span{font:700 11px var(--sans);letter-spacing:.08em;color:#9fc4cb;border-top:3px solid #e3b45a;padding-top:10px;display:block}
+.cv-steps b{display:block;font:700 18px var(--display);letter-spacing:0;color:#fff;margin-top:4px}
+.cv-foot{font:500 12px var(--sans);letter-spacing:.06em;color:#9fb3c0;margin:0}
+.perguntas-box{margin:24px 0;border:1px solid #c4dede;border-left:6px solid var(--teal);border-radius:12px;background:var(--teal-bg);padding:16px 22px}
+.perguntas-box .lab,.goias-box .lab{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px}
+.perguntas-box .lab{color:#14565d}
+.perguntas-box ul{margin:6px 0 0;padding-left:20px}
+.goias-box{margin:30px 0;border:1px solid #ecd9ac;border-left:6px solid var(--gold);border-radius:12px;background:var(--gold-bg);padding:18px 24px;font-size:17px;line-height:1.62}
+.goias-box .lab{color:#8a5f12}
+.goias-box h4{font:700 19px var(--display);color:var(--navy);margin:16px 0 4px}
+.goias-box p{margin:6px 0}
+.seq{margin:26px 0;display:grid;gap:12px}
+.seq-row{display:grid;grid-template-columns:150px 1fr 1fr 1fr;gap:8px;align-items:stretch}
+.seq-l{font:700 14px var(--sans);color:var(--navy);align-self:center}
+.seq-l small{font-weight:500;color:var(--muted)}
+.seq-b{font:700 13.5px/1.35 var(--sans);padding:12px;border-radius:10px;text-align:center;display:flex;align-items:center;justify-content:center}
+.seq-b.c1{background:var(--teal-bg);color:#14565d}.seq-b.c2{background:var(--gold-bg);color:#7a5614}.seq-b.c3{background:var(--terra-bg);color:var(--terra)}
+.ch-end{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 64px;border-top:1px solid var(--line);background:#f4f1e8;font:600 12.5px var(--sans);color:var(--muted)}
+.callout ul,.goias-box ul{margin:6px 0 0;padding-left:20px}
+.tb th,.tb td{vertical-align:top}
+@media(max-width:760px){.cover-art{padding:60px 22px 40px}.cv-steps{grid-template-columns:1fr 1fr}.seq-row{grid-template-columns:1fr}.ch-end{padding:14px 22px}}
+
+/* ---------- alinhamento: títulos centralizados, texto justificado ---------- */
+.body p,.body li,.lead,.support .in p,.support .src,.callout p,.callout li,.goias-box p,.perguntas-box li,.card p,.tl .t span,.gl dd,.refs li,figure.doc blockquote,details.prof .in p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
+.eyebrow,.deck,h2,h3,h4,.goias-box h4{text-align:left}
+.chips,.card,.stat,.think,.callout .lab,.perguntas-box .lab,.goias-box .lab,.support>header,.colophon,figure.doc figcaption{text-align:center}
+.chips,.support>header{justify-content:center}
+.ch-end{justify-content:center;gap:10px 40px;text-align:center}
+.gl dt,.tb th,.tb td,.tl .t b{text-align:left}
+
+/* ---------- alinhamento: títulos à esquerda, texto justificado ---------- */
+.body p,.body li,.lead,.support .in p,.support .src,.callout p,.callout li,.goias-box p,.perguntas-box li,.card p,.tl .t span,.gl dd,.refs li,figure.doc blockquote,details.prof .in p,.panel-txt p,.viz .note{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
+.eyebrow,.deck,h2,h3,h4{text-align:left}
+.chips,.support>header{justify-content:center}
+.callout .lab,.perguntas-box .lab,.goias-box .lab,.support>header,.colophon,figure.doc figcaption{text-align:center}
+.ch-end{justify-content:center;gap:10px 40px;text-align:center}
+.gl dt,.tb th,.tb td,.tl .t b{text-align:left}
+
+/* ---------- gráficos interativos ---------- */
+:root{--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--mute:#e6e3da;--ink2:#52514e}
+.viz{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px 18px;margin:30px 0;box-shadow:0 10px 28px -22px #1d273180;scroll-margin-top:24px}
+.viz.pulse{animation:pulse 1.4s ease-out 1}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #b8842bcc}70%{box-shadow:0 0 0 14px #b8842b00}100%{box-shadow:0 10px 28px -22px #1d273180}}
+.viz-k{font:800 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 4px;text-align:left}
+.viz h4.vt{font:700 22px/1.2 var(--display);letter-spacing:0;text-transform:none;color:var(--navy);margin:0 0 4px}
+.viz .sub{font:500 14px/1.5 var(--sans);color:var(--muted);margin:0 0 12px;text-align:left}
+.viz .note{font:500 12.5px/1.55 var(--sans);color:var(--muted);margin:12px 0 0}
+.viz-ctl{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;align-items:center}
+.pill{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:99px;padding:7px 14px;font:600 13px var(--sans);cursor:pointer;display:inline-flex;gap:8px;align-items:center;transition:background .15s,color .15s,border-color .15s}
+.pill:hover{border-color:var(--navy)}
+.pill:focus-visible,.cell:focus-visible,.hit:focus-visible,.gbtn:focus-visible,.tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.pill[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pill i{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--k,var(--navy))}
+.pill[aria-pressed="false"] i{opacity:.35}
+.pill.ghost{margin-left:auto;background:#f4f1e8}
+
+/* waffle */
+.waffle-wrap{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:26px;align-items:center}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+.cell{aspect-ratio:1;border-radius:3px;background:var(--mute);border:0;padding:0;transition:background .3s ease,transform .15s;transition-delay:var(--d,0ms),0ms;cursor:default}
+.cell.on{background:var(--c,var(--c1))}
+.cell:hover{transform:scale(1.18);position:relative;z-index:1}
+.readout .big{font:800 64px/1 var(--display);color:var(--c,var(--c1));letter-spacing:-.02em}
+.readout .big small{font-size:28px;margin-left:2px}
+.readout .lb{font:700 18px var(--display);color:var(--navy);margin:6px 0 4px}
+.readout p{font:400 15.5px/1.55 var(--serif);margin:6px 0}
+.readout .src{font:500 12px/1.5 var(--sans);color:var(--muted)}
+
+/* barras SVG */
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:var(--sans)}
+.chart .ax{stroke:#cfcabb;stroke-width:1}
+.chart .gd{stroke:#ece8dc;stroke-width:1}
+.chart .tk{fill:var(--ink2);font-size:11.5px}
+.chart .vl{fill:var(--ink);font-size:12px;font-weight:700}
+.bar{transition:opacity .15s,y .35s,height .35s;cursor:pointer}
+.bar.dim{opacity:.45}
+.hit{fill:transparent;cursor:pointer}
+.stack{display:flex;height:54px;gap:2px;border-radius:10px;overflow:hidden;margin:10px 0 6px}
+.seg{flex:var(--w);display:flex;align-items:center;padding:0 14px;font:700 14px var(--sans);color:#fff;cursor:pointer;border:0;transition:filter .15s,flex .5s;min-width:6px}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12)}
+.hbars{display:grid;gap:10px;margin:8px 0}
+.hb{display:grid;grid-template-columns:minmax(120px,210px) 1fr 56px;gap:12px;align-items:center;background:none;border:0;padding:4px;border-radius:8px;cursor:pointer;text-align:left;font-family:var(--sans)}
+.hb:hover,.hb[aria-pressed="true"]{background:#f4f1e8}
+.hb .n{font:600 14px var(--sans);color:var(--ink)}
+.hb .tr{height:22px;background:var(--mute);border-radius:6px;overflow:hidden}
+.hb .fl{height:100%;width:0;background:var(--c,var(--c1));border-radius:0 6px 6px 0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.hb .v{font:800 16px var(--sans);color:var(--ink);text-align:right}
+.detail{margin-top:12px;border-left:5px solid var(--c,var(--c1));background:#faf8f2;border-radius:0 10px 10px 0;padding:12px 16px;font:400 15.5px/1.55 var(--serif)}
+.detail b{font-family:var(--display);color:var(--navy);font-size:18px}
+.detail .meta{font:700 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.detail p{margin:6px 0;text-align:justify}
+.tvw{display:none;overflow-x:auto}
+.viz.tbl-on .tvw{display:block}.viz.tbl-on .plot{display:none}
+
+/* timeline SVG */
+.tlrow{cursor:pointer}
+.tlrow .tr{fill:transparent}
+.tlrow:hover .tr,.tlrow.sel .tr{fill:#f4f1e8}
+.tlrow .lbl{font-size:12.5px;fill:var(--ink);font-weight:600}
+.tlrow .yr{font-size:11px;fill:var(--ink2)}
+.tlrow.off{display:none}
+.tlbar{rx:5px}
+.tlrow.sel .tlbar,.tlrow:hover .tlbar{stroke:var(--navy);stroke-width:2}
+.tlrow:focus-visible{outline:none}
+.tlrow:focus-visible .tr{fill:#f4f1e8;stroke:var(--gold);stroke-width:2}
+.axtxt{font-size:11.5px;fill:var(--ink2)}
+
+/* abas */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font:700 13.5px var(--sans);cursor:pointer;color:var(--ink);transition:all .15s}
+.tab:hover{border-color:var(--navy)}
+.tab[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 24px 18px;border-top:4px solid var(--gold);animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.panel-box[hidden]{display:none}
+.panel-box h5{font:700 21px var(--display);color:var(--navy);margin:14px 0 4px}
+.panel-box h6{font:800 10.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin:14px 0 2px}
+.panel-box p{margin:6px 0}
+.gbtn{border:1px solid var(--line);background:#f4f1e8;border-radius:99px;padding:6px 12px;font:700 12.5px var(--sans);cursor:pointer;color:var(--navy);margin:4px 6px 0 0}
+.gbtn:hover{border-color:var(--navy)}
+.who{font:700 12px var(--sans);color:var(--muted);display:block;margin:2px 0 6px}
+
+/* fraudes (details) */
+.fr{display:grid;gap:8px;margin:14px 0}
+.fr details{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.fr summary{cursor:pointer;padding:12px 18px;font:700 15px var(--sans);color:var(--navy);list-style:none;display:flex;gap:12px;align-items:center}
+.fr summary::-webkit-details-marker{display:none}
+.fr summary:before{content:"+";width:24px;height:24px;border-radius:50%;background:var(--gold-bg);color:#7a5614;display:grid;place-items:center;font-weight:800;flex:none}
+.fr details[open] summary:before{content:"−"}
+.fr details>div{padding:0 18px 14px 54px;font:400 16px/1.6 var(--serif)}
+.fr details>div p{margin:4px 0;text-align:justify}
+
+/* dica de interação e tooltip */
+.tip-hint{font:600 12.5px var(--sans);color:#7a5614;background:var(--gold-bg);border:1px solid #ecd9ac;border-radius:99px;display:inline-block;padding:5px 12px;margin:0 0 10px}
+#tip{position:fixed;z-index:120;pointer-events:none;background:var(--navy);color:#fff;border-radius:9px;padding:9px 12px;font:500 13px/1.45 var(--sans);box-shadow:0 10px 26px #0006;max-width:280px;opacity:0;transition:opacity .12s;left:0;top:0}
+#tip.on{opacity:1}
+#tip b{display:block;font:800 17px var(--sans);color:#fff}
+#tip span{color:#cfdbe5}
+#tip .k{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+@media(max-width:700px){.waffle-wrap{grid-template-columns:1fr}.hb{grid-template-columns:1fr 54px}.hb .tr{grid-column:1/-1;grid-row:2}.viz{padding:16px 14px}.fr details>div{padding-left:18px}}
+@media(prefers-reduced-motion:reduce){.cell,.bar,.seg,.hb .fl,.panel-box{transition:none;animation:none}.viz.pulse{animation:none}}
+@media print{.viz-ctl,.tabs,.tip-hint,#tip{display:none!important}.panel-box[hidden]{display:block!important}}
+.body p.viz-k,.body .viz .sub{text-align:left}
+@media(max-width:700px){#viz-resist .plot{overflow-x:auto}#viz-resist .plot svg{min-width:680px}#viz-eleicoes .plot{overflow-x:auto}#viz-eleicoes .plot svg{min-width:520px}}
+
+
+.card.lens{font:inherit;text-align:left;cursor:pointer;border:1px solid var(--line);border-top:4px solid var(--gold);transition:transform .15s,box-shadow .15s,border-color .15s;display:block;width:100%}
+.card.lens:hover,.card.lens:focus-visible{transform:translateY(-3px);box-shadow:0 12px 26px -16px #1d2731aa;border-color:var(--gold)}
+.card.lens:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card.lens .n{font:800 11px var(--sans);letter-spacing:.14em;color:var(--teal);text-align:left}
+.card.lens h6{font:700 24px var(--display);color:var(--navy);margin:6px 0 6px;text-align:left}
+.card.lens p{text-align:left}
+.lens-go{display:inline-block;margin-top:8px;font:700 12px var(--sans);color:#7a5614;background:var(--gold-bg);border-radius:99px;padding:5px 12px}
+#lens-dlg{border:0;border-radius:18px;padding:0;max-width:min(720px,92vw);width:100%;box-shadow:0 30px 80px #000a;color:var(--ink)}
+#lens-dlg::backdrop{background:#0b1a29b8}
+.lens-box{padding:30px 34px 24px;position:relative;background:var(--paper);border-top:6px solid var(--gold)}
+.lens-x{position:absolute;top:12px;right:14px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;font:400 26px/1 var(--sans);cursor:pointer;color:var(--navy)}
+.lens-x:hover{background:var(--gold-bg)}
+.lens-k{font:800 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 4px;text-align:left}
+#lens-t{margin:0 0 10px;font:800 34px/1.1 var(--display);color:var(--navy);text-align:left}
+#lens-p{font-size:18px;line-height:1.65;text-align:justify;hyphens:auto;margin:8px 0}
+.lens-src{font:500 12.5px/1.5 var(--sans);color:var(--muted);background:#f5f2ea;border-radius:8px;padding:9px 12px;margin:12px 0 0;text-align:left}
+.lens-nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.lens-b{border:2px solid var(--line);background:#fff;border-radius:99px;padding:9px 18px;font:700 14px var(--sans);color:var(--navy);cursor:pointer}
+.lens-b:hover{border-color:var(--navy)}
+@media(prefers-reduced-motion:no-preference){#lens-dlg[open]{animation:lensin .22s ease}@keyframes lensin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}}
+@media(max-width:640px){.lens-box{padding:24px 20px 20px}#lens-t{font-size:28px}#lens-p{font-size:17px}}
+@media print{#lens-dlg{display:none!important}}
+
+/* Linha do tempo ilustrada: aba interna com zoom */
+.timeline-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:38px 0 8px}.timeline-heading h3{margin:0}.timeline-launch{display:inline-grid;place-items:center;flex:none;width:34px;height:34px;margin:0;background:#12304a;color:#e3a52e;border:0;border-radius:9px;font:800 19px Arial,sans-serif;cursor:pointer;box-shadow:0 6px 18px #12304a33}
+.timeline-launch:hover,.timeline-launch:focus-visible{background:#1c4a6b;outline:3px solid #e3b45a;outline-offset:2px}
+.timeline-dialog{position:fixed;inset:0;z-index:200;background:#08121cf5;color:white;display:none;flex-direction:column;font-family:var(--sans)}
+.timeline-dialog.open{display:flex}
+.timeline-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#12304a;flex-wrap:wrap}
+.timeline-toolbar strong{font-size:15px}.timeline-controls{display:flex;align-items:center;gap:8px}
+.timeline-controls button{border:1px solid #ffffff55;border-radius:9px;background:#ffffff1b;color:#fff;min-width:42px;height:40px;cursor:pointer;font-size:20px}
+.timeline-controls button:hover{background:#ffffff35}
+.timeline-viewport{flex:1;overflow:auto;text-align:center;padding:18px;min-height:0}
+.timeline-viewport img{display:block;margin:auto;max-width:none;height:auto;box-shadow:0 10px 40px #0008;transform-origin:top center}
+.timeline-foot{text-align:center;font-size:12px;color:#cbd6e0;padding:8px}
+@media print{.timeline-launch,.timeline-dialog{display:none!important}}
+
+/* Janela de zoom: Três lentes */
+.lentesview-dialog{position:fixed;inset:0;z-index:250;background:rgba(8,18,28,.97);color:#fff;display:none;flex-direction:column;font-family:var(--sans)}
+.lentesview-dialog.open{display:flex}
+.lentesview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap;background:#12304a}
+.lentesview-toolbar strong{font-size:14px}
+.lentesview-controls{display:flex;align-items:center;gap:7px}
+.lentesview-controls button{background:#ffffff20;border:1px solid #ffffff55;color:#fff;border-radius:8px;min-width:38px;height:38px;font:700 19px Arial;cursor:pointer}
+.lentesview-controls button:hover{background:#ffffff44}
+#lentesview-percent{min-width:48px;text-align:center;font-size:13px}
+.lentesview-viewport{flex:1;min-height:0;overflow:auto;display:flex;padding:12px;overscroll-behavior:contain}
+.lentesview-viewport img{display:block;margin:auto;max-width:none;height:auto;flex:none;object-fit:contain;background:white}
+.lentesview-foot{text-align:center;padding:8px;color:#d1dce5;font-size:12px}
+@media print{.lentesview-dialog{display:none!important}}
+
+.goias-box h4{text-transform:none;letter-spacing:0;color:var(--navy);font:700 19px var(--display)}
+
+/* Transição da capa original para a imagem, seguindo index.html */
+.cover{position:relative;line-height:normal;isolation:isolate;aspect-ratio:2040 / 771;container-type:inline-size;overflow:hidden}
+.cover-art{position:absolute;inset:0;z-index:1;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:4% 3.5%;overflow:hidden}
+.cover img.cover-image{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;opacity:0;z-index:2;pointer-events:none;transition:opacity 2.8s ease-in-out}
+.cover.show-image img.cover-image{opacity:1}
+.cover-toggle{position:absolute;right:18px;top:18px;z-index:5;border:1px solid #ffffff99;border-radius:999px;background:#102c43ed;color:white;padding:12px 18px;font:700 13px var(--sans);cursor:pointer;box-shadow:0 4px 16px #0006}
+.cover-toggle:hover,.cover-toggle:focus-visible{background:#b8842b;color:#102c43;outline:2px solid white;outline-offset:2px}
+.cover-art .cv-k{font-size:1.05cqw;margin-bottom:1.2cqw}
+.cover-art .cv-title{font-family:var(--display);font-weight:800;font-size:5.1cqw;line-height:1.02;margin:0;letter-spacing:-.02em;color:#fff}
+.cover-art .cv-sub{font-size:2.15cqw;margin-top:1.1cqw}
+.cover-art .cv-steps{margin:3cqw 0 1.4cqw;gap:1cqw}
+.cover-art .cv-steps span{font-size:1cqw;padding-top:.6cqw;border-top-width:.23cqw}
+.cover-art .cv-steps b{font-size:1.55cqw;margin-top:.3cqw}
+.cover-art .cv-foot{font-size:.95cqw}
+@media(max-width:760px){.cover-art{padding:3% 4%}.cover-art .cv-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cover-toggle{width:27px;height:27px;padding:0;display:grid;place-items:center;border-radius:6px;top:auto;right:2%;bottom:3%;opacity:.9}.cover-toggle svg{display:block;width:16px;height:16px}.cover.show-image .cover-toggle{background:#b8842b;color:#102c43}@media(max-width:600px){.cover-toggle{width:25px;height:25px;top:auto;right:2%;bottom:3%}.cover-toggle svg{width:15px;height:15px}}
+@media(prefers-reduced-motion:reduce){.cover img.cover-image{transition:none}}
+@media print{.cover-toggle{display:none!important}}
+
+/* Charge de cidadania: imagem flutuante à direita, texto contornado */
+.cidadania-charge{float:right;width:min(43%,310px);margin:5px 0 18px 24px;}
+.cidadania-charge a{display:block;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:7px 10px 20px -12px #12304a88;transition:transform .2s}
+.cidadania-charge a:hover{transform:translateY(-3px)}
+.cidadania-charge img{display:block;width:100%;height:auto}
+.cidadania-charge figcaption{font:500 11px/1.4 var(--sans);color:var(--muted);margin-top:6px;text-align:center}
+@media(max-width:540px){.cidadania-charge{float:none;width:min(100%,350px);margin:8px auto 18px}}
+@media print{.cidadania-charge{break-inside:avoid}}
+
+/* Tirinha democracia à direita com texto contornando */
+.democracia-charge{float:right;width:min(34%,245px);margin:5px 0 14px 22px;shape-outside:margin-box}
+.democracia-charge a{display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;box-shadow:7px 10px 20px -12px #12304a88;transition:transform .2s}
+.democracia-charge a:hover{transform:translateY(-3px)}
+.democracia-charge img{display:block;width:100%;height:auto}
+.democracia-charge figcaption{font:500 11px/1.4 var(--sans);color:var(--muted);margin-top:6px;text-align:center}
+@media(max-width:540px){.democracia-charge{float:none;width:min(100%,350px);margin:8px auto 18px}}
+@media print{.democracia-charge{break-inside:avoid}}
+
+/* Box da atividade Democracia — cores da página atv-democracia.html */
+.atv-democracia-box{display:flex;align-items:center;gap:18px;margin:16px 0 30px;padding:20px 22px;border-radius:16px;background:linear-gradient(105deg,#14214f,#2f4a9c);color:#fff;text-decoration:none;box-shadow:0 12px 28px -14px #14214faa;font-family:var(--sans);transition:transform .2s,box-shadow .2s}
+.atv-democracia-box:hover,.atv-democracia-box:focus-visible{transform:translateY(-2px);box-shadow:0 16px 32px -12px #14214faa;color:#fff}
+.atv-democracia-icon{display:grid;place-items:center;flex:none;width:58px;height:58px;border-radius:15px;background:#ffffff1c;border:1px solid #ffffff55;color:#f4dfb4;font-size:29px}
+.atv-democracia-copy{flex:1;min-width:0;display:block}.atv-democracia-label{display:block;font-size:11px;font-weight:800;letter-spacing:.15em;color:#f4dfb4}.atv-democracia-copy strong{display:block;font:700 22px/1.3 var(--display);color:#fff;margin:4px 0}.atv-democracia-desc{display:block;font-size:13.5px;line-height:1.5;color:#e4e9f6}.atv-democracia-button{flex:none;background:#fafbfe;color:#14214f;border-radius:99px;padding:12px 18px;font-size:13px;font-weight:800;white-space:nowrap}
+@media(max-width:640px){.atv-democracia-box{flex-wrap:wrap;padding:17px}.atv-democracia-button{width:100%;text-align:center}}
+
+/* Atividade Participação popular — paleta original da atividade */
+.atv-participacao-box{display:flex;align-items:center;gap:18px;margin:18px 0 30px;padding:20px 22px;border-radius:16px;background:linear-gradient(105deg,#0a2a66 0%,#1a8a4a 76%,#218b4a 100%);color:#fff;text-decoration:none;box-shadow:0 12px 28px -14px #0a2a66aa;font-family:var(--sans);transition:transform .2s,box-shadow .2s;border-bottom:4px solid #f2c94c}
+.atv-participacao-box:hover,.atv-participacao-box:focus-visible{transform:translateY(-2px);box-shadow:0 16px 32px -12px #0a2a66aa;color:#fff}
+.atv-participacao-icon{display:grid;place-items:center;flex:none;width:58px;height:58px;border-radius:15px;background:#ffffff1c;border:1px solid #ffffff55;color:#ffd23f;font-size:29px}
+.atv-participacao-copy{flex:1;min-width:0;display:block}.atv-participacao-label{display:block;font-size:11px;font-weight:800;letter-spacing:.15em;color:#ffd23f}.atv-participacao-copy strong{display:block;font:700 22px/1.3 var(--display);color:#fff;margin:4px 0}.atv-participacao-desc{display:block;font-size:13.5px;line-height:1.5;color:#e6f3ea}.atv-participacao-button{flex:none;background:#fff;color:#0e2f6b;border-radius:99px;padding:12px 18px;font-size:13px;font-weight:800;white-space:nowrap}
+@media(max-width:640px){.atv-participacao-box{flex-wrap:wrap;padding:17px}.atv-participacao-button{width:100%;text-align:center}}
+
+/* Card Diretas Já: miniatura flutuante à direita */
+.diretas-card{float:right;width:min(34%,235px);margin:5px 0 16px 22px;shape-outside:margin-box}
+.diretas-card a{display:block;border-radius:12px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:7px 10px 20px -12px #12304a88;transition:transform .2s,box-shadow .2s}
+.diretas-card a:hover,.diretas-card a:focus-visible{transform:translateY(-3px);box-shadow:7px 14px 24px -10px #12304a99}
+.diretas-card img{display:block;width:100%;height:auto}
+@media(max-width:540px){.diretas-card{float:none;width:min(78%,260px);margin:10px auto 18px}}
+@media print{.diretas-card{break-inside:avoid}}
+.resistencia-deck-row{display:flex;align-items:center;justify-content:space-between;gap:14px}.resistencia-deck-row .deck{flex:1;min-width:0}.resistencia-drive-link{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:9px;background:#12304a;color:#e3b45a;text-decoration:none;box-shadow:0 5px 15px #12304a33;transition:transform .2s,background .2s}.resistencia-drive-link:hover{background:#1c4a6b;color:#fff;transform:translateY(-2px)}.resistencia-drive-link:focus-visible{outline:3px solid #b8842b;outline-offset:3px}
+
+/* Charge Resistência — à direita com texto contornando */
+.resistencia-charge{float:right;width:min(37%,260px);margin:4px 0 18px 24px;shape-outside:margin-box}
+.resistencia-charge a{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:7px 10px 20px -12px #12304a88;transition:transform .2s}
+.resistencia-charge a:hover,.resistencia-charge a:focus-visible{transform:translateY(-3px);outline-color:var(--gold)}
+.resistencia-charge img{display:block;width:100%;height:auto}
+.resistencia-charge figcaption{font:500 11px/1.4 var(--sans);color:var(--muted);margin-top:6px;text-align:center}
+@media(max-width:540px){.resistencia-charge{float:none;width:min(100%,300px);margin:8px auto 18px}}
+@media print{.resistencia-charge{break-inside:avoid}}
+
+/* Atividade Resistência — identidade visual da atividade */
+.atv-resistencia{background:linear-gradient(110deg,#141414,#c8102e);box-shadow:0 12px 28px -16px #c8102ecc;margin-top:18px}
+.atv-resistencia:hover,.atv-resistencia:focus-visible{box-shadow:0 16px 32px -14px #c8102e}
+.atv-resistencia .atv-ic{color:#ffb4be}
+.atv-resistencia .atv-k{color:#ffb4be}
+.atv-resistencia .atv-d{color:#ffe4e8}
+.atv-resistencia .atv-go{color:#a30d27}
+.atv-resistencia:hover .atv-go{background:#ffe4e8}
+
+/* Atividade de síntese: cores da página atvresumo.html */
+.atv-resumo-box{display:flex;align-items:center;gap:18px;margin:18px 0 30px;padding:20px 24px;border:2px solid #e8434a;border-radius:15px;background:linear-gradient(115deg,#7a0c12,#d71920);color:#fff;text-decoration:none;box-shadow:0 12px 28px -15px #7a0c1288;font-family:var(--sans);transition:transform .2s,box-shadow .2s}
+.atv-resumo-box:hover,.atv-resumo-box:focus-visible{transform:translateY(-3px);box-shadow:0 17px 30px -12px #7a0c12aa;color:#fff}
+.atv-resumo-box:focus-visible{outline:3px solid #e3b45a;outline-offset:3px}
+.atv-resumo-icon{flex:none;width:54px;height:54px;display:grid;place-items:center;border-radius:13px;background:#ffffff20;border:1px solid #ffffff66;font-size:26px}
+.atv-resumo-copy{flex:1;min-width:0;display:block}
+.atv-resumo-label{display:block;font:800 11px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:#ffd9db}
+.atv-resumo-copy strong{display:block;font:700 22px/1.3 var(--display);color:#fff;margin:4px 0}
+.atv-resumo-desc{display:block;font:400 14px/1.5 var(--sans);color:#fff0f0}
+.atv-resumo-go{flex:none;background:#fff;color:#7a0c12;border-radius:99px;padding:10px 16px;font:800 13px var(--sans)}
+@media(max-width:640px){.atv-resumo-box{flex-wrap:wrap;padding:17px}.atv-resumo-go{width:100%;text-align:center}}
+</style>
+<style>
+.deck-drive-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:12px}.deck-drive-row .deck{margin:0;flex:1;min-width:0}.drive-square-link{display:inline-flex;align-items:center;justify-content:center;flex:none;width:42px;height:42px;border-radius:10px;background:var(--navy);color:#e3b45a;text-decoration:none;box-shadow:0 5px 14px #12304a33;transition:transform .2s,background .2s}.drive-square-link:hover{background:var(--teal);transform:translateY(-2px)}.drive-square-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px}@media print{.drive-square-link{display:none}}
+
+/* Charge de Henfil: imagem à direita e texto contornando */
+.henfil-charge{float:right;width:min(44%,330px);margin:5px 0 16px 24px;shape-outside:margin-box}
+.henfil-charge .henfil-image-link{display:block;cursor:zoom-in;border-radius:10px;transition:transform .2s}.henfil-charge .henfil-image-link:hover{transform:translateY(-3px)}.henfil-charge .henfil-image-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.henfil-charge img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:7px 10px 20px -12px #12304a88}
+.henfil-charge figcaption{font:500 12px/1.5 var(--sans);color:var(--muted);margin-top:8px;text-align:left}
+.henfil-charge figcaption a{font-weight:700;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:540px){.henfil-charge{float:none;width:min(100%,370px);margin:8px auto 18px}}
+@media print{.henfil-charge{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+<div id="progress" aria-hidden="true"></div>
+<main id="conteudo">
+<section class="cover" id="capa">
+  <button class="cover-toggle" type="button" aria-pressed="false" onclick="toggleCover(this)" aria-label="Revelar imagem" title="Revelar imagem"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><rect x="8" y="8" width="8" height="8" rx="1"/></svg></button>
+  <img class="cover-image" src="img/capap1.webp" onerror="if(!this.dataset.triedParent){this.dataset.triedParent='1';this.src='../img/capap1.webp';}else{this.dataset.missing='1';}" alt="Capa ilustrada: Quatro conceitos para entender a República brasileira">
+  <h1 class="sr">Quatro conceitos para entender a República brasileira</h1>
+  <div class="cover-art">
+    <p class="cv-k">História · 2ª série · Ensino Médio · Texto de leitura</p>
+    <p class="cv-title">Quatro conceitos para entender a República brasileira</p>
+    <p class="cv-sub">Cidadania, democracia, participação popular e resistência: da Proclamação, em 1889, às eleições de 2026</p>
+    <div class="cv-steps"><span>CONCEITO 1<b>Cidadania</b></span><span>CONCEITO 2<b>Democracia</b></span><span>CONCEITO 3<b>Participação popular</b></span><span>CONCEITO 4<b>Resistência</b></span></div>
+    <p class="cv-foot">Colégio Estadual Rodolfo de Oliveira · CERO · 2026</p>
+  </div>
+</section>
+<section class="chapter" id="abertura">
+  <header class="ch-head"><div class="ch-num"></div><div>
+    <p class="eyebrow">Texto de leitura</p><h2>Para começar</h2>
+    <div class="deck-drive-row"><p class="deck">Quatro palavras que ajudam a contar a história da República.</p><a class="drive-square-link" href="https://drive.google.com/file/d/1X0fVCVyHB2gn08WDCkF6Tjr5aS0A1jT-/view?usp=sharing" target="_blank" rel="noopener noreferrer" title="Abrir material no Google Drive (nova aba)" aria-label="Abrir material no Google Drive em nova aba"><svg viewBox="0 0 32 32" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="18" height="18" rx="2"/><rect x="11" y="4" width="17" height="17" rx="2"/></svg></a></div></div></header>
+  <div class="body">
+<p class="lead">Imagine que alguém lhe pedisse para explicar como o Brasil chegou ao que é hoje. Você poderia listar presidentes, constituições e datas, mas ficaria faltando um fio que ligasse tudo isso. Este texto propõe quatro palavras para cumprir esse papel: <b>cidadania</b>, <b>democracia</b>, <b>participação popular</b> e <b>resistência</b>.</p><p>Essas palavras aparecem nos jornais, nas redes sociais, nas provas e até nas conversas de família, e muitas vezes são usadas como se todos soubessem o que significam. Nas próximas páginas, você vai ver o sentido de cada uma e acompanhar como elas se manifestaram em momentos diferentes da República, da Primeira República (1889–1930) até a atualidade.</p><p>Cada conceito responde a uma pergunta. A cidadania pergunta: <b>quem tem direitos?</b> A democracia pergunta: <b>quem decide e como?</b> A participação popular pergunta: <b>de que modo as pessoas influenciam as decisões?</b> E a resistência pergunta: <b>o que as pessoas fazem quando consideram a ordem injusta?</b> Ao longo do texto, você vai perceber que as respostas mudaram bastante em 137 anos.</p><div class="callout teal"><span class="lab">Como ler este texto</span><p>Cada capítulo começa com a explicação do conceito e continua com exemplos de épocas diferentes. Procure comparar um período com outro e perceber o que mudou e o que permaneceu.</p></div>
+  </div>
+  <div class="ch-end"><span>Texto de leitura</span><span>Próximo: Cidadania →</span></div>
+</section>
+<section class="chapter" id="cidadania">
+  <header class="ch-head"><div class="ch-num">1</div><div>
+    <p class="eyebrow">Conceito 1</p><h2>Cidadania: ter direitos e poder exercê-los</h2>
+    <div class="deck-drive-row"><p class="deck">O que significa ser cidadão e por que nem todos foram cidadãos plenos.</p><a class="drive-square-link" href="https://drive.google.com/file/d/1x6cssf4JBU8Dk39h0A4U73Frnoi_JLyA/view?usp=sharing" target="_blank" rel="noopener noreferrer" title="Abrir material sobre cidadania no Google Drive (nova aba)" aria-label="Abrir material sobre cidadania em nova aba"><svg viewBox="0 0 32 32" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="18" height="18" rx="2"/><rect x="11" y="4" width="17" height="17" rx="2"/></svg></a></div></div></header>
+  <div class="body">
+<figure class="cidadania-charge"><a href="../img/cidadania.jpg" target="_blank" rel="noopener" aria-label="Abrir charge sobre cidadania em nova aba"><img src="../img/cidadania.jpg" alt="Charge sobre cidadania: personagem afirma que a cidadania também entrou em greve" loading="lazy" onerror="if(!this.dataset.retry){this.dataset.retry='1';this.src='img/cidadania.jpg';this.parentElement.href='img/cidadania.jpg';}"></a><figcaption>Charge sobre cidadania · Clique para ampliar</figcaption></figure>
+<p class="lead">Quando alguém diz “sou cidadão brasileiro”, quer dizer mais do que ter nascido no país ou possuir documentos. <b>Cidadania</b> é o conjunto de direitos e deveres que ligam as pessoas entre si, à sociedade e ao Estado.</p><p>O historiador José Murilo de Carvalho, autor de <em>Cidadania no Brasil: o longo caminho</em>, propõe separar esses direitos em três grupos. Os <b>direitos civis</b> garantem a liberdade e a igualdade perante a lei: ir e vir, expressar o que pensa, ter propriedade, ser julgado com justiça. Os <b>direitos políticos</b> permitem participar do poder: votar, ser votado, criar partidos e sindicatos. Os <b>direitos sociais</b> asseguram condições dignas de vida: educação, saúde, trabalho, salário justo e aposentadoria.</p><p>Quem reúne os três tipos de direitos é um <b>cidadão pleno</b>. Quem tem apenas alguns é um <b>cidadão incompleto</b>. Essa ideia é muito útil para estudar a história, porque, em quase todas as épocas, uma parte dos brasileiros foi cidadã apenas pela metade.</p><div class="callout concept"><span class="lab">Conceito em destaque</span><p><b>Cidadania:</b> conjunto de direitos civis, políticos e sociais exercidos de fato pelas pessoas, com garantias legais.</p><p><b>Estadania:</b> termo de Carvalho para a situação em que os direitos chegam como favor de quem governa e podem ser retirados quando o governante quiser.</p></div><h3>Na Primeira República: direitos no papel</h3><p>A Constituição de 1891 acabou com o voto censitário, aquele que dependia de renda. Parecia um grande avanço, mas só podiam votar homens alfabetizados com 21 anos ou mais. Mulheres, analfabetos, mendigos e soldados de baixa patente ficavam de fora. Como cerca de 65% da população com mais de 15 anos era analfabeta em 1900, a maioria dos adultos não conseguia nem se alistar. Em 1930, o ano de maior participação eleitoral da Primeira República, só 5,65% da população votou. A igualdade proclamada em lei convivia com a exclusão na prática.</p><h3>Na Era Vargas: direitos sociais como presente</h3><p>Depois de 1930, o país ampliou direitos. O Código Eleitoral de 1932 estabeleceu o voto secreto e o voto feminino, e em 1943 a Consolidação das Leis do Trabalho (CLT) reuniu salário mínimo, jornada de trabalho e férias. Mas esses direitos sociais avançaram junto com restrições políticas: durante o Estado Novo (1937–1945), o Congresso foi fechado e a liberdade de expressão foi controlada. Muitos trabalhadores passaram a ver as leis trabalhistas como um presente de Getúlio Vargas, e não como resultado das greves e lutas anteriores. É isso que Carvalho chama de estadania.</p><h3>Da Constituição de 1988 à atualidade</h3><p>A Constituição de 1988, chamada de Constituição Cidadã, reuniu os três tipos de direitos em um único texto, elaborado com participação da sociedade, que enviou cerca de 72 mil sugestões. Antes dela, em 1985, os analfabetos já tinham conquistado o direito de votar. Nas décadas seguintes surgiram leis como o Estatuto da Criança e do Adolescente (1990), a Lei Maria da Penha (2006), a Lei de Cotas (2012) e o Estatuto da Pessoa com Deficiência (2015).</p><p>Ainda assim, ter uma lei não significa que todos exerçam o direito. A Consolidação das Leis do Trabalho determina igual salário para funções iguais, mas dados do IBGE de 2024 indicam que as mulheres ganham cerca de 20% menos do que os homens nas mesmas funções. Em 2023, 1.463 mulheres foram vítimas de feminicídio, segundo o Fórum Brasileiro de Segurança Pública. E o debate sobre os direitos dos trabalhadores de aplicativos mostra que a cidadania social precisa ser repensada a cada mudança no mundo do trabalho.</p><div class="goias-box"><span class="lab">Recorte regional · Goiás</span><h4>Em Goiás: oligarquias e quilombolas</h4><p>Na Primeira República, famílias como os Caiado e os Bulhões dominavam a política goiana, e a cidadania política dependia da fidelidade a um chefe local. Hoje, a comunidade Kalunga, em Goiás, vive na região há cerca de trezentos anos e conta com o artigo 68 da Constituição de 1988, que reconhece a propriedade das terras ocupadas por remanescentes de quilombos.</p></div><div class="think"><small>Para pensar</small>Se a lei garante um direito, mas parte da população não consegue exercê-lo, esse direito existe de fato? Dê um exemplo que você conheça.</div><a class="atv-box" href="../atv/atv-cidadania.html" target="_blank" rel="noopener"><span class="atv-ic" aria-hidden="true">✎</span><span class="atv-tx"><span class="atv-k">Atividade</span><b>Cidadania: quem tem direitos?</b><span class="atv-d">Seis questões dissertativas sobre direitos civis, políticos e sociais, estadania e a distância entre a lei e a vida real.</span></span><span class="atv-go">Abrir atividade →</span></a>
+  </div>
+  <div class="ch-end"><span>Conceito 1</span><span>Próximo: Democracia →</span></div>
+</section>
+<section class="chapter" id="democracia">
+  <header class="ch-head"><div class="ch-num">2</div><div>
+    <p class="eyebrow">Conceito 2</p><h2>Democracia: o poder vem do povo</h2>
+    <div class="deck-drive-row"><p class="deck">Por que ter eleições não basta para que um país seja democrático.</p><a class="drive-square-link" href="https://drive.google.com/file/d/1BZlAzIwjbdczl0EPZH8fhzjQk_rMYeds/view?usp=sharing" target="_blank" rel="noopener noreferrer" title="Abrir material complementar no Google Drive" aria-label="Abrir material complementar no Google Drive em nova aba"><svg viewBox="0 0 32 32" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="18" height="18" rx="2"/><rect x="11" y="4" width="17" height="17" rx="2"/></svg></a></div></div></header>
+  <div class="body">
+<figure class="democracia-charge"><a href="../img/democracia.webp" target="_blank" rel="noopener noreferrer" aria-label="Abrir charge sobre democracia em nova aba"><img src="../img/democracia.webp" alt="Tirinha da Mafalda sobre democracia" loading="lazy" onerror="if(!this.dataset.retry){this.dataset.retry='1';this.src='img/democracia.webp';this.parentElement.href='img/democracia.webp';}"></a><figcaption>Democracia · Clique para ampliar</figcaption></figure><p class="lead">A palavra <b>democracia</b> vem do grego e junta <em>demos</em> (povo) e <em>kratos</em> (poder). Em uma democracia, o poder pertence ao povo, que o exerce diretamente ou por meio de representantes. A Constituição brasileira de 1988 diz isso logo no início: “Todo o poder emana do povo”.</p><p>Mas atenção: <b>eleger não é o mesmo que viver em uma democracia</b>. Para que uma eleição seja democrática, o voto precisa ser livre (secreto e sem pressão), amplo (aberto à maioria dos adultos) e competitivo (com candidatos e partidos de verdade e resultados respeitados). Também são necessárias a liberdade de imprensa e de associação, a separação entre os Poderes Executivo, Legislativo e Judiciário e o respeito aos direitos das minorias.</p><div class="callout concept"><span class="lab">Conceito em destaque</span><p><b>Democracia:</b> regime em que o poder vem do povo, por eleições livres e competitivas, com liberdade de expressão e de organização e respeito às regras e aos direitos de todos. Eleições sem liberdade ou sem concorrência são só uma aparência de democracia.</p></div><p>Você já viveu uma experiência democrática em escala pequena: a eleição do representante de turma ou do grêmio estudantil. Ela só tem valor se o voto for secreto, se houver mais de um candidato e se todos aceitarem o resultado, inclusive quem perdeu.</p><h3>Na Primeira República: eleições sem democracia</h3><p>Entre 1894 e 1930, o Brasil realizou eleições presidenciais regulares. No entanto, o voto era aberto, o que permitia a patrões e coronéis vigiar os eleitores, o chamado voto de cabresto. Havia fraudes na contagem e a recusa de reconhecer candidatos de oposição eleitos, a “degola”. Os resultados falam por si: em 1906, o vencedor teve 97,9% dos votos válidos; em 1918, 99,1%. Disputas reais não produzem números assim.</p><h3>Do Estado Novo à ditadura civil-militar</h3><p>Em 1932, o Código Eleitoral criou a Justiça Eleitoral para combater a fraude. Mas, em 1937, Getúlio Vargas deu um golpe, usando como pretexto o Plano Cohen, um documento forjado sobre uma suposta conspiração comunista. O Congresso foi fechado e os partidos foram extintos. Depois da queda de Vargas, a Constituição de 1946 trouxe eleições competitivas e partidos nacionais, mas os analfabetos continuavam sem voto e as crises políticas eram constantes. Em 1964, um golpe civil-militar inaugurou uma ditadura de 21 anos. O Brasil ficou 29 anos sem eleição direta para presidente, de 1960 a 1989.</p><h3>Da redemocratização à atualidade</h3><p>A campanha das Diretas Já (1983–1984), a eleição indireta de Tancredo Neves (1985) e a Constituição de 1988 abriram o período democrático mais longo da história republicana: são mais de 41 anos. Nesse tempo, o país elegeu presidentes por voto direto, realizou plebiscitos, afastou um presidente por impeachment dentro das regras constitucionais (Collor, em 1992) e viu a oposição chegar ao poder (2002).</p><p>Isso não significa que a democracia esteja garantida para sempre. Em 8 de janeiro de 2023, a Praça dos Três Poderes foi invadida por manifestantes que não aceitavam o resultado da eleição. Em 11 de setembro de 2025, a 1ª Turma do Supremo Tribunal Federal condenou o ex-presidente Jair Bolsonaro a 27 anos e 3 meses de prisão por crimes ligados à trama golpista, por quatro votos a um. E em outubro de 2026 o país vive novas eleições gerais, com o primeiro turno realizado em 4 de outubro e o segundo marcado para 25 de outubro. A democracia se mantém quando vencedores e perdedores respeitam as regras.</p><div class="goias-box"><span class="lab">Recorte regional · Goiás</span><h4>Em Goiás: o fim das oligarquias</h4><p>Depois da Revolução de 1930, Pedro Ludovico Teixeira foi nomeado interventor em Goiás e pôs fim ao domínio das oligarquias tradicionais. Em 1933, foi lançada a pedra fundamental de Goiânia, símbolo de modernização do Centro-Oeste. Repare que esse processo ocorreu em um governo provisório, em que interventores substituíam governadores eleitos.</p></div><div class="think"><small>Para pensar</small>Um país pode ter eleições e, mesmo assim, não ser democrático? Use a Primeira República para justificar a sua resposta.</div>
+<a class="atv-democracia-box" href="../atv/atv-democracia.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir atividade Democracia: o poder vem do povo em nova aba">
+  <span class="atv-democracia-icon" aria-hidden="true">✎</span>
+  <span class="atv-democracia-copy"><span class="atv-democracia-label">ATIVIDADE · CONCEITO 2</span><strong>Democracia: o poder vem do povo</strong><span class="atv-democracia-desc">Texto de apoio e seis questões dissertativas sobre eleições, democracia e a história do Brasil.</span></span>
+  <span class="atv-democracia-button">Abrir atividade →</span>
+</a>
+  </div>
+  <div class="ch-end"><span>Conceito 2</span><span>Próximo: Participação popular →</span></div>
+</section>
+<section class="chapter" id="participacao">
+  <header class="ch-head"><div class="ch-num">3</div><div>
+    <p class="eyebrow">Conceito 3</p><h2>Participação popular: além do voto</h2>
+    <div class="deck-drive-row"><p class="deck">As várias formas pelas quais as pessoas influenciam as decisões.</p><a class="drive-square-link" href="https://drive.google.com/file/d/14zAEdpDRppZy4hofbUv86VIHI8ZwTarr/view?usp=sharing" target="_blank" rel="noopener noreferrer" title="Abrir material sobre participação popular em nova aba" aria-label="Abrir material sobre participação popular no Google Drive em nova aba"><svg viewBox="0 0 32 32" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="18" height="18" rx="2"/><rect x="11" y="4" width="17" height="17" rx="2"/></svg></a></div></div></header>
+  <div class="body">
+<figure class="henfil-charge"><a class="henfil-image-link" href="../img/henfil.jpg" target="_blank" rel="noopener noreferrer" title="Abrir charge de Henfil em nova aba"><img src="../img/henfil.jpg" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='img/henfil.jpg';}" alt="Charge atribuída a Henfil: Queremos o poder! Personagens dizem eu posso, tu podes, ele pode, nós podemos, vós podeis, eles podem." loading="lazy"></a><figcaption>Charge “Queremos o poder!”, de Henfil. <a href="https://www.google.com/search?udm=50&amp;q=Henfil%20charge%20%22Queremos%20o%20poder%22%20eu%20posso%20tu%20podes%20ele%20pode%20an%C3%A1lise%20significado%20participa%C3%A7%C3%A3o%20popular%20democracia" target="_blank" rel="noopener noreferrer" title="Pesquisar a charge no Modo IA do Google">Pesquisar e analisar a imagem no Google IA ↗</a></figcaption></figure>
+<p class="lead">Participar não é apenas votar de dois em dois anos. <b>Participação popular</b> é tudo o que as pessoas fazem para influenciar decisões que afetam a vida coletiva: votar, filiar-se a um partido, criar um sindicato, escrever na imprensa, assinar um abaixo-assinado, fazer greve, ocupar uma praça, pressionar um parlamentar.</p><p>Podemos reunir essas formas em dois caminhos. A <b>participação institucional</b> acontece pelos canais previstos em lei: o voto, o plebiscito (consulta antes de uma decisão), o referendo (consulta para confirmar uma decisão), a iniciativa popular de projetos de lei e os conselhos de políticas públicas. A <b>participação direta</b> acontece pela mobilização coletiva: greves, passeatas, comícios, ocupações e campanhas na imprensa e nas redes sociais. Muitas vezes, ela nasce justamente quando os canais legais estão fechados.</p><div class="callout concept"><span class="lab">Conceito em destaque</span><p><b>Participação popular:</b> conjunto de ações pelas quais as pessoas influenciam decisões coletivas. Inclui o voto, mas também a organização em sindicatos, associações e movimentos sociais, a imprensa, a greve e as manifestações.</p></div><h3>Quando não há canais: o povo “bestializado”</h3><figure class="doc"><blockquote>“O povo assistiu àquilo bestializado, atônito, surpreso, sem conhecer o que significava.”</blockquote><figcaption>Aristides Lobo, jornalista republicano, sobre a Proclamação da República, 1889. Expressão discutida por José Murilo de Carvalho em <em>Os bestializados</em> (1987).</figcaption></figure><p>A frase mostra que, em 1889, a mudança de regime foi feita sem consultar o povo. Como o voto era restrito e controlado, a participação foi para as ruas e para as fábricas. Em 1904, a população do Rio de Janeiro protestou na Revolta da Vacina contra a vacinação obrigatória e contra reformas que expulsavam os pobres do centro. Em 1917, cerca de 70 mil trabalhadores pararam São Paulo na Greve Geral e conquistaram, nos anos seguintes, as primeiras leis de proteção ao trabalho.</p><h3>Os grandes movimentos do século XX</h3><p>Entre 1947 e 1953, a campanha “O petróleo é nosso” reuniu estudantes, militares e sindicatos e contribuiu para a criação da Petrobras. Nos anos 1950, as Ligas Camponesas reuniram trabalhadores do campo que lutavam contra a expulsão das terras. Mesmo sob a ditadura, as ruas voltaram a se encher: em 1968, a Passeata dos Cem Mil, no Rio de Janeiro, protestou contra a violência da repressão; em 1978, os metalúrgicos do ABC paulista desafiaram a lei e pararam as fábricas. Em 1984, as Diretas Já levaram até 1,5 milhão de pessoas aos comícios para exigir o voto direto para presidente.</p><p>Quando a ditadura acabou, a participação passou a fazer parte do desenho institucional. A Constituinte recebeu cerca de 72 mil sugestões da população e a Constituição de 1988 previu plebiscito, referendo, iniciativa popular e conselhos. Em 1992, os “caras-pintadas”, jovens com o rosto pintado de verde e amarelo, ocuparam as ruas pelo impeachment de Collor.</p><h3>Na atualidade: das ruas às redes</h3><p>Em 2013, o Movimento Passe Livre protestou contra o aumento das passagens de ônibus em São Paulo e as Jornadas de Junho se espalharam por todo o país. Em 2015, estudantes secundaristas ocuparam escolas em São Paulo. Em 2023, após os ataques de 8 de janeiro, movimentos sociais e cidadãos foram às ruas em defesa das instituições. As redes sociais ampliaram a capacidade de mobilização, mas também facilitaram a circulação de informações falsas. Participar de modo consciente exige checar os fatos e conhecer as regras do jogo.</p><div class="goias-box"><span class="lab">Recorte regional · Goiás</span><h4>Em Goiás: Trombas e Formoso</h4><p>Entre 1950 e 1957, posseiros do norte de Goiás, na região de Trombas e Formoso, organizaram conselhos próprios e resistiram à grilagem de terras. O episódio mostra como a participação popular nasceu, no interior do Brasil, da luta por terra e por autonomia.</p></div><div class="think"><small>Para pensar</small>Que formas de participação estão ao seu alcance hoje, na escola e no seu bairro? Alguma delas já produziu mudanças concretas?</div>
+<a class="atv-participacao-box" href="../atv/atv-participacao.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir atividade Participação popular: além do voto em nova aba">
+  <span class="atv-participacao-icon" aria-hidden="true">✎</span>
+  <span class="atv-participacao-copy"><span class="atv-participacao-label">ATIVIDADE · CONCEITO 3</span><strong>Participação popular: além do voto</strong><span class="atv-participacao-desc">Texto de apoio e seis questões dissertativas sobre participação institucional, mobilização popular e movimentos sociais.</span></span>
+  <span class="atv-participacao-button">Abrir atividade →</span>
+</a>
+  </div>
+  <div class="ch-end"><span>Conceito 3</span><span>Próximo: Resistência →</span></div>
+</section>
+<section class="chapter" id="resistencia">
+  <header class="ch-head"><div class="ch-num">4</div><div>
+    <p class="eyebrow">Conceito 4</p><h2>Resistência: dizer não a uma ordem injusta</h2>
+    <div class="resistencia-deck-row"><p class="deck">Revoltas, greves, guerrilhas, arte e defesa de modos de vida.</p><a class="resistencia-drive-link" href="https://drive.google.com/file/d/1q6kw0at6kx1QvejrF8ShpLM446CYVhcC/view?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Abrir material complementar sobre resistência em nova aba" title="Abrir material complementar em nova aba"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="14" height="14" rx="1.5"/><rect x="8" y="2" width="13" height="13" rx="1.5"/></svg></a></div></div></header>
+  <div class="body">
+<figure class="resistencia-charge"><a href="../img/resistencia.jpeg" target="_blank" rel="noopener noreferrer" title="Abrir imagem em nova aba"><img src="../img/resistencia.jpeg" alt="Charge de Henfil sobre a campanha Diretas Já, 1984" loading="lazy"></a><figcaption>Henfil. <i>Diretas Já!</i> (1984). Clique para ampliar.</figcaption></figure>
+<p class="lead"><b>Resistência</b> é a reação organizada ou espontânea contra uma ordem considerada injusta. Ela pode ser armada ou pacífica, coletiva ou individual, aberta ou discreta. Na história da República, aparece nos sertões, nas fábricas, nos quartéis, nas escolas e nas artes.</p><p>Podemos distinguir quatro formas principais. A <b>resistência armada</b> usa a força, como nas revoltas e guerrilhas. A <b>resistência civil</b> recorre a greves, passeatas e desobediência a leis injustas. A <b>resistência cultural</b> denuncia a opressão por meio da música, do teatro, do cinema e da literatura. E a <b>resistência cotidiana</b> consiste em manter modos de vida, línguas e tradições ameaçados, como fazem comunidades quilombolas, indígenas e camponesas.</p><div class="callout concept"><span class="lab">Conceito em destaque</span><p><b>Resistência:</b> reação organizada ou espontânea contra uma ordem considerada injusta. Pode visar a um governo, a uma lei ou a uma situação de opressão.</p></div><h3>Na Primeira República: revoltas contra a violência do Estado</h3><p>Entre 1896 e 1897, milhares de sertanejos se reuniram em Canudos, na Bahia, em torno de Antônio Conselheiro. A comunidade enfrentou quatro expedições militares e foi destruída em 1897. Em 1910, marinheiros, em sua maioria negros, tomaram navios na Baía de Guanabara na Revolta da Chibata, exigindo o fim dos castigos físicos herdados da escravidão. Entre 1912 e 1916, camponeses do Contestado, em Santa Catarina e no Paraná, resistiram à perda de terras e ao avanço da ferrovia. Nem todas essas resistências venceram, mas todas revelaram que havia uma insatisfação que o sistema político não conseguia ouvir.</p><h3>Na ditadura civil-militar: resistir de muitos modos</h3><p>Depois de 1964 e, sobretudo, do AI-5 (1968), a resistência assumiu várias formas. Houve a luta armada de pequenos grupos de esquerda e a Guerrilha do Araguaia (1972–1974), na divisa entre Pará, Goiás (atual Tocantins) e Maranhão. Houve o movimento estudantil, que organizou a Passeata dos Cem Mil. Houve a resistência cultural, com a Tropicália, o Cinema Novo e o teatro, mesmo sob censura. Houve a ação de setores da Igreja e da imprensa, que ganhou força depois do assassinato do jornalista Vladimir Herzog, em 1975. E houve a campanha pela Anistia, que resultou na lei de 1979.</p><h3>Da Constituição de 1988 à atualidade</h3><p>Com a democracia, a resistência passou a se expressar principalmente por meios legais, mas não desapareceu. O líder seringueiro Chico Mendes, assassinado em 1988, tornou-se símbolo da defesa da floresta. Em 1996, o massacre de 21 sem-terra em Eldorado do Carajás reforçou a luta pela reforma agrária. Em 2018, o assassinato da vereadora Marielle Franco transformou seu nome em símbolo da resistência de mulheres negras e de moradores de favelas. Em 2023, o Congresso aprovou a lei do marco temporal, que só reconheceria as terras indígenas ocupadas em 5 de outubro de 1988, e os povos indígenas, apoiados por entidades, a contestaram; em 2024, o STF criou uma comissão de conciliação sobre o tema.</p><div class="callout warn"><span class="lab">Cuidado com o conceito</span><p>Nem todo ato contra o governo é resistência democrática. Nos ataques de 8 de janeiro de 2023, manifestantes invadiram e depredaram as sedes dos Três Poderes, e a resposta de cidadãos, entidades e instituições foi defender a Constituição. Um bom critério é perguntar: <b>o movimento defende direitos e regras que protegem todos ou procura impor a vontade de um grupo pela força?</b></p></div><div class="goias-box"><span class="lab">Recorte regional · Goiás</span><h4>Em Goiás: Santa Dica, Coluna Prestes e Araguaia</h4><p>Na década de 1920, a líder religiosa Santa Dica reuniu fiéis na região de Pirenópolis e foi reprimida pelas forças do estado. Entre 1925 e 1926, a Coluna Prestes atravessou o interior goiano, passando por cidades como Jataí, Niquelândia e Posse. E a Guerrilha do Araguaia, nos anos 1970, atuou em uma região que hoje pertence ao Tocantins, mas que então fazia parte de Goiás.</p></div><div class="think"><small>Para pensar</small>Canudos foi destruído, mas a Revolta da Chibata levou ao fim dos castigos físicos na Marinha. Como saber se uma resistência “deu certo”?</div><a class="atv-box atv-resistencia" href="../atv/atv-resistencia.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir atividade sobre resistência em nova aba"><span class="atv-ic" aria-hidden="true">✎</span><span class="atv-tx"><span class="atv-k">Atividade · Conceito 4</span><b>Resistência: dizer não a uma ordem injusta</b><span class="atv-d">Texto de leitura e seis questões dissertativas sobre revoltas, ditadura e formas de resistência na história do Brasil.</span></span><span class="atv-go">Abrir atividade →</span></a>
+  </div>
+  <div class="ch-end"><span>Conceito 4</span><span>Próximo: Os quatro conceitos em ação →</span></div>
+</section>
+<section class="chapter" id="integrando">
+  <header class="ch-head"><div class="ch-num">5</div><div>
+    <p class="eyebrow">Para integrar</p><h2>Os quatro conceitos em ação: o caso das Diretas Já</h2>
+    <p class="deck">Um episódio em que cidadania, democracia, participação e resistência aparecem juntas.</p></div></header>
+  <div class="body">
+<p class="lead">Os quatro conceitos não funcionam como gavetas separadas. Eles se cruzam em quase todos os grandes acontecimentos da República. Um bom exemplo é a campanha das <b>Diretas Já</b>, entre 1983 e 1984.</p><div class="cards"><div class="card"><span class="n">Cidadania</span><h6>Direito político negado</h6><p>Os brasileiros não podiam escolher o presidente pelo voto direto desde a ditadura: faltava um direito político básico.</p></div><div class="card"><span class="n">Democracia</span><h6>Eleição direta para presidente</h6><p>A campanha exigia que o poder voltasse a vir do povo, por meio de eleições livres e competitivas.</p></div><div class="card"><span class="n">Participação popular</span><h6>Comícios gigantes</h6><p>Em 16 de abril de 1984, cerca de 1,5 milhão de pessoas se reuniram em um comício em São Paulo.</p></div><div class="card"><span class="n">Resistência</span><h6>Contra o regime militar</h6><p>Partidos de oposição, sindicatos, artistas e até jogadores de futebol, como Sócrates, se uniram contra a ditadura.</p></div></div><figure class="diretas-card"><a href="https://youtu.be/bhAdhCvWJ9Y?si=DodUgZcxYasH7yFq" target="_blank" rel="noopener noreferrer" aria-label="Assistir ao vídeo sobre as Diretas Já no YouTube em nova aba"><img src="../img/card1.webp" alt="Imagem sobre a campanha das Diretas Já" loading="lazy" onerror="if(!this.dataset.retry){this.dataset.retry='1';this.src='img/card1.webp';}"></a></figure><p>A Emenda Dante de Oliveira, que restabeleceria as eleições diretas, foi derrotada na Câmara dos Deputados em 25 de abril de 1984, por falta de quórum. Mesmo assim, a mobilização enfraqueceu o regime. Em 1985, a ditadura terminou com a eleição indireta do civil Tancredo Neves, e em 1988 a Constituição Cidadã reuniu, em um mesmo texto, direitos civis, políticos e sociais, eleições diretas e mecanismos de participação popular.</p><p>A história republicana mostra uma tensão constante entre o poder concentrado e a pressão popular por direitos. Quando os canais oficiais se fecham, a participação vai às ruas e a resistência ganha força. Quando eles se abrem, a cidadania se amplia e a democracia se fortalece. Hoje, quase quarenta anos depois da Constituição, o desafio é transformar os direitos escritos em direitos vividos e manter vivas as instituições que protegem a todos.</p><div class="think"><small>Para pensar</small>Escolha um dos momentos estudados neste texto e mostre como os quatro conceitos se relacionam nele. Em seguida, compare com outro momento: em qual deles a participação era mais livre? Em qual a resistência foi mais necessária?</div>
+<a class="atv-resumo-box" href="../atv/atvresumo.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir atividade de síntese dos quatro conceitos em nova aba">
+  <span class="atv-resumo-icon" aria-hidden="true">✎</span>
+  <span class="atv-resumo-copy"><span class="atv-resumo-label">Atividade de síntese · História</span><strong>Quatro palavras para contar a República</strong><span class="atv-resumo-desc">Leia, interprete imagens e responda às dez questões sobre cidadania, democracia, participação popular e resistência.</span></span>
+  <span class="atv-resumo-go">Iniciar atividade ↗</span>
+</a>
+<h3>Resumo em quatro ideias</h3><ul><li><b>Cidadania:</b> conjunto de direitos civis, políticos e sociais. Quem tem os três é cidadão pleno.</li><li><b>Democracia:</b> poder que vem do povo por eleições livres, amplas e competitivas, com liberdades e regras respeitadas.</li><li><b>Participação popular:</b> tudo o que as pessoas fazem para influenciar decisões: votar, mas também se organizar, fazer greve e ocupar as ruas.</li><li><b>Resistência:</b> reação a uma ordem considerada injusta, que pode ser armada, civil, cultural ou cotidiana.</li></ul>
+  </div>
+  <div class="ch-end"><span>Para integrar</span><span>Próximo: Bibliografia →</span></div>
+</section>
+<section class="chapter" id="fontes"><header class="ch-head"><div class="ch-num">§</div><div><p class="eyebrow">Referências</p><h2>Bibliografia e fontes</h2><p class="deck">De onde vêm os fatos, as datas e os dados deste texto.</p></div></header><div class="body"><ol class="refs"><li>AZEVEDO, Gislane; SERIACOPI, Reinaldo. <em>Por toda parte: História</em>. São Paulo: FTD, 2024.</li><li>CAMPOS, Cristiano; FERREIRA, Lier Pires; SILVA, Renata (coord.). <em>História: democracia e protagonismo</em> (Interação). São Paulo: Editora do Brasil, 2024.</li><li>SM EDUCAÇÃO (org.). <em>Ser protagonista: Ciências Humanas e Sociais Aplicadas — História</em>. 1. ed. São Paulo: Edições SM, 2024.</li><li>VIEIRA, Felipe de Paula Góis; BACKX, Isabela; FERNANDES, Luiz Estevam de Oliveira; ABREU, Marcelo. <em>Moderna Plus: História</em>. São Paulo: Moderna, 2024.</li><li><em>Caminhos do Homem: História</em>, v. 1, 2 e 3. PNLD 2018.</li><li>CARVALHO, José Murilo de. <em>Cidadania no Brasil: o longo caminho</em>. Rio de Janeiro: Civilização Brasileira, 2001.</li><li>CARVALHO, José Murilo de. <em>Os bestializados: o Rio de Janeiro e a República que não foi</em>. São Paulo: Companhia das Letras, 1987.</li><li>BRASIL. <em>Constituição da República Federativa do Brasil</em>, 1988 (arts. 1º, 68 e 231).</li><li>Supremo Tribunal Federal, 1ª Turma: julgamento da trama golpista, 11 set. 2025. Eleições gerais de 2026: 1º turno em 4 out. e 2º turno em 25 out. (cobertura jornalística).</li></ol></div></section>
+<div class="colophon">HISTÓRIA · 2ª SÉRIE · QUATRO CONCEITOS PARA ENTENDER A REPÚBLICA · CERO · 2026<br>Colégio Estadual Rodolfo de Oliveira · CERO · 2026</div>
+</main>
+<script>
+(function(){
+  var bar=document.getElementById('progress');
+  function onScroll(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);bar.style.width=(p*100)+'%'}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  var tab=document.createElement('button');tab.className='toc-tab';tab.setAttribute('aria-label','Abrir sumário');tab.setAttribute('aria-expanded','false');tab.innerHTML='<b>\u2630</b> Sumário';
+  var ov=document.createElement('div');ov.className='toc-ov';
+  var dr=document.createElement('aside');dr.className='drawer';dr.setAttribute('aria-label','Sumário');dr.setAttribute('aria-hidden','true');
+  dr.innerHTML='<div class="dr-head"><div><div class="k">História \u00b7 2\u00aa série</div><div class="t">Quatro conceitos para entender a República</div></div><button class="dr-close" aria-label="Fechar sumário">\u00d7</button></div><div class="dr-prog"><span id="drLbl">Capa</span><i><span id="drBar"></span></i></div><div class="dr-body" id="drBody"></div>';
+  document.body.append(tab,ov,dr);
+  var body=dr.querySelector('#drBody');
+  function slug(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+  function sec(id){return document.getElementById(id)}
+  function title(id){var h=sec(id).querySelector('h2');return h?h.textContent:'Capa'}
+  function num(id){var n=sec(id).querySelector('.ch-num');return (n&&n.textContent)?n.textContent:'\u00b7'}
+  function subs(id){var out=[];sec(id).querySelectorAll('.body h3').forEach(function(h){if(!h.id)h.id=id+'-'+slug(h.textContent);out.push(h)});return out}
+  var links={};
+  function link(id,cls){var a=document.createElement('a');a.href='#'+id;a.className=cls;links[id]=a;return a}
+  [['capa','Capa'],['abertura','Para começar']].forEach(function(p){var a=link(p[0],'dr-link');a.textContent=p[1];body.appendChild(a)});
+  function group(label,ids,open){
+    var g=document.createElement('div');g.className='acc'+(open?' open':'');
+    var b=document.createElement('button');b.textContent=label;b.setAttribute('aria-expanded',open?'true':'false');
+    var pn=document.createElement('div');pn.className='panel';
+    ids.forEach(function(id){
+      var it=document.createElement('div');it.className='item';
+      var row=document.createElement('div');row.className='row';
+      var a=link(id,'');a.innerHTML='<b>'+num(id)+'</b><span>'+title(id)+'</span>';row.appendChild(a);
+      var ss=subs(id);
+      if(ss.length){
+        var tb=document.createElement('button');tb.setAttribute('aria-label','Mostrar tópicos');tb.setAttribute('aria-expanded','false');
+        tb.addEventListener('click',function(e){e.stopPropagation();var o=it.classList.toggle('open');tb.setAttribute('aria-expanded',o)});
+        row.appendChild(tb);
+        var sb=document.createElement('div');sb.className='subs';
+        ss.forEach(function(h){var s=document.createElement('a');s.href='#'+h.id;s.textContent=h.textContent;sb.appendChild(s)});
+        it.append(row,sb);
+      } else it.appendChild(row);
+      pn.appendChild(it);
+    });
+    b.addEventListener('click',function(){var o=!g.classList.contains('open');
+      body.querySelectorAll('.acc').forEach(function(x){x.classList.remove('open');x.firstChild.setAttribute('aria-expanded','false')});
+      if(o){g.classList.add('open');b.setAttribute('aria-expanded','true')}});
+    g.append(b,pn);body.appendChild(g);return g;
+  }
+  var chIds=['cidadania','democracia','participacao','resistencia','integrando'];
+  var g1=group('Capítulos',chIds,true);
+  var g2=group('Para consultar',['fontes'],false);
+  function open(){dr.classList.add('open');ov.classList.add('open');tab.setAttribute('aria-expanded','true');dr.setAttribute('aria-hidden','false')}
+  function close(){dr.classList.remove('open');ov.classList.remove('open');tab.setAttribute('aria-expanded','false');dr.setAttribute('aria-hidden','true')}
+  tab.addEventListener('click',open);ov.addEventListener('click',close);dr.querySelector('.dr-close').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+  body.addEventListener('click',function(e){if(e.target.closest('a'))close()});
+  var order=['capa','abertura'].concat(chIds,['fontes']);
+  var lbl=dr.querySelector('#drLbl'),pbar=dr.querySelector('#drBar');
+  function setActive(id){
+    Object.keys(links).forEach(function(k){links[k].classList.remove('on')});
+    if(links[id])links[id].classList.add('on');
+    var ci=chIds.indexOf(id);
+    lbl.textContent=(ci>=0)?(ci<4?'Conceito '+(ci+1)+' de 4 \u00b7 ':'')+title(id):title(id)||'Capa';
+    pbar.style.width=((order.indexOf(id)+1)/order.length*100)+'%';
+    var grp=ci>=0?g1:(['fontes'].indexOf(id)>=0?g2:null);
+    if(grp&&!grp.classList.contains('open')&&!dr.classList.contains('open')){body.querySelectorAll('.acc').forEach(function(x){x.classList.remove('open')});grp.classList.add('open')}
+  }
+  setActive('capa');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)setActive(e.target.id)})},{rootMargin:'-30% 0px -60% 0px'});
+    order.forEach(function(k){io.observe(sec(k))});
+  }
+})();
+</script>
+<script>function toggleCover(button){const cover=document.getElementById("capa");const picture=cover.querySelector(".cover-image");if(picture.dataset.missing==="1"){alert("Imagem não encontrada. Verifique img/capap1.webp ou ../img/capap1.webp, conforme a localização de p1.html.");return;}const showing=cover.classList.toggle("show-image");button.setAttribute("aria-label",showing?"Voltar à capa original":"Revelar imagem");button.title=showing?"Voltar à capa original":"Revelar imagem";button.setAttribute("aria-pressed",String(showing));}</script>
+</body>
+</html>
