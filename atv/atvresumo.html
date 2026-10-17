@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texto de Apoio — Quatro palavras para contar a República | CERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#fdf5f5;
+    --bg-alt:#fbe3e4;
+    --paper:#ffffff;
+    --ink:#2a1213;
+    --ink-soft:#6b4a4c;
+    --roxo:#d71920;
+    --roxo-dark:#7a0c12;
+    --roxo-2:#e8434a;
+    --cobre:#8f0e14;
+    --cobre-light:#ffd9db;
+    --line:#f0d0d2;
+    --shadow:0 10px 30px rgba(215,25,32,.18);
+    --radius:14px;
+    --font-title:'Playfair Display', serif;
+    --font-body:'Source Serif 4', serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    -webkit-user-select:none; -ms-user-select:none;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.7;
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  
+  .campo-resposta{user-select:text; -webkit-user-select:text;}
+
+  /* ===== CAPA / GATE ===== */
+  #capa{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(to bottom, #4a070b, #d71920, #f6b3b6);
+    padding:24px;
+  }
+  #capa .grade-centralizada{
+    position:absolute;
+    top:0; bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:896px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.08;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px);
+    background-size:40px 40px;
+  }
+  .capa-card{
+    position:relative;
+    z-index:1;
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    max-width:480px;
+    width:100%;
+    padding:36px 32px;
+    text-align:center;
+  }
+  .capa-card .tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.7rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(215,25,32,.1); padding:5px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .capa-card h1{font-family:var(--font-title); font-size:1.6rem; margin:0 0 10px; color:var(--roxo-dark);}
+  .capa-card p.desc{color:var(--ink-soft); font-size:.94rem; margin:0 0 22px;}
+  .capa-card input{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:1rem; margin-bottom:14px;
+  }
+  .capa-card button{
+    width:100%; padding:13px; border:none; border-radius:8px;
+    background:var(--roxo); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+    font-family:var(--font-body); transition:filter .15s ease;
+  }
+  .capa-card button:hover{filter:brightness(1.15);}
+  .capa-aviso{font-size:.78rem; color:#a33; margin-top:8px; display:none;}
+
+  /* ===== APP ===== */
+  #app{display:none;}
+  .sticky-header{
+    position:sticky; top:0; z-index:50;
+    background:var(--roxo-dark); color:#fdeaeb;
+    padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    font-family:var(--font-mono); font-size:.82rem;
+  }
+  .sticky-header .aluno{font-family:var(--font-body); font-weight:600; font-size:.92rem;}
+  .barra-progresso-trilho{
+    flex:1; min-width:120px; height:8px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; margin:0 14px;
+  }
+  .barra-progresso-fill{height:100%; background:#ffd9db; width:0%; transition:width .3s ease;}
+
+  .wrap{max-width:800px; margin:0 auto; padding:32px 24px 60px;}
+
+  header.topo{margin-bottom:28px;}
+  header.topo .hero-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(215,25,32,.1); padding:5px 12px; border-radius:999px; margin-bottom:12px;
+  }
+  header.topo h1{font-family:var(--font-title); font-size:clamp(1.5rem,4vw,2rem); margin:0 0 8px; color:var(--ink);}
+  header.topo p.sub{color:var(--ink-soft); margin:0; font-size:.98rem;}
+  .descritor-bar{
+    font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; margin-bottom:14px; display:inline-block;
+  }
+  .ficha-id{
+    display:flex; flex-wrap:wrap; gap:10px 26px;
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-top:12px; font-family:var(--font-mono); font-size:.84rem; color:var(--ink);
+  }
+  .ficha-id span b{color:var(--roxo-dark);}
+
+  /* ===== TEXTO DE APOIO ===== */
+  .texto-apoio{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:28px 30px; margin-bottom:30px;
+  }
+  .texto-apoio h2{font-family:var(--font-title); font-size:1.25rem; color:var(--roxo-dark); margin:0 0 4px;}
+  .texto-apoio h3{font-family:var(--font-title); font-size:1.05rem; color:var(--roxo-2); margin:22px 0 8px;}
+  .texto-apoio .fonte-tag{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-bottom:16px; display:block;}
+  .texto-apoio p{margin:0 0 14px; color:var(--ink);}
+  .texto-apoio p:last-of-type{margin-bottom:0;}
+  .texto-apoio .destaque{
+    background:var(--bg-alt); border-left:4px solid var(--cobre); border-radius:0 8px 8px 0;
+    padding:12px 16px; margin:0 0 14px; font-size:.95rem;
+  }
+  .texto-apoio .mito{
+    background:#fff8f8; border:1px solid var(--line); border-top:4px solid var(--roxo-2);
+    border-radius:10px; padding:16px 18px; margin:0 0 14px;
+  }
+  .texto-apoio .mito .rot{
+    font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--cobre); display:block; margin-bottom:6px;
+  }
+  .texto-apoio .mito p{font-size:.93rem;}
+
+  .tabela-lentes{width:100%; border-collapse:collapse; margin:6px 0 14px; font-size:.9rem;}
+  .tabela-lentes caption{
+    caption-side:top; text-align:left; font-family:var(--font-mono); font-size:.68rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--cobre); padding-bottom:6px;
+  }
+  .tabela-lentes th, .tabela-lentes td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top;}
+  .tabela-lentes th{background:var(--roxo); color:#fff; font-family:var(--font-title); font-weight:600; font-size:.9rem;}
+  .tabela-lentes tbody tr:nth-child(even){background:var(--bg-alt);}
+  .tabela-lentes td:first-child{font-weight:700; color:var(--roxo-dark); white-space:nowrap;}
+  .tabela-wrap{overflow-x:auto;}
+
+  .referencia-box{
+    margin-top:20px; padding:14px 16px;
+    background:var(--bg-alt); border-left:3px solid var(--cobre); border-radius:0 8px 8px 0;
+  }
+  .referencia-box .rot{
+    font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--roxo-dark); display:block; margin-bottom:6px;
+  }
+  .referencia-box p{margin:0 0 6px; font-size:.86rem; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.6;}
+  .referencia-box p:last-child{margin-bottom:0;}
+
+  /* ===== QUESTOES ===== */
+  .questoes-titulo{
+    font-family:var(--font-title); font-size:1.2rem; color:var(--roxo-dark);
+    margin:0 0 18px; display:flex; align-items:center; gap:10px;
+  }
+  .questao{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; margin-bottom:18px;
+  }
+  .questao .num-q{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--roxo);
+    color:#fff; font-family:var(--font-mono); font-size:.78rem; margin-right:8px; flex-shrink:0;
+  }
+  .questao .enunciado{font-weight:600; color:var(--ink); margin-bottom:12px; display:flex; align-items:flex-start;}
+  .questao textarea{
+    width:100%; min-height:100px; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--ink);
+  }
+  .questao textarea:focus{outline:2px solid var(--roxo-2); outline-offset:1px;}
+  .contador-chars{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-top:6px; text-align:right;}
+
+  .comentario-prof{
+    display:none; margin-top:14px; padding:14px 16px;
+    background:#fdeaeb; border:1px solid #f3bfc2; border-radius:8px; font-size:.9rem; color:var(--roxo-dark);
+  }
+  .comentario-prof.show{display:block;}
+  .comentario-prof b{display:block; margin-bottom:4px; font-family:var(--font-title); font-size:.92rem;}
+
+  /* ===== ALERTA / FINALIZAR ===== */
+  .alerta-incompleto{
+    display:none; background:#fdf1e6; border:1px solid #f0d2b3; color:#8a4a10;
+    padding:12px 16px; border-radius:8px; font-size:.9rem; margin-bottom:16px;
+  }
+  .alerta-incompleto.show{display:block;}
+
+  .acoes-finais{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;}
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:.94rem; padding:12px 22px;
+    border-radius:8px; border:none; cursor:pointer; transition:filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.1);}
+  .btn-primario{background:var(--roxo); color:#fff;}
+  .btn-secundario{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-pdf{background:var(--cobre); color:#fff;}
+  .btn[disabled]{opacity:.5; cursor:not-allowed;}
+
+  /* ===== POPUP ===== */
+  .popup-overlay{
+    display:none; position:fixed; inset:0; background:rgba(74,7,11,.6);
+    align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .popup-overlay.show{display:flex;}
+  .popup-card{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    max-width:420px; width:100%; padding:32px 28px; text-align:center;
+  }
+  .popup-card .emoji{display:none;}
+  .popup-card h3{font-family:var(--font-title); margin:0 0 8px; color:var(--roxo-dark);}
+  .popup-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 20px;}
+
+  footer.rodape{text-align:center; padding:24px; color:var(--ink-soft); font-family:var(--font-mono); font-size:.8rem;}
+
+  @media (max-width:600px){
+    .wrap{padding:24px 16px 50px;}
+    .texto-apoio, .questao{padding:18px 18px;}
+  }
+
+  *{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+  textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:none}
+  .chip-tema{display:inline-block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--roxo);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .btn-pdf{background:#8f0e14}
+  .btn-pdf:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+  .questao .pessoal{display:inline-block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#8f0e14;background:var(--cobre-light);border-radius:999px;padding:3px 10px;margin:0 0 10px 34px}
+  .texto-apoio .mito{border-top-color:var(--roxo-2)}
+.img-apoio{margin:0 0 18px;text-align:center}
+.img-apoio img{max-width:100%;max-height:420px;width:auto;height:auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:zoom-in}
+.img-apoio figcaption{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+.img-apoio .zoomdica{display:block;opacity:.8}
+#lightbox{display:none;position:fixed;inset:0;background:rgba(74,7,11,.88);z-index:300;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
+#lightbox.show{display:flex}
+#lightbox img{max-width:96vw;max-height:92vh;background:#fff;border-radius:8px;padding:6px}
+.item-q{margin-top:16px}
+.item-enun{font-weight:600;color:var(--ink);margin-bottom:8px;line-height:1.6}
+.item-enun b{color:var(--roxo);font-family:var(--font-mono);margin-right:4px}
+.comentario-prof .cp{margin:6px 0 0}
+.comentario-prof .lt{font-family:var(--font-mono);font-weight:700}
+</style>
+</head>
+<body>
+<div id="capa">
+  <div class="grade-centralizada"></div>
+  <div class="capa-card">
+    <span class="tag">2ª série · História · CERO</span>
+    <h1>Quatro palavras para contar a República</h1>
+    <p class="desc">Texto de leitura, dados e dez questões dissertativas, algumas a partir de imagens, sobre cidadania, democracia, participação popular e resistência na história da República. Preencha os dados para começar.</p>
+    <input type="text" id="nome-aluno" placeholder="Seu nome completo">
+    <input type="text" id="turma-aluno" placeholder="Turma (ex.: 2º A)">
+    <button onclick="iniciarAtividade()">Iniciar atividade</button>
+    <div class="capa-aviso" id="capa-aviso">Por favor, digite seu nome para continuar.</div>
+  </div>
+</div>
+<div id="app">
+  <div class="sticky-header">
+    <span class="aluno" id="header-nome"></span>
+    <div class="barra-progresso-trilho"><div class="barra-progresso-fill" id="barra-fill"></div></div>
+    <span id="contador-geral">Respondidas: 0/10</span>
+  </div>
+  <div class="wrap">
+    <header class="topo selecionavel">
+      <span class="descritor-bar">Ciências Humanas e Sociais Aplicadas / História · 2ª série do Ensino Médio &nbsp;|&nbsp; (GO-EMCHS602A) – Primeira República e República contemporânea</span>
+      <span class="chip-tema" style="display:block;width:max-content;margin-top:10px;">Texto de leitura</span>
+      <h1>Cidadania, democracia, participação e resistência: quatro palavras para contar a República</h1>
+      <p class="sub">Leia cada parte com atenção e responda às dez questões, algumas a partir de imagens. Fundamente suas respostas no texto e nos dados apresentados.</p>
+      <div class="ficha-id" id="ficha-id">
+        <span><b>NOME:</b> <span id="ficha-nome"></span></span>
+        <span><b>DATA:</b> <span id="ficha-data"></span></span>
+        <span><b>TURMA:</b> <span id="ficha-turma"></span></span>
+      </div>
+    </header>
+    <main>
+      <section class="texto-apoio selecionavel"><h2>Para começar: quatro palavras que ajudam a contar a história da República</h2><span class="fonte-tag">Texto de leitura para a 2ª série do Ensino Médio · Parte 1 de 3</span><p>Imagine que alguém lhe pedisse para explicar como o Brasil chegou ao que é hoje. Você poderia listar presidentes, constituições e datas, mas ficaria faltando um fio que ligasse tudo isso. Este texto propõe quatro palavras para cumprir esse papel: cidadania, democracia, participação popular e resistência.</p><p>Essas palavras aparecem nos jornais, nas redes sociais, nas provas e até nas conversas de família, e muitas vezes são usadas como se todos soubessem o que significam. Nas próximas páginas, você vai ver o sentido de cada uma e acompanhar como elas se manifestaram em momentos diferentes da República, da Primeira República (1889-1930) até a atualidade.</p><p>Cada conceito responde a uma pergunta. A cidadania pergunta: quem tem direitos? A democracia pergunta: quem decide e como? A participação popular pergunta: de que modo as pessoas influenciam as decisões? E a resistência pergunta: o que as pessoas fazem quando consideram a ordem injusta? Ao longo do texto, você vai perceber que as respostas mudaram bastante em 137 anos.</p><div class="destaque" style="margin-top:14px"><b>Como ler este texto.</b> Cada capítulo começa com a explicação do conceito e continua com exemplos de épocas diferentes. Procure comparar um período com outro e perceber o que mudou e o que permaneceu.</div></section>
+      <h2 class="questoes-titulo">Imagens e questões sobre o texto de leitura</h2>
+<figure class="img-apoio"><img src="../img/democracia.webp" alt="Tirinha de Mafalda: ela lê no dicionário a definição de democracia e, nos quadros seguintes, aparece em uma cena de convivência familiar." data-zoom="1" loading="lazy"><figcaption>Tirinha de Mafalda, personagem de Quino, sobre a definição de democracia. <span class="zoomdica">Clique na imagem para ampliar.</span></figcaption></figure>
+<div class="questao" data-questao="1"><div class="enunciado"><span class="num-q">1</span> Na tirinha, Mafalda lê no dicionário que democracia é o “governo no qual a soberania é exercida pelo povo” e, nos quadros seguintes, aparece em uma cena de convivência familiar.</div><div class="item-q"><div class="item-enun"><b>a)</b> Descreva o contraste entre a definição lida por Mafalda e a cena doméstica que vem depois, indicando quem decide na cena.</div><textarea id="resp-1-a" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Explique como esse contraste produz humor e crítica, relacionando-o à pergunta da democracia no texto: quem decide e como?</div><textarea id="resp-1-b" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Pense em uma regra ou decisão da sua casa ou da sua escola da qual você não participou e avalie se, nesse caso, a ideia de soberania do povo poderia ou deveria se aplicar.</div><textarea id="resp-1-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> A definição apresenta o ideal democrático, o poder exercido pelo povo; a cena familiar mostra quem decide na prática, os adultos, sem que a vontade da menina prevaleça.</p><p class="cp"><span class="lt">b)</span> O humor nasce da distância entre o conceito e a experiência cotidiana. A crítica dialoga com o texto: democracia não é só definição, depende de quem decide e de como, e o poder do povo precisa ser exercido de fato.</p><p class="cp"><span class="lt">c)</span> Aceitar posições diversas, desde que justificadas: em uma família há hierarquia e responsabilidade dos adultos, mas pode haver espaço para ouvir e negociar; decisões que afetam todos (regras da turma, uso de espaços) podem ser compartilhadas. Valorizar a distinção entre decisões que admitem participação e as que não admitem.</p></div></div>
+<figure class="img-apoio"><img src="../img/henfil.jpg" alt="Charge com o título “Queremos o poder!”: sete personagens conjugam o verbo poder, de “eu posso” a “eles podem”, voltando a “eu posso”." data-zoom="1" loading="lazy"><figcaption>Charge “Queremos o poder!” (autoria conforme material de origem). <span class="zoomdica">Clique na imagem para ampliar.</span></figcaption></figure>
+<div class="questao" data-questao="2"><div class="enunciado"><span class="num-q">2</span> A charge “Queremos o poder!” conjuga o verbo poder em todas as pessoas, de “eu posso” a “eles podem”, e termina com um último personagem que volta a dizer “eu posso”.</div><div class="item-q"><div class="item-enun"><b>a)</b> Explique o jogo de palavras entre poder como capacidade (“eu posso”) e poder como autoridade para decidir.</div><textarea id="resp-2-a" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Relacione a charge à ideia de que, em uma democracia, “todo o poder emana do povo”, e interprete por que a volta final ao “eu posso” pode ser lida como crítica ou alerta.</div><textarea id="resp-2-b" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Descreva uma situação em que você se sentiu capaz de fazer algo, mas não tinha poder para decidir, indicando quem decidia por você.</div><textarea id="resp-2-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> O verbo poder indica capacidade ou permissão; o substantivo poder, autoridade para decidir. A charge usa a conjugação para brincar com os dois sentidos.</p><p class="cp"><span class="lt">b)</span> A conjugação distribui o “posso” por todas as pessoas (“nós podemos, vós podeis, eles podem”), como um poder compartilhado. A volta final admite leituras justificadas: o poder coletivo pode voltar a se concentrar em um indivíduo, cada um pode querer o poder para si, ou reivindicar o poder sem regras leva ao ponto de partida.</p><p class="cp"><span class="lt">c)</span> Pede um relato concreto: valorizar a distinção entre capacidade e poder de decisão e a identificação de quem decidia e por quê.</p></div></div>
+<div class="questao" data-questao="3"><div class="enunciado"><span class="num-q">3</span> O texto afirma que as quatro palavras (cidadania, democracia, participação popular e resistência) “muitas vezes são usadas como se todos soubessem o que significam”.</div><div class="item-q"><div class="item-enun"><b>a)</b> Escolha duas delas e explique, com suas palavras, a pergunta a que cada uma responde.</div><textarea id="resp-3-a" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Lembre-se de uma ocasião em que você viu ou ouviu uma dessas palavras (em um jornal, nas redes sociais, em uma prova ou em uma conversa de família) e descreva o contexto em que ela foi usada.</div><textarea id="resp-3-b" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Avalie se quem usou a palavra parecia dominar o sentido dela, justificando sua avaliação.</div><textarea id="resp-3-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> Cidadania: quem tem direitos? Democracia: quem decide e como? Participação popular: de que modo as pessoas influenciam as decisões? Resistência: o que as pessoas fazem quando consideram a ordem injusta? Exigir paráfrase, e não cópia.</p><p class="cp"><span class="lt">b)</span> Aceitar exemplos variados; valorizar a descrição precisa de quem falou, onde e com que objetivo.</p><p class="cp"><span class="lt">c)</span> Valorizar respostas que distingam o uso rigoroso do uso vago (por exemplo, “democracia” como sinônimo de “vale tudo” ou “cidadania” reduzida a “ser bom vizinho”). Não há resposta única; o critério é a justificativa coerente com o sentido dado no texto.</p></div></div>
+<div class="questao" data-questao="4"><div class="enunciado"><span class="num-q">4</span> O texto diz que listar presidentes, constituições e datas deixaria faltando “um fio que ligasse tudo isso”.</div><div class="item-q"><div class="item-enun"><b>a)</b> Explique por que uma lista de fatos não basta para entender como o Brasil chegou ao que é hoje.</div><textarea id="resp-4-a" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Justifique por que as quatro perguntas (quem tem direitos, quem decide, como as pessoas influenciam, o que fazem diante da injustiça) funcionam melhor como fio condutor.</div><textarea id="resp-4-b" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Escolha uma dessas perguntas e mostre, com um exemplo histórico, que ela teve respostas diferentes em dois momentos da República.</div><textarea id="resp-4-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> Uma lista descreve o que aconteceu, mas não explica por que mudou nem o que permaneceu.</p><p class="cp"><span class="lt">b)</span> As perguntas permitem comparar períodos com o mesmo critério e perceber continuidades e rupturas, como o texto orienta.</p><p class="cp"><span class="lt">c)</span> O exemplo deve ser verificável: “quem tem direitos?” teve resposta restrita na Primeira República (analfabetos excluídos do voto) e mais ampla em 1988 (sufrágio universal); “quem decide?” pode contrastar o voto controlado por oligarquias com o voto direto e secreto. Valorizar a comparação explícita.</p></div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Quem votava? Dados da Primeira República aos nossos dias</h3><span class="fonte-tag">Parte 2 de 3</span><p>A Constituição de 1891 definiu como eleitores os cidadãos maiores de 21 anos que se alistassem na forma da lei, mas excluiu do alistamento, entre outros, os mendigos, os analfabetos, as praças de pré (soldados e cabos) e os religiosos de ordens monásticas. Como a maior parte da população era analfabeta e as mulheres eram mantidas fora do voto, o eleitorado era pequeno. Para o historiador José Murilo de Carvalho, a Primeira República foi, literalmente, um regime sem povo, pois votava menos de 5% da população.</p><p>Os números abaixo mostram a participação eleitoral em alguns marcos da história republicana. Atenção ao que cada linha mede: as três primeiras indicam a parcela da população que efetivamente votou; a última indica quantas pessoas estavam aptas a votar.</p><div class="tabela-wrap"><table class="tabela-lentes"><caption>Participação eleitoral no Brasil</caption><thead><tr><th>Ano</th><th>O que o dado mede</th><th>Valor</th></tr></thead><tbody><tr><td>1930</td><td>Parcela da população que votou</td><td>5,6%</td></tr><tr><td>1945</td><td>Parcela da população que votou</td><td>13%</td></tr><tr><td>1960</td><td>Parcela da população que votou</td><td>18%</td></tr><tr><td>2022</td><td>Eleitoras e eleitores aptos a votar</td><td>mais de 156 milhões de pessoas, para cerca de 203 milhões de habitantes (Censo 2022)</td></tr></tbody></table></div><div class="destaque">Entre as pessoas aptas a votar em 2022 estão grupos para os quais o voto é facultativo: analfabetos, maiores de 70 anos e jovens de 16 e 17 anos. Na Primeira República, os analfabetos eram impedidos de se alistar.</div></section>
+      <h2 class="questoes-titulo">Imagem e questões sobre os dados do voto</h2>
+<figure class="img-apoio"><img src="../img/cidadania.jpg" alt="Charge de 2012: um homem magro e uma mulher com um bebê no colo, e o homem diz que desconfia que a cidadania também entrou em greve." data-zoom="1" loading="lazy"><figcaption>Charge de 2012 sobre cidadania (autoria conforme material de origem). <span class="zoomdica">Clique na imagem para ampliar.</span></figcaption></figure>
+<div class="questao" data-questao="5"><div class="enunciado"><span class="num-q">5</span> Na charge de 2012, o homem diz: “Tô começando a desconfiar que a nossa cidadania também entrou em greve!”.</div><div class="item-q"><div class="item-enun"><b>a)</b> Explique a ironia dessa fala, relacionando-a à ideia de que direitos devem funcionar sempre, e não apenas quando um serviço está disponível.</div><textarea id="resp-5-a" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Indique quais direitos (civis, políticos ou sociais) os personagens parecem não exercer e que elementos da imagem sustentam essa leitura, relacionando-os à ideia de cidadão incompleto.</div><textarea id="resp-5-b" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Relate uma situação em que você, ou alguém próximo, ficou sem acesso a um direito ou serviço (saúde, escola, transporte, segurança, informação) por paralisação, falta ou demora e diga como isso afetou a vida da pessoa.</div><textarea id="resp-5-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> A ironia está em tratar a cidadania como algo que “entra em greve”, isto é, que deixa de funcionar justamente quando é necessária; direitos que deveriam estar sempre disponíveis passam a depender de que o serviço funcione.</p><p class="cp"><span class="lt">b)</span> Os elementos da imagem (aparência magra e simples dos personagens, a criança no colo, a expressão de preocupação) sugerem ausência de direitos sociais, como saúde, alimentação, trabalho e educação, o que remete ao cidadão incompleto de Carvalho e à distância entre o direito escrito e o direito vivido.</p><p class="cp"><span class="lt">c)</span> Aceitar relatos diversos: valorizar a identificação do direito afetado, da causa (paralisação, falta de vaga, demora) e das consequências concretas.</p></div></div>
+<div class="questao" data-questao="6"><div class="enunciado"><span class="num-q">6</span> Com base no texto sobre o voto, considere que a Primeira República tinha eleições regulares, mas um eleitorado muito pequeno.</div><div class="item-q"><div class="item-enun"><b>a)</b> Explique por que ela foi uma república, mas ainda não plenamente uma democracia, relacionando a pergunta da cidadania (quem tem direitos?) com a da democracia (quem decide e como?).</div><textarea id="resp-6-a" class="campo-resposta dissertativa" data-min="70" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 70)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Coloque-se no lugar de uma pessoa da sua família que tivesse a sua idade em 1900 e vivesse em uma cidade pequena: ela teria direito ao voto? Quais critérios decidiriam isso?</div><textarea id="resp-6-b" class="campo-resposta dissertativa" data-min="70" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 70)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Diga o que a sua resposta ao item anterior revela sobre quem era considerado cidadão naquela época.</div><textarea id="resp-6-c" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> República é a forma de governo sem monarquia, com cargos eletivos; democracia exige que a maior parte da população possa decidir de fato. A cidadania política era restrita (idade mínima de 21 anos, exclusão de analfabetos, mendigos, praças de pré e religiosos de ordens monásticas, e a prática de manter as mulheres fora do voto).</p><p class="cp"><span class="lt">b)</span> A maior parte dos alunos concluirá que a pessoa não votaria (por ser menor de 21 anos, mulher ou analfabeta). Valorizar quem identificar os critérios: idade, sexo e alfabetização.</p><p class="cp"><span class="lt">c)</span> Valorizar quem perceber que o direito formal dependia de sexo, idade e escolaridade e que a cidadania era um privilégio, não uma condição de todos; o eleitorado ficava abaixo de 5% da população.</p></div></div>
+<div class="questao" data-questao="7"><div class="enunciado"><span class="num-q">7</span> A tabela do texto apresenta dados de 1930, 1945, 1960 e 2022 sobre participação eleitoral.</div><div class="item-q"><div class="item-enun"><b>a)</b> Explique por que é preciso cuidado ao comparar “parcela da população que votou” com “pessoas aptas a votar”.</div><textarea id="resp-7-a" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Indique o que o crescimento desses números mostra sobre a cidadania e o que ele não garante sobre a participação popular.</div><textarea id="resp-7-b" class="campo-resposta dissertativa" data-min="70" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 70)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Pense em uma decisão que afeta a sua vida (na escola, no bairro ou na cidade) e da qual você nunca foi chamado a participar: explique quem decidiu, por quê, e qual canal você ou sua comunidade poderia usar para influenciar essa decisão.</div><textarea id="resp-7-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> As duas medidas não são equivalentes: “votou” mede o comparecimento efetivo; “apto” mede o direito formal de votar, e não o exercício.</p><p class="cp"><span class="lt">b)</span> O aumento mostra a ampliação do direito (voto feminino, voto do analfabeto, voto aos 16 anos), isto é, da cidadania política; mas votar a cada dois anos não assegura influência contínua sobre as decisões, o que remete à pergunta da participação popular.</p><p class="cp"><span class="lt">c)</span> Aceitar exemplos como horário escolar, reforma de quadra, transporte, coleta de lixo, posto de saúde; valorizar a identificação de quem decidiu e de canais reais (grêmio, conselho escolar, associação de moradores, audiência pública, abaixo-assinado, ouvidoria, iniciativa popular).</p></div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Direitos no papel e ruas em movimento</h3><span class="fonte-tag">Parte 3 de 3</span><p>A Constituição de 1988 afirma, no parágrafo único do artigo 1º: “Todo o poder emana do povo, que o exerce por meio de representantes eleitos ou diretamente, nos termos desta Constituição”. O artigo 14 acrescenta que a soberania popular é exercida pelo voto direto e secreto, com valor igual para todos, e também por plebiscito, referendo e iniciativa popular.</p><p>Entre uma Constituição e a outra, a população não esperou apenas as urnas. Em 1904, moradores do Rio de Janeiro se revoltaram contra a vacinação obrigatória contra a varíola e contra as reformas urbanas do período, na chamada Revolta da Vacina. Em 1917, uma greve geral paralisou São Paulo, em protesto contra as condições de vida e de trabalho. Em 1983 e 1984, a campanha das Diretas Já levou multidões às ruas para exigir o voto direto para presidente, durante a ditadura militar; a emenda que o restabeleceria, votada em abril de 1984, não obteve os votos necessários na Câmara dos Deputados.</p></section>
+      <h2 class="questoes-titulo">Imagem e questões sobre direitos e movimentos</h2>
+<figure class="img-apoio"><img src="../img/resistencia.jpeg" alt="Charge de Henfil sobre as Diretas Já, 1984: multidão com faixas pedindo o voto e uma autoridade com megafone dizendo que o povo é ilegal." data-zoom="1" loading="lazy"><figcaption>HENFIL. Diretas Já!, 1984. In: LEMOS, R. (Org.). Uma história do Brasil através da caricatura (1840-2001). Rio de Janeiro: Letras &amp; Expressões, 2001. <span class="zoomdica">Clique na imagem para ampliar.</span></figcaption></figure>
+<div class="questao" data-questao="8"><div class="enunciado"><span class="num-q">8</span> Na charge de Henfil (1984), uma multidão carrega faixas como “Diretas Já”, “Quero votar!” e “O voto é nosso!”, enquanto uma autoridade com megafone diz: “Voltem para suas casas! O povo é ilegal...”.</div><div class="item-q"><div class="item-enun"><b>a)</b> Explique o que a fala da autoridade revela sobre a relação entre o regime e o povo em 1984 e o que as faixas da multidão mostram sobre aquilo que as pessoas reivindicavam.</div><textarea id="resp-8-a" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Relacione a charge aos conceitos de participação popular e de resistência.</div><textarea id="resp-8-b" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Imagine que você estivesse nesse comício: que faixa levaria e o que escreveria nela? Justifique a escolha.</div><textarea id="resp-8-c" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> A fala “Voltem para suas casas! O povo é ilegal...” é irônica: a autoridade trata como ilegítima a mobilização de quem pede o voto, o que inverte a ideia de que o poder emana do povo, já que o povo, ao reivindicar um direito, é tratado como ilegal. As faixas (“Quero votar!”, “O voto é nosso!”, “Diretas Já?”, “Queremos votar!”) mostram que a multidão reivindicava o voto direto para presidente, ou seja, o direito de decidir quem governa. A cena contrasta uma multidão numerosa, que pede um direito político básico, com uma única figura de autoridade armada de megafone que tenta dispersá-la, o que revela um regime que respondia à demanda com ordem e repressão, e não com abertura de canais de participação.</p><p class="cp"><span class="lt">b)</span> A charge mostra participação popular (comício, faixas, mobilização de massa) e resistência civil, em um período em que os canais de decisão estavam fechados e a população reivindicava o voto direto para presidente.</p><p class="cp"><span class="lt">c)</span> Resposta aberta: valorizar a faixa que expresse uma demanda concreta (voto direto, direitos, liberdade) e a justificativa que relacione a mensagem ao contexto.</p></div></div>
+<div class="questao" data-questao="9"><div class="enunciado"><span class="num-q">9</span> O texto define a resistência pela pergunta: “o que as pessoas fazem quando consideram a ordem injusta?”.</div><div class="item-q"><div class="item-enun"><b>a)</b> Compare a Revolta da Vacina (1904) e a campanha das Diretas Já (1983-1984): o que cada movimento contestava e que meios utilizou?</div><textarea id="resp-9-a" class="campo-resposta dissertativa" data-min="70" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 70)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> Explique em que sentido ambos podem ser lidos como participação popular, ainda que fora das urnas.</div><textarea id="resp-9-b" class="campo-resposta dissertativa" data-min="60" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 60)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Considerando que a Constituição de 1988 prevê plebiscito, referendo e iniciativa popular, explique por que as pessoas continuam recorrendo a protestos.</div><textarea id="resp-9-c" class="campo-resposta dissertativa" data-min="70" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 70)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> Revolta da Vacina: a vacinação obrigatória e as reformas urbanas que expulsavam os pobres do centro; meio: revolta de rua em um regime de voto restrito. Diretas Já: a eleição indireta do presidente na ditadura; meio: comícios e mobilização de massa, em busca de mudança institucional.</p><p class="cp"><span class="lt">b)</span> Em ambos, pessoas fora dos canais formais tentaram influenciar decisões coletivas; participação popular inclui o voto, mas também a mobilização, o protesto e a organização.</p><p class="cp"><span class="lt">c)</span> Os instrumentos formais exigem regras, quórum e tempo, e nem sempre alcançam demandas urgentes ou de grupos com pouco acesso às instituições; o protesto dá visibilidade e pressiona. Valorizar a percepção de que os dois caminhos podem coexistir.</p></div></div>
+<div class="questao" data-questao="10"><div class="enunciado"><span class="num-q">10</span> Retome as quatro perguntas do texto e aplique-as a um espaço que você conhece bem: a sua escola, o seu bairro ou a sua cidade.</div><div class="item-q"><div class="item-enun"><b>a)</b> Responda, com base no que você observa: quem tem direitos nesse espaço e quem fica de fora? Quem decide e como?</div><textarea id="resp-10-a" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item a) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="item-q"><div class="item-enun"><b>b)</b> De que modo as pessoas influenciam as decisões nesse espaço e o que elas fazem quando consideram algo injusto?</div><textarea id="resp-10-b" class="campo-resposta dissertativa" data-min="80" placeholder="Escreva sua resposta ao item b) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 80)</div></div><div class="item-q"><div class="item-enun"><b>c)</b> Seguindo a orientação do texto, “comparar um período com outro”, indique o que mudou e o que permaneceu em relação à Primeira República e diga qual das quatro palavras, na sua opinião, mais precisa avançar no espaço que você escolheu, justificando.</div><textarea id="resp-10-c" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta ao item c) aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div></div><div class="comentario-prof"><b>Comentário do professor</b><p class="cp"><span class="lt">a)</span> Esperar observações concretas, e não definições genéricas: quem é incluído e excluído (por renda, local de moradia, idade, deficiência) e quem de fato decide.</p><p class="cp"><span class="lt">b)</span> Valorizar a identificação de canais reais (grêmio, conselho escolar, associação de moradores, abaixo-assinado, redes) e de formas de reação (reclamação, organização coletiva, denúncia).</p><p class="cp"><span class="lt">c)</span> A comparação deve mencionar ao menos uma mudança (sufrágio universal, voto aos 16 anos, existência de conselhos e grêmios) e uma permanência (desigualdade de acesso a serviços, decisões sem consulta, dependência de favores, grupos pouco ouvidos). A escolha da palavra é justificada por um argumento ligado ao exemplo; não exigir uma posição única.</p></div></div>
+
+      <section class="texto-apoio selecionavel">
+        <div class="referencia-box" style="margin-top:0"><span class="rot">Fontes</span><p>CARVALHO, José Murilo de. Texto publicado em Pesquisa FAPESP, 2005 (a Primeira República como regime em que votava menos de 5% da população; participação eleitoral de 5,6% em 1930, 13% em 1945 e 18% em 1960). Disponível em: revistapesquisa.fapesp.br.</p><p>BRASIL. Constituição da República dos Estados Unidos do Brasil, de 24 de fevereiro de 1891, art. 70 (alistamento eleitoral e exclusões).</p><p>BRASIL. Constituição da República Federativa do Brasil de 1988, art. 1º, parágrafo único, e art. 14.</p><p>TRIBUNAL SUPERIOR ELEITORAL. Brasil tem mais de 156 milhões de eleitoras e eleitores aptos a votar em 2022. Brasília: TSE, jul. 2022. Disponível em: tse.jus.br.</p><p>INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA. Censo Demográfico 2022: população residente, cerca de 203 milhões de pessoas.</p><p>Texto de leitura “Para começar” e demais ideias resumidas com palavras próprias.</p><p>QUINO. Mafalda (tirinha sobre a definição de democracia).</p><p>Charge “Queremos o poder!” e charge de 2012 sobre cidadania, com autoria conforme o material de origem.</p><p>HENFIL. Diretas Já!, 1984. In: LEMOS, R. (Org.). Uma história do Brasil através da caricatura (1840-2001). Rio de Janeiro: Letras &amp; Expressões, 2001.</p></div>
+      </section>
+      <div class="alerta-incompleto" id="alerta-incompleto">Ainda há questões incompletas. Revise o tamanho mínimo de cada resposta antes de finalizar.</div>
+      <div class="acoes-finais">
+        <button class="btn btn-primario" onclick="finalizarAtividade()">Finalizar e ver comentários</button>
+        <button class="btn btn-secundario" onclick="refazerAtividade()">Refazer</button>
+        <button class="btn btn-pdf" id="btn-pdf" onclick="exportarPDF()" disabled aria-disabled="true">Exportar em PDF</button>
+        <span id="dica-pdf" style="flex-basis:100%;font-size:.84rem;color:#6b4a4c;">O botão de PDF é liberado quando todas as questões estiverem respondidas (tamanho mínimo de cada resposta).</span>
+      </div>
+    </main>
+  </div>
+  <footer class="rodape">Colégio Estadual Rodolfo de Oliveira · CERO · 2026</footer>
+</div>
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card">
+    <h3>Atividade concluída!</h3>
+    <p>Suas dez respostas foram registradas. Os comentários do professor já estão disponíveis abaixo de cada questão para você comparar com o que escreveu.</p>
+    <button class="btn btn-primario" onclick="fecharPopup()">Continuar</button>
+  </div>
+</div>
+<script>
+/* ===== GATE DE NOME ===== */
+function iniciarAtividade(){
+  const nome = document.getElementById('nome-aluno').value.trim();
+  const turma = document.getElementById('turma-aluno').value.trim();
+  const aviso = document.getElementById('capa-aviso');
+  if(!nome){
+    aviso.style.display = 'block';
+    return;
+  }
+  aviso.style.display = 'none';
+  const hoje = new Date();
+  const dataFormatada = String(hoje.getDate()).padStart(2,'0') + '/' + String(hoje.getMonth()+1).padStart(2,'0') + '/' + hoje.getFullYear();
+  document.getElementById('header-nome').textContent = nome;
+  document.getElementById('ficha-nome').textContent = nome;
+  document.getElementById('ficha-data').textContent = dataFormatada;
+  document.getElementById('ficha-turma').textContent = turma || '—';
+  document.getElementById('capa').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+/* ===== CONTADOR DE CARACTERES E PROGRESSO ===== */
+const textareas = document.querySelectorAll('textarea.dissertativa');
+const QCOUNT = document.querySelectorAll('.questao').length;
+
+function atualizarProgresso(){
+  let respondidas = 0;
+  document.querySelectorAll('.questao').forEach(function(q){
+    const ok = Array.prototype.every.call(q.querySelectorAll('textarea.dissertativa'), function(t){ return t.value.trim().length >= parseInt(t.dataset.min, 10); });
+    if(ok) respondidas++;
+  });
+  document.getElementById('contador-geral').textContent = 'Respondidas: ' + respondidas + '/' + QCOUNT;
+  document.getElementById('barra-fill').style.width = (respondidas / QCOUNT * 100) + '%';
+}
+
+textareas.forEach(function(t){
+  const contadorEl = t.parentElement.querySelector('.contador-chars');
+  const min = parseInt(t.dataset.min, 10);
+  t.addEventListener('input', function(){
+    contadorEl.textContent = t.value.length + ' caracteres (mínimo ' + min + ')';
+    atualizarProgresso();
+  });
+});
+
+/* ===== FINALIZAR ===== */
+function finalizarAtividade(){
+  let completo = true;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length < min) completo = false;
+  });
+
+  const alerta = document.getElementById('alerta-incompleto');
+  if(!completo){
+    alerta.classList.add('show');
+    alerta.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  alerta.classList.remove('show');
+
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.add('show');
+  });
+
+  document.getElementById('popup-overlay').classList.add('show');
+}
+
+function fecharPopup(){
+  document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function refazerAtividade(){
+  textareas.forEach(function(t){
+    t.value = '';
+    t.parentElement.querySelector('.contador-chars').textContent = '0 caracteres (mínimo ' + t.dataset.min + ')';
+  });
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.remove('show');
+  });
+  document.getElementById('alerta-incompleto').classList.remove('show');
+  atualizarProgresso();
+  window.scrollTo(0,0);
+}
+
+
+/* ===== EXPORTAR PDF ===== */
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function esc(str){ const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML.replace(/\n/g,'<br>'); }
+const QUESTOES = [{"num": "1", "ctx": "Na tirinha, Mafalda lê no dicionário que democracia é o “governo no qual a soberania é exercida pelo povo” e, nos quadros seguintes, aparece em uma cena de convivência familiar.", "itens": [{"letra": "a", "txt": "Descreva o contraste entre a definição lida por Mafalda e a cena doméstica que vem depois, indicando quem decide na cena.", "id": "resp-1-a"}, {"letra": "b", "txt": "Explique como esse contraste produz humor e crítica, relacionando-o à pergunta da democracia no texto: quem decide e como?", "id": "resp-1-b"}, {"letra": "c", "txt": "Pense em uma regra ou decisão da sua casa ou da sua escola da qual você não participou e avalie se, nesse caso, a ideia de soberania do povo poderia ou deveria se aplicar.", "id": "resp-1-c"}], "coment": ["A definição apresenta o ideal democrático, o poder exercido pelo povo; a cena familiar mostra quem decide na prática, os adultos, sem que a vontade da menina prevaleça.", "O humor nasce da distância entre o conceito e a experiência cotidiana. A crítica dialoga com o texto: democracia não é só definição, depende de quem decide e de como, e o poder do povo precisa ser exercido de fato.", "Aceitar posições diversas, desde que justificadas: em uma família há hierarquia e responsabilidade dos adultos, mas pode haver espaço para ouvir e negociar; decisões que afetam todos (regras da turma, uso de espaços) podem ser compartilhadas. Valorizar a distinção entre decisões que admitem participação e as que não admitem."], "ref": "Tirinha de Mafalda, personagem de Quino, sobre a definição de democracia."}, {"num": "2", "ctx": "A charge “Queremos o poder!” conjuga o verbo poder em todas as pessoas, de “eu posso” a “eles podem”, e termina com um último personagem que volta a dizer “eu posso”.", "itens": [{"letra": "a", "txt": "Explique o jogo de palavras entre poder como capacidade (“eu posso”) e poder como autoridade para decidir.", "id": "resp-2-a"}, {"letra": "b", "txt": "Relacione a charge à ideia de que, em uma democracia, “todo o poder emana do povo”, e interprete por que a volta final ao “eu posso” pode ser lida como crítica ou alerta.", "id": "resp-2-b"}, {"letra": "c", "txt": "Descreva uma situação em que você se sentiu capaz de fazer algo, mas não tinha poder para decidir, indicando quem decidia por você.", "id": "resp-2-c"}], "coment": ["O verbo poder indica capacidade ou permissão; o substantivo poder, autoridade para decidir. A charge usa a conjugação para brincar com os dois sentidos.", "A conjugação distribui o “posso” por todas as pessoas (“nós podemos, vós podeis, eles podem”), como um poder compartilhado. A volta final admite leituras justificadas: o poder coletivo pode voltar a se concentrar em um indivíduo, cada um pode querer o poder para si, ou reivindicar o poder sem regras leva ao ponto de partida.", "Pede um relato concreto: valorizar a distinção entre capacidade e poder de decisão e a identificação de quem decidia e por quê."], "ref": "Charge “Queremos o poder!” (autoria conforme material de origem)."}, {"num": "3", "ctx": "O texto afirma que as quatro palavras (cidadania, democracia, participação popular e resistência) “muitas vezes são usadas como se todos soubessem o que significam”.", "itens": [{"letra": "a", "txt": "Escolha duas delas e explique, com suas palavras, a pergunta a que cada uma responde.", "id": "resp-3-a"}, {"letra": "b", "txt": "Lembre-se de uma ocasião em que você viu ou ouviu uma dessas palavras (em um jornal, nas redes sociais, em uma prova ou em uma conversa de família) e descreva o contexto em que ela foi usada.", "id": "resp-3-b"}, {"letra": "c", "txt": "Avalie se quem usou a palavra parecia dominar o sentido dela, justificando sua avaliação.", "id": "resp-3-c"}], "coment": ["Cidadania: quem tem direitos? Democracia: quem decide e como? Participação popular: de que modo as pessoas influenciam as decisões? Resistência: o que as pessoas fazem quando consideram a ordem injusta? Exigir paráfrase, e não cópia.", "Aceitar exemplos variados; valorizar a descrição precisa de quem falou, onde e com que objetivo.", "Valorizar respostas que distingam o uso rigoroso do uso vago (por exemplo, “democracia” como sinônimo de “vale tudo” ou “cidadania” reduzida a “ser bom vizinho”). Não há resposta única; o critério é a justificativa coerente com o sentido dado no texto."], "ref": ""}, {"num": "4", "ctx": "O texto diz que listar presidentes, constituições e datas deixaria faltando “um fio que ligasse tudo isso”.", "itens": [{"letra": "a", "txt": "Explique por que uma lista de fatos não basta para entender como o Brasil chegou ao que é hoje.", "id": "resp-4-a"}, {"letra": "b", "txt": "Justifique por que as quatro perguntas (quem tem direitos, quem decide, como as pessoas influenciam, o que fazem diante da injustiça) funcionam melhor como fio condutor.", "id": "resp-4-b"}, {"letra": "c", "txt": "Escolha uma dessas perguntas e mostre, com um exemplo histórico, que ela teve respostas diferentes em dois momentos da República.", "id": "resp-4-c"}], "coment": ["Uma lista descreve o que aconteceu, mas não explica por que mudou nem o que permaneceu.", "As perguntas permitem comparar períodos com o mesmo critério e perceber continuidades e rupturas, como o texto orienta.", "O exemplo deve ser verificável: “quem tem direitos?” teve resposta restrita na Primeira República (analfabetos excluídos do voto) e mais ampla em 1988 (sufrágio universal); “quem decide?” pode contrastar o voto controlado por oligarquias com o voto direto e secreto. Valorizar a comparação explícita."], "ref": ""}, {"num": "5", "ctx": "Na charge de 2012, o homem diz: “Tô começando a desconfiar que a nossa cidadania também entrou em greve!”.", "itens": [{"letra": "a", "txt": "Explique a ironia dessa fala, relacionando-a à ideia de que direitos devem funcionar sempre, e não apenas quando um serviço está disponível.", "id": "resp-5-a"}, {"letra": "b", "txt": "Indique quais direitos (civis, políticos ou sociais) os personagens parecem não exercer e que elementos da imagem sustentam essa leitura, relacionando-os à ideia de cidadão incompleto.", "id": "resp-5-b"}, {"letra": "c", "txt": "Relate uma situação em que você, ou alguém próximo, ficou sem acesso a um direito ou serviço (saúde, escola, transporte, segurança, informação) por paralisação, falta ou demora e diga como isso afetou a vida da pessoa.", "id": "resp-5-c"}], "coment": ["A ironia está em tratar a cidadania como algo que “entra em greve”, isto é, que deixa de funcionar justamente quando é necessária; direitos que deveriam estar sempre disponíveis passam a depender de que o serviço funcione.", "Os elementos da imagem (aparência magra e simples dos personagens, a criança no colo, a expressão de preocupação) sugerem ausência de direitos sociais, como saúde, alimentação, trabalho e educação, o que remete ao cidadão incompleto de Carvalho e à distância entre o direito escrito e o direito vivido.", "Aceitar relatos diversos: valorizar a identificação do direito afetado, da causa (paralisação, falta de vaga, demora) e das consequências concretas."], "ref": "Charge de 2012 sobre cidadania (autoria conforme material de origem)."}, {"num": "6", "ctx": "Com base no texto sobre o voto, considere que a Primeira República tinha eleições regulares, mas um eleitorado muito pequeno.", "itens": [{"letra": "a", "txt": "Explique por que ela foi uma república, mas ainda não plenamente uma democracia, relacionando a pergunta da cidadania (quem tem direitos?) com a da democracia (quem decide e como?).", "id": "resp-6-a"}, {"letra": "b", "txt": "Coloque-se no lugar de uma pessoa da sua família que tivesse a sua idade em 1900 e vivesse em uma cidade pequena: ela teria direito ao voto? Quais critérios decidiriam isso?", "id": "resp-6-b"}, {"letra": "c", "txt": "Diga o que a sua resposta ao item anterior revela sobre quem era considerado cidadão naquela época.", "id": "resp-6-c"}], "coment": ["República é a forma de governo sem monarquia, com cargos eletivos; democracia exige que a maior parte da população possa decidir de fato. A cidadania política era restrita (idade mínima de 21 anos, exclusão de analfabetos, mendigos, praças de pré e religiosos de ordens monásticas, e a prática de manter as mulheres fora do voto).", "A maior parte dos alunos concluirá que a pessoa não votaria (por ser menor de 21 anos, mulher ou analfabeta). Valorizar quem identificar os critérios: idade, sexo e alfabetização.", "Valorizar quem perceber que o direito formal dependia de sexo, idade e escolaridade e que a cidadania era um privilégio, não uma condição de todos; o eleitorado ficava abaixo de 5% da população."], "ref": ""}, {"num": "7", "ctx": "A tabela do texto apresenta dados de 1930, 1945, 1960 e 2022 sobre participação eleitoral.", "itens": [{"letra": "a", "txt": "Explique por que é preciso cuidado ao comparar “parcela da população que votou” com “pessoas aptas a votar”.", "id": "resp-7-a"}, {"letra": "b", "txt": "Indique o que o crescimento desses números mostra sobre a cidadania e o que ele não garante sobre a participação popular.", "id": "resp-7-b"}, {"letra": "c", "txt": "Pense em uma decisão que afeta a sua vida (na escola, no bairro ou na cidade) e da qual você nunca foi chamado a participar: explique quem decidiu, por quê, e qual canal você ou sua comunidade poderia usar para influenciar essa decisão.", "id": "resp-7-c"}], "coment": ["As duas medidas não são equivalentes: “votou” mede o comparecimento efetivo; “apto” mede o direito formal de votar, e não o exercício.", "O aumento mostra a ampliação do direito (voto feminino, voto do analfabeto, voto aos 16 anos), isto é, da cidadania política; mas votar a cada dois anos não assegura influência contínua sobre as decisões, o que remete à pergunta da participação popular.", "Aceitar exemplos como horário escolar, reforma de quadra, transporte, coleta de lixo, posto de saúde; valorizar a identificação de quem decidiu e de canais reais (grêmio, conselho escolar, associação de moradores, audiência pública, abaixo-assinado, ouvidoria, iniciativa popular)."], "ref": ""}, {"num": "8", "ctx": "Na charge de Henfil (1984), uma multidão carrega faixas como “Diretas Já”, “Quero votar!” e “O voto é nosso!”, enquanto uma autoridade com megafone diz: “Voltem para suas casas! O povo é ilegal...”.", "itens": [{"letra": "a", "txt": "Explique o que a fala da autoridade revela sobre a relação entre o regime e o povo em 1984 e o que as faixas da multidão mostram sobre aquilo que as pessoas reivindicavam.", "id": "resp-8-a"}, {"letra": "b", "txt": "Relacione a charge aos conceitos de participação popular e de resistência.", "id": "resp-8-b"}, {"letra": "c", "txt": "Imagine que você estivesse nesse comício: que faixa levaria e o que escreveria nela? Justifique a escolha.", "id": "resp-8-c"}], "coment": ["A fala “Voltem para suas casas! O povo é ilegal...” é irônica: a autoridade trata como ilegítima a mobilização de quem pede o voto, o que inverte a ideia de que o poder emana do povo, já que o povo, ao reivindicar um direito, é tratado como ilegal. As faixas (“Quero votar!”, “O voto é nosso!”, “Diretas Já?”, “Queremos votar!”) mostram que a multidão reivindicava o voto direto para presidente, ou seja, o direito de decidir quem governa. A cena contrasta uma multidão numerosa, que pede um direito político básico, com uma única figura de autoridade armada de megafone que tenta dispersá-la, o que revela um regime que respondia à demanda com ordem e repressão, e não com abertura de canais de participação.", "A charge mostra participação popular (comício, faixas, mobilização de massa) e resistência civil, em um período em que os canais de decisão estavam fechados e a população reivindicava o voto direto para presidente.", "Resposta aberta: valorizar a faixa que expresse uma demanda concreta (voto direto, direitos, liberdade) e a justificativa que relacione a mensagem ao contexto."], "ref": "HENFIL. Diretas Já!, 1984. In: LEMOS, R. (Org.). Uma história do Brasil através da caricatura (1840-2001). Rio de Janeiro: Letras & Expressões, 2001."}, {"num": "9", "ctx": "O texto define a resistência pela pergunta: “o que as pessoas fazem quando consideram a ordem injusta?”.", "itens": [{"letra": "a", "txt": "Compare a Revolta da Vacina (1904) e a campanha das Diretas Já (1983-1984): o que cada movimento contestava e que meios utilizou?", "id": "resp-9-a"}, {"letra": "b", "txt": "Explique em que sentido ambos podem ser lidos como participação popular, ainda que fora das urnas.", "id": "resp-9-b"}, {"letra": "c", "txt": "Considerando que a Constituição de 1988 prevê plebiscito, referendo e iniciativa popular, explique por que as pessoas continuam recorrendo a protestos.", "id": "resp-9-c"}], "coment": ["Revolta da Vacina: a vacinação obrigatória e as reformas urbanas que expulsavam os pobres do centro; meio: revolta de rua em um regime de voto restrito. Diretas Já: a eleição indireta do presidente na ditadura; meio: comícios e mobilização de massa, em busca de mudança institucional.", "Em ambos, pessoas fora dos canais formais tentaram influenciar decisões coletivas; participação popular inclui o voto, mas também a mobilização, o protesto e a organização.", "Os instrumentos formais exigem regras, quórum e tempo, e nem sempre alcançam demandas urgentes ou de grupos com pouco acesso às instituições; o protesto dá visibilidade e pressiona. Valorizar a percepção de que os dois caminhos podem coexistir."], "ref": ""}, {"num": "10", "ctx": "Retome as quatro perguntas do texto e aplique-as a um espaço que você conhece bem: a sua escola, o seu bairro ou a sua cidade.", "itens": [{"letra": "a", "txt": "Responda, com base no que você observa: quem tem direitos nesse espaço e quem fica de fora? Quem decide e como?", "id": "resp-10-a"}, {"letra": "b", "txt": "De que modo as pessoas influenciam as decisões nesse espaço e o que elas fazem quando consideram algo injusto?", "id": "resp-10-b"}, {"letra": "c", "txt": "Seguindo a orientação do texto, “comparar um período com outro”, indique o que mudou e o que permaneceu em relação à Primeira República e diga qual das quatro palavras, na sua opinião, mais precisa avançar no espaço que você escolheu, justificando.", "id": "resp-10-c"}], "coment": ["Esperar observações concretas, e não definições genéricas: quem é incluído e excluído (por renda, local de moradia, idade, deficiência) e quem de fato decide.", "Valorizar a identificação de canais reais (grêmio, conselho escolar, associação de moradores, abaixo-assinado, redes) e de formas de reação (reclamação, organização coletiva, denúncia).", "A comparação deve mencionar ao menos uma mudança (sufrágio universal, voto aos 16 anos, existência de conselhos e grêmios) e uma permanência (desigualdade de acesso a serviços, decisões sem consulta, dependência de favores, grupos pouco ouvidos). A escolha da palavra é justificada por um argumento ligado ao exemplo; não exigir uma posição única."], "ref": ""}];
+const APOIO = [["Para começar: quatro palavras que ajudam a contar a história da República", "Imagine que alguém lhe pedisse para explicar como o Brasil chegou ao que é hoje. Você poderia listar presidentes, constituições e datas, mas ficaria faltando um fio que ligasse tudo isso. Este texto propõe quatro palavras para cumprir esse papel: cidadania, democracia, participação popular e resistência. Essas palavras aparecem nos jornais, nas redes sociais, nas provas e até nas conversas de família, e muitas vezes são usadas como se todos soubessem o que significam. Nas próximas páginas, você vai ver o sentido de cada uma e acompanhar como elas se manifestaram em momentos diferentes da República, da Primeira República (1889-1930) até a atualidade. Cada conceito responde a uma pergunta. A cidadania pergunta: quem tem direitos? A democracia pergunta: quem decide e como? A participação popular pergunta: de que modo as pessoas influenciam as decisões? E a resistência pergunta: o que as pessoas fazem quando consideram a ordem injusta? Ao longo do texto, você vai perceber que as respostas mudaram bastante em 137 anos. Como ler este texto. Cada capítulo começa com a explicação do conceito e continua com exemplos de épocas diferentes. Procure comparar um período com outro e perceber o que mudou e o que permaneceu."], ["Quem votava? Dados da Primeira República aos nossos dias", "A Constituição de 1891 definiu como eleitores os cidadãos maiores de 21 anos que se alistassem na forma da lei, mas excluiu do alistamento, entre outros, os mendigos, os analfabetos, as praças de pré (soldados e cabos) e os religiosos de ordens monásticas. Como a maior parte da população era analfabeta e as mulheres eram mantidas fora do voto, o eleitorado era pequeno. Para o historiador José Murilo de Carvalho, a Primeira República foi, literalmente, um regime sem povo, pois votava menos de 5% da população. Os números abaixo mostram a participação eleitoral em alguns marcos da história republicana. Atenção ao que cada linha mede: as três primeiras indicam a parcela da população que efetivamente votou; a última indica quantas pessoas estavam aptas a votar. 1930: Parcela da população que votou - 5,6% | 1945: Parcela da população que votou - 13% | 1960: Parcela da população que votou - 18% | 2022: Eleitoras e eleitores aptos a votar - mais de 156 milhões de pessoas, para cerca de 203 milhões de habitantes (Censo 2022) Entre as pessoas aptas a votar em 2022 estão grupos para os quais o voto é facultativo: analfabetos, maiores de 70 anos e jovens de 16 e 17 anos. Na Primeira República, os analfabetos eram impedidos de se alistar."], ["Direitos no papel e ruas em movimento", "A Constituição de 1988 afirma, no parágrafo único do artigo 1º: “Todo o poder emana do povo, que o exerce por meio de representantes eleitos ou diretamente, nos termos desta Constituição”. O artigo 14 acrescenta que a soberania popular é exercida pelo voto direto e secreto, com valor igual para todos, e também por plebiscito, referendo e iniciativa popular. Entre uma Constituição e a outra, a população não esperou apenas as urnas. Em 1904, moradores do Rio de Janeiro se revoltaram contra a vacinação obrigatória contra a varíola e contra as reformas urbanas do período, na chamada Revolta da Vacina. Em 1917, uma greve geral paralisou São Paulo, em protesto contra as condições de vida e de trabalho. Em 1983 e 1984, a campanha das Diretas Já levou multidões às ruas para exigir o voto direto para presidente, durante a ditadura militar; a emenda que o restabeleceria, votada em abril de 1984, não obteve os votos necessários na Câmara dos Deputados."]];
+const GRUPOS = [[0, 1, 2, 3], [4, 5, 6], [7, 8, 9]];
+function todasRespondidas(){
+  const tas=document.querySelectorAll('textarea.dissertativa');
+  if(!tas.length) return false;
+  return Array.prototype.every.call(tas,function(t){ return t.value.trim().length >= (parseInt(t.dataset.min,10)||1); });
+}
+function atualizarBotaoPDF(){
+  const b=document.getElementById('btn-pdf'); if(!b) return;
+  const ok=todasRespondidas();
+  b.disabled=!ok; b.setAttribute('aria-disabled',String(!ok));
+  b.title=ok?'':'Responda todas as questões para liberar a exportação.';
+  const d=document.getElementById('dica-pdf'); if(d) d.style.display=ok?'none':'block';
+}
+document.addEventListener('input',function(e){ if(e.target&&e.target.matches&&e.target.matches('textarea.dissertativa')) atualizarBotaoPDF(); });
+document.addEventListener('DOMContentLoaded',atualizarBotaoPDF);
+setTimeout(atualizarBotaoPDF,0);
+async function exportarPDF(){
+  if(!todasRespondidas()){ atualizarBotaoPDF(); const a=document.getElementById('alerta-incompleto'); if(a){a.classList.add('show');a.scrollIntoView({behavior:'smooth',block:'center'});} return; }
+  const overlay=document.createElement('div'); overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(74,7,11,.6);display:flex;align-items:center;justify-content:center;z-index:999;';
+  overlay.innerHTML='<div style="background:#fff;border-radius:14px;padding:32px 36px;text-align:center;max-width:300px;box-shadow:0 10px 30px rgba(215,25,32,.3);font-family:\'Source Serif 4\',serif;"><h4 style="margin:0 0 4px;color:#7a0c12;font-family:\'Playfair Display\',serif;">Gerando PDF…</h4><p style="margin:0 0 14px;color:#6b4a4c;font-size:.86rem;">Aguarde alguns instantes.</p><div style="background:#fbe3e4;border-radius:6px;overflow:hidden;height:8px;"><div id="pdf-prog" style="height:100%;width:0%;background:#d71920;transition:width .2s ease;"></div></div><div id="pdf-prog-txt" style="margin-top:8px;font-family:\'JetBrains Mono\',monospace;font-size:.74rem;color:#6b4a4c;">0%</div></div>';
+  document.body.appendChild(overlay); await sleep(80);
+  function setP(pct,msg){ const pp=document.getElementById('pdf-prog'),pt=document.getElementById('pdf-prog-txt'); if(pp)pp.style.width=pct+'%'; if(pt)pt.textContent=msg||(pct+'%'); }
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:'a4',hotfixes:['px_scaling']});
+    const PW=pdf.internal.pageSize.getWidth(),PH=pdf.internal.pageSize.getHeight();
+    const ML=28,CW=PW-ML*2; let y=ML;
+    async function addImg(el){
+      const canvas=await html2canvas(el,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0,windowWidth:860});
+      const imgW=CW,imgH=(canvas.height/canvas.width)*imgW; const dataUrl=canvas.toDataURL('image/jpeg',.92),avail=PH-ML*2;
+      if(imgH<=avail){ if(y+imgH>PH-ML){pdf.addPage();y=ML;} pdf.addImage(dataUrl,'JPEG',ML,y,imgW,imgH); y+=imgH+8; }
+      else{
+        const pxPerPt=canvas.width/imgW; let srcY=0;
+        while(srcY<canvas.height){
+          const availPt=PH-y-ML,sliceH_pt=Math.min(availPt,avail);
+          const sliceH_px=Math.round(sliceH_pt*pxPerPt),actualH=Math.min(sliceH_px,canvas.height-srcY);
+          const tmp=document.createElement('canvas'); tmp.width=canvas.width; tmp.height=actualH;
+          tmp.getContext('2d').drawImage(canvas,0,srcY,canvas.width,actualH,0,0,canvas.width,actualH);
+          const sliceUrl=tmp.toDataURL('image/jpeg',.92),slicePt=(actualH/canvas.width)*imgW;
+          pdf.addImage(sliceUrl,'JPEG',ML,y,imgW,slicePt); srcY+=actualH; y+=slicePt;
+          if(srcY<canvas.height){pdf.addPage();y=ML;}
+        } y+=8;
+      }
+    }
+    async function band(tag,txt){
+      const b=document.createElement('div'); b.style.cssText='width:860px;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      b.innerHTML='<div style="background:linear-gradient(90deg,#d71920,#7a0c12);border-radius:8px;padding:12px 22px;display:flex;align-items:center;gap:12px"><span style="background:rgba(255,255,255,.2);color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;border-radius:20px;padding:3px 12px">'+tag+'</span><span style="color:#fff;font-size:15px;font-weight:700">'+txt+'</span></div>';
+      document.body.appendChild(b); await sleep(20); await addImg(b); document.body.removeChild(b);
+    }
+    const nome=document.getElementById('header-nome').textContent||'Aluno(a)';
+    const turma=document.getElementById('ficha-turma').textContent||'—';
+    const now=new Date(); const dtStr=now.toLocaleDateString('pt-BR')+' às '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    setP(5,'Preparando capa…'); await sleep(40);
+    const coverEl=document.createElement('div'); coverEl.style.cssText='width:860px;font-family:Arial,sans-serif;overflow:hidden;position:absolute;left:-9999px;top:0';
+    coverEl.innerHTML='<div style="background:linear-gradient(135deg,#4a070b 0%,#d71920 60%,#f6b3b6 100%);padding:32px 48px 28px;color:white"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.85;font-weight:700;margin-bottom:6px">História · 2ª Série do Ensino Médio · GO-EMCHS602A</div><div style="font-size:26px;font-weight:900;line-height:1.2;margin-bottom:5px">Quatro palavras para contar a República</div><div style="font-size:13px;opacity:.9;font-style:italic">Texto de leitura · Cidadania, democracia, participação e resistência · 10 questões dissertativas</div></div><div style="background:#fdf5f5;padding:22px 48px 26px;border-bottom:3px solid #ffd9db"><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#d71920;font-weight:700;margin-bottom:5px">Aluno(a)</div><div style="font-size:20px;font-weight:700;color:#2a1213;border-bottom:2.5px solid #d71920;padding-bottom:6px;display:inline-block;margin-bottom:16px">'+esc(nome)+'</div><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#d71920">'+esc(turma)+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Turma</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#8f0e14">10</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Dissertativas</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:140px"><div style="font-size:13px;font-weight:700;color:#333">'+dtStr+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Gerado em</div></div></div><div style="font-size:9px;color:#bbb;margin-top:14px">Colégio Estadual Rodolfo de Oliveira · Goiás · 2026</div></div>';
+    document.body.appendChild(coverEl); await sleep(60); await addImg(coverEl); document.body.removeChild(coverEl);
+    setP(15,'Preparando texto de apoio…'); await sleep(20);
+    async function bloco(el){ document.body.appendChild(el); await sleep(20); await addImg(el); document.body.removeChild(el); }
+    for(let k=0;k<APOIO.length;k++){
+      await band('TEXTO '+(k+1)+' DE '+APOIO.length, APOIO[k][0]);
+      const textoEl=document.createElement('div'); textoEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #f0d0d2;border-radius:10px;position:absolute;left:-9999px;top:0';
+      textoEl.innerHTML='<div style="padding:18px 24px;background:#ffffff"><p style="font-size:12.5px;color:#2a1213;line-height:1.8;margin:0;text-align:justify">'+esc(APOIO[k][1])+'</p></div>';
+      await bloco(textoEl);
+      for(let j=0;j<GRUPOS[k].length;j++){
+        const i=GRUPOS[k][j]; const q=QUESTOES[i]; setP(20+Math.round(i/QUESTOES.length*65),'Questão '+q.num+'/'+QUESTOES.length+'…'); await sleep(12);
+      const qEl=document.createElement('div'); qEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #f0d0d2;border-radius:10px;position:absolute;left:-9999px;top:0';
+      let itensHtml='';
+      q.itens.forEach(function(it,k){
+        const v=document.getElementById(it.id)?document.getElementById(it.id).value:'';
+        itensHtml+='<div style="margin-bottom:14px"><div style="font-size:12.5px;font-weight:700;color:#2a1213;line-height:1.6;margin-bottom:6px"><span style="color:#d71920">'+it.letra+')</span> '+esc(it.txt)+'</div><div style="background:#fdeaeb;border:1.5px solid #eca9ac;border-radius:8px;padding:11px 14px;min-height:40px"><div style="font-size:12.5px;color:#2a1213;line-height:1.8;white-space:pre-wrap">'+(esc(v)||'<span style="color:#aaa">(sem resposta)</span>')+'</div></div><div style="font-size:11.5px;color:#7a0c12;line-height:1.7;margin-top:6px;padding:8px 12px;background:#fff3f3;border:1px solid #ffd9db;border-radius:8px"><b>Comentário do professor ('+it.letra+'):</b> '+esc(q.coment[k])+'</div></div>';
+      });
+      qEl.innerHTML='<div style="background:linear-gradient(90deg,#d71920,#7a0c12);padding:10px 22px;display:flex;justify-content:space-between;align-items:center"><span style="color:white;font-weight:700;font-size:13px;letter-spacing:.8px">QUESTÃO '+q.num+'</span><span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;padding:3px 12px;border-radius:20px;font-weight:600">Dissertativa</span></div><div style="padding:18px 24px 12px;background:#ffffff"><div style="font-size:13px;font-weight:700;color:#2a1213;line-height:1.6;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #eee">'+esc(q.ctx)+'</div>'+(q.ref?'<div style="font-size:11px;color:#6b4a4c;margin:-4px 0 12px;font-style:italic">Imagem de apoio: '+esc(q.ref)+'</div>':'')+itensHtml+'</div>';
+      document.body.appendChild(qEl); await sleep(12); await addImg(qEl); document.body.removeChild(qEl);
+      }
+    }
+    const fEl0=document.createElement('div'); fEl0.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #f0d0d2;border-radius:10px;position:absolute;left:-9999px;top:0';
+    fEl0.innerHTML='<div style="padding:14px 24px;background:#ffffff"><div style="font-size:10px;color:#6b4a4c;font-family:monospace">CARVALHO, José Murilo de. Texto publicado em Pesquisa FAPESP, 2005 (a Primeira República como regime em que votava menos de 5% da população; participação eleitoral de 5,6% em 1930, 13% em 1945 e 18% em 1960). Disponível em: revistapesquisa.fapesp.br. · BRASIL. Constituição da República dos Estados Unidos do Brasil, de 24 de fevereiro de 1891, art. 70 (alistamento eleitoral e exclusões). · BRASIL. Constituição da República Federativa do Brasil de 1988, art. 1º, parágrafo único, e art. 14. · TRIBUNAL SUPERIOR ELEITORAL. Brasil tem mais de 156 milhões de eleitoras e eleitores aptos a votar em 2022. Brasília: TSE, jul. 2022. Disponível em: tse.jus.br. · INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA. Censo Demográfico 2022: população residente, cerca de 203 milhões de pessoas. · Texto de leitura “Para começar” e demais ideias resumidas com palavras próprias. · QUINO. Mafalda (tirinha sobre a definição de democracia). · Charge “Queremos o poder!” e charge de 2012 sobre cidadania, com autoria conforme o material de origem. · HENFIL. Diretas Já!, 1984. In: LEMOS, R. (Org.). Uma história do Brasil através da caricatura (1840-2001). Rio de Janeiro: Letras & Expressões, 2001.</div></div>';
+    await bloco(fEl0);
+    setP(92,'Finalizando…'); await sleep(30);
+    const totalPages=pdf.getNumberOfPages();
+    for(let p=1;p<=totalPages;p++){
+      pdf.setPage(p);
+      const fEl=document.createElement('div');
+      fEl.style.cssText='width:'+Math.round(CW)+'px;height:22px;background:#fdf5f5;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:10px;color:#888;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      fEl.innerHTML='<span>Quatro palavras para contar a República · '+esc(nome)+'</span><span>Página '+p+' de '+totalPages+'</span>';
+      document.body.appendChild(fEl);
+      const fc=await html2canvas(fEl,{scale:2,logging:false,backgroundColor:'#fdf5f5'}); document.body.removeChild(fEl);
+      const fUrl=fc.toDataURL('image/jpeg',.9),fH=(fc.height/fc.width)*CW;
+      pdf.setFillColor(253,238,244); pdf.rect(ML,PH-fH,CW,fH,'F'); pdf.addImage(fUrl,'JPEG',ML,PH-fH,CW,fH);
+    }
+    setP(100,'Salvando…'); await sleep(200);
+    pdf.save('Cidadania_democracia_participacao_resistencia_'+nome.replace(/[^a-zA-Z0-9_\-]/g,'_')+'.pdf');
+  }catch(err){ console.error(err); alert('Erro ao gerar PDF: '+err.message); }
+  finally{ const ov=document.getElementById('pdf-overlay'); if(ov)document.body.removeChild(ov); }
+}
+
+/* ===== PROTEÇÃO ANTI-COLA E ANTI-CÓPIA (página inteira) ===== */
+(function () {
+  const LIMITE_BLOCO = 25;
+  const CAMPOS = document.querySelectorAll('textarea.dissertativa, .campo-resposta');
+  const ehCampo = function (el) { return el && el.closest && el.closest('textarea.dissertativa, .campo-resposta'); };
+
+  function mostrarToast(mensagem) {
+    let toast = document.getElementById('anti-cola-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'anti-cola-toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#7a0c12;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = mensagem;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function () { toast.style.opacity = '0'; }, 2500);
+  }
+  function bloquear(e, msg) { e.preventDefault(); e.stopPropagation(); mostrarToast(msg || 'Copiar e colar não são permitidos nesta atividade.'); return false; }
+
+  /* 1) Página inteira: copiar, recortar, colar, arrastar, selecionar e menu de contexto */
+  ['copy', 'cut', 'paste', 'dragstart', 'drop', 'dragover', 'contextmenu', 'selectstart'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      if (evt === 'selectstart' && ehCampo(e.target)) return;      /* permite posicionar o cursor no campo */
+      if (evt === 'selectstart') { e.preventDefault(); return; }
+      bloquear(e);
+    }, true);
+  });
+
+  /* 2) Atalhos de teclado */
+  document.addEventListener('keydown', function (e) {
+    const k = (e.key || '').toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    if (mod && ['c', 'x', 'v', 'a', 'p', 's', 'u'].indexOf(k) >= 0) return bloquear(e);
+    if (e.shiftKey && k === 'insert') return bloquear(e);                 /* Shift+Insert (colar) */
+    if (e.ctrlKey && k === 'insert') return bloquear(e);                  /* Ctrl+Insert (copiar) */
+    if (e.shiftKey && k === 'delete') return bloquear(e);                 /* Shift+Delete (recortar) */
+    if (k === 'f12' || (mod && e.shiftKey && ['i', 'j', 'c'].indexOf(k) >= 0)) return bloquear(e, 'Esta função está desativada nesta atividade.');
+    if (k === 'printscreen') {
+      try { navigator.clipboard.writeText(''); } catch (_) {}
+      mostrarToast('Captura de tela não recomendada nesta atividade.');
+    }
+  }, true);
+
+  /* 3) Campos de resposta: colar por qualquer via, texto em bloco e autocomplete */
+  CAMPOS.forEach(function (campo) {
+    campo.setAttribute('autocomplete', 'off');
+    campo.setAttribute('autocorrect', 'off');
+    campo.setAttribute('autocapitalize', 'off');
+    campo.setAttribute('spellcheck', 'false');
+
+    campo.addEventListener('beforeinput', function (e) {
+      const t = e.inputType || '';
+      if (t === 'insertFromPaste' || t === 'insertFromDrop' || t === 'insertFromYank' || t === 'insertFromPasteAsQuotation') {
+        bloquear(e);
+      }
+    });
+
+    let valorAnterior = campo.value;
+    campo.addEventListener('input', function (e) {
+      const diferenca = campo.value.length - valorAnterior.length;
+      if (diferenca >= LIMITE_BLOCO) {                                    /* texto entrou de uma vez só */
+        campo.value = valorAnterior;
+        mostrarToast('Escreva com suas palavras: texto colado foi removido.');
+        campo.dispatchEvent(new Event('input'));                          /* atualiza contador e progresso */
+      } else {
+        valorAnterior = campo.value;
+      }
+    });
+  });
+
+  /* 4) Impressão do conteúdo da página desativada (use o botão Exportar em PDF) */
+  const st = document.createElement('style');
+  st.textContent = '@media print{body *{visibility:hidden!important}body::before{content:"Impressão desativada. Use o botão Exportar em PDF.";visibility:visible!important;display:block;padding:40px;font:16px sans-serif}}';
+  document.head.appendChild(st);
+})();
+
+</script>
+<div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" alt=""></div>
+<script>document.addEventListener('click',function(e){var t=e.target;if(t&&t.matches&&t.matches('img[data-zoom]')){var l=document.getElementById('lightbox');document.getElementById('lightbox-img').src=t.src;document.getElementById('lightbox-img').alt=t.alt;l.classList.add('show');}});document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('lightbox').classList.remove('show');});</script>
+</body>
+</html>

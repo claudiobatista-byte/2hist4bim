@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texto de Apoio — Democracia: o poder vem do povo | CERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#eef1f8;
+    --bg-alt:#dbe2f1;
+    --paper:#fafbfe;
+    --ink:#161b2e;
+    --ink-soft:#50577a;
+    --roxo:#2f4a9c;
+    --roxo-dark:#14214f;
+    --roxo-2:#4361c2;
+    --cobre:#b7791f;
+    --cobre-light:#f4dfb4;
+    --line:#d3daec;
+    --shadow:0 10px 30px rgba(47,74,156,.18);
+    --radius:14px;
+    --font-title:'Playfair Display', serif;
+    --font-body:'Source Serif 4', serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    -webkit-user-select:none; -ms-user-select:none;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.7;
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  
+  .campo-resposta{user-select:text; -webkit-user-select:text;}
+
+  /* ===== CAPA / GATE ===== */
+  #capa{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(to bottom, #0b1438, #2f4a9c, #8fa3e0);
+    padding:24px;
+  }
+  #capa .grade-centralizada{
+    position:absolute;
+    top:0; bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:896px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.08;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px);
+    background-size:40px 40px;
+  }
+  .capa-card{
+    position:relative;
+    z-index:1;
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    max-width:480px;
+    width:100%;
+    padding:36px 32px;
+    text-align:center;
+  }
+  .capa-card .tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.7rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(47,74,156,.1); padding:5px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .capa-card h1{font-family:var(--font-title); font-size:1.6rem; margin:0 0 10px; color:var(--roxo-dark);}
+  .capa-card p.desc{color:var(--ink-soft); font-size:.94rem; margin:0 0 22px;}
+  .capa-card input{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:1rem; margin-bottom:14px;
+  }
+  .capa-card button{
+    width:100%; padding:13px; border:none; border-radius:8px;
+    background:var(--roxo); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+    font-family:var(--font-body); transition:filter .15s ease;
+  }
+  .capa-card button:hover{filter:brightness(1.15);}
+  .capa-aviso{font-size:.78rem; color:#a33; margin-top:8px; display:none;}
+
+  /* ===== APP ===== */
+  #app{display:none;}
+  .sticky-header{
+    position:sticky; top:0; z-index:50;
+    background:var(--roxo-dark); color:#e4e9f6;
+    padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    font-family:var(--font-mono); font-size:.82rem;
+  }
+  .sticky-header .aluno{font-family:var(--font-body); font-weight:600; font-size:.92rem;}
+  .barra-progresso-trilho{
+    flex:1; min-width:120px; height:8px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; margin:0 14px;
+  }
+  .barra-progresso-fill{height:100%; background:#f4dfb4; width:0%; transition:width .3s ease;}
+
+  .wrap{max-width:800px; margin:0 auto; padding:32px 24px 60px;}
+
+  header.topo{margin-bottom:28px;}
+  header.topo .hero-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(47,74,156,.1); padding:5px 12px; border-radius:999px; margin-bottom:12px;
+  }
+  header.topo h1{font-family:var(--font-title); font-size:clamp(1.5rem,4vw,2rem); margin:0 0 8px; color:var(--ink);}
+  header.topo p.sub{color:var(--ink-soft); margin:0; font-size:.98rem;}
+  .descritor-bar{
+    font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; margin-bottom:14px; display:inline-block;
+  }
+  .ficha-id{
+    display:flex; flex-wrap:wrap; gap:10px 26px;
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-top:12px; font-family:var(--font-mono); font-size:.84rem; color:var(--ink);
+  }
+  .ficha-id span b{color:var(--roxo-dark);}
+
+  /* ===== TEXTO DE APOIO ===== */
+  .texto-apoio{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:28px 30px; margin-bottom:30px;
+  }
+  .texto-apoio h2{font-family:var(--font-title); font-size:1.25rem; color:var(--roxo-dark); margin:0 0 4px;}
+  .texto-apoio h3{font-family:var(--font-title); font-size:1.05rem; color:var(--roxo-2); margin:22px 0 8px;}
+  .texto-apoio .fonte-tag{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-bottom:16px; display:block;}
+  .texto-apoio p{margin:0 0 14px; color:var(--ink);}
+  .texto-apoio p:last-of-type{margin-bottom:0;}
+  .texto-apoio .destaque{
+    background:var(--bg-alt); border-left:4px solid var(--cobre); border-radius:0 8px 8px 0;
+    padding:12px 16px; margin:0 0 14px; font-size:.95rem;
+  }
+  .texto-apoio .mito{
+    background:#f5f7fc; border:1px solid var(--line); border-top:4px solid var(--roxo-2);
+    border-radius:10px; padding:16px 18px; margin:0 0 14px;
+  }
+  .texto-apoio .mito .rot{
+    font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--cobre); display:block; margin-bottom:6px;
+  }
+  .texto-apoio .mito p{font-size:.93rem;}
+
+  .tabela-lentes{width:100%; border-collapse:collapse; margin:6px 0 14px; font-size:.9rem;}
+  .tabela-lentes caption{
+    caption-side:top; text-align:left; font-family:var(--font-mono); font-size:.68rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--cobre); padding-bottom:6px;
+  }
+  .tabela-lentes th, .tabela-lentes td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top;}
+  .tabela-lentes th{background:var(--roxo); color:#fff; font-family:var(--font-title); font-weight:600; font-size:.9rem;}
+  .tabela-lentes tbody tr:nth-child(even){background:var(--bg-alt);}
+  .tabela-lentes td:first-child{font-weight:700; color:var(--roxo-dark); white-space:nowrap;}
+  .tabela-wrap{overflow-x:auto;}
+
+  .referencia-box{
+    margin-top:20px; padding:14px 16px;
+    background:var(--bg-alt); border-left:3px solid var(--cobre); border-radius:0 8px 8px 0;
+  }
+  .referencia-box .rot{
+    font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--roxo-dark); display:block; margin-bottom:6px;
+  }
+  .referencia-box p{margin:0 0 6px; font-size:.86rem; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.6;}
+  .referencia-box p:last-child{margin-bottom:0;}
+
+  /* ===== QUESTOES ===== */
+  .questoes-titulo{
+    font-family:var(--font-title); font-size:1.2rem; color:var(--roxo-dark);
+    margin:0 0 18px; display:flex; align-items:center; gap:10px;
+  }
+  .questao{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; margin-bottom:18px;
+  }
+  .questao .num-q{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--roxo);
+    color:#fff; font-family:var(--font-mono); font-size:.78rem; margin-right:8px; flex-shrink:0;
+  }
+  .questao .enunciado{font-weight:600; color:var(--ink); margin-bottom:12px; display:flex; align-items:flex-start;}
+  .questao textarea{
+    width:100%; min-height:100px; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--ink);
+  }
+  .questao textarea:focus{outline:2px solid var(--roxo-2); outline-offset:1px;}
+  .contador-chars{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-top:6px; text-align:right;}
+
+  .comentario-prof{
+    display:none; margin-top:14px; padding:14px 16px;
+    background:#e4e9f6; border:1px solid #bcc7e6; border-radius:8px; font-size:.9rem; color:var(--roxo-dark);
+  }
+  .comentario-prof.show{display:block;}
+  .comentario-prof b{display:block; margin-bottom:4px; font-family:var(--font-title); font-size:.92rem;}
+
+  /* ===== ALERTA / FINALIZAR ===== */
+  .alerta-incompleto{
+    display:none; background:#fdf1e6; border:1px solid #f0d2b3; color:#8a4a10;
+    padding:12px 16px; border-radius:8px; font-size:.9rem; margin-bottom:16px;
+  }
+  .alerta-incompleto.show{display:block;}
+
+  .acoes-finais{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;}
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:.94rem; padding:12px 22px;
+    border-radius:8px; border:none; cursor:pointer; transition:filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.1);}
+  .btn-primario{background:var(--roxo); color:#fff;}
+  .btn-secundario{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-pdf{background:var(--cobre); color:#fff;}
+  .btn[disabled]{opacity:.5; cursor:not-allowed;}
+
+  /* ===== POPUP ===== */
+  .popup-overlay{
+    display:none; position:fixed; inset:0; background:rgba(11,20,56,.6);
+    align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .popup-overlay.show{display:flex;}
+  .popup-card{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    max-width:420px; width:100%; padding:32px 28px; text-align:center;
+  }
+  .popup-card .emoji{display:none;}
+  .popup-card h3{font-family:var(--font-title); margin:0 0 8px; color:var(--roxo-dark);}
+  .popup-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 20px;}
+
+  footer.rodape{text-align:center; padding:24px; color:var(--ink-soft); font-family:var(--font-mono); font-size:.8rem;}
+
+  @media (max-width:600px){
+    .wrap{padding:24px 16px 50px;}
+    .texto-apoio, .questao{padding:18px 18px;}
+  }
+
+  *{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+  textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:none}
+  .chip-tema{display:inline-block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--roxo);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .btn-pdf{background:#b7791f}
+  .btn-pdf:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+  .questao .pessoal{display:inline-block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#b7791f;background:var(--cobre-light);border-radius:999px;padding:3px 10px;margin:0 0 10px 34px}
+  .texto-apoio .mito{border-top-color:var(--roxo-2)}
+</style>
+</head>
+<body>
+<div id="capa">
+  <div class="grade-centralizada"></div>
+  <div class="capa-card">
+    <span class="tag">2ª série · História · CERO</span>
+    <h1>Democracia: o poder vem do povo</h1>
+    <p class="desc">Texto de leitura e seis questões dissertativas sobre o conceito de democracia na história do Brasil. Preencha os dados para começar.</p>
+    <input type="text" id="nome-aluno" placeholder="Seu nome completo">
+    <input type="text" id="turma-aluno" placeholder="Turma (ex.: 2º A)">
+    <button onclick="iniciarAtividade()">Iniciar atividade</button>
+    <div class="capa-aviso" id="capa-aviso">Por favor, digite seu nome para continuar.</div>
+  </div>
+</div>
+<div id="app">
+  <div class="sticky-header">
+    <span class="aluno" id="header-nome"></span>
+    <div class="barra-progresso-trilho"><div class="barra-progresso-fill" id="barra-fill"></div></div>
+    <span id="contador-geral">Respondidas: 0/6</span>
+  </div>
+  <div class="wrap">
+    <header class="topo selecionavel">
+      <span class="descritor-bar">Ciências Humanas e Sociais Aplicadas / História · 2ª série do Ensino Médio &nbsp;|&nbsp; (GO-EMCHS602A) – Primeira República e República contemporânea</span>
+      <span class="chip-tema" style="display:block;width:max-content;margin-top:10px;">Conceito 2 · Democracia</span>
+      <h1>Democracia: o poder vem do povo, mas só se as regras valem para todos</h1>
+      <p class="sub">Leia cada parte com atenção e responda às seis questões que vêm logo abaixo dela. Fundamente suas respostas no texto.</p>
+      <div class="ficha-id" id="ficha-id">
+        <span><b>NOME:</b> <span id="ficha-nome"></span></span>
+        <span><b>DATA:</b> <span id="ficha-data"></span></span>
+        <span><b>TURMA:</b> <span id="ficha-turma"></span></span>
+      </div>
+    </header>
+    <main>
+      <section class="texto-apoio selecionavel"><h2>Por que ter eleições não basta</h2><span class="fonte-tag">Texto de leitura para a 2ª série do Ensino Médio · Parte 1 de 3</span><p>A palavra democracia vem do grego e junta demos (povo) e kratos (poder). Em uma democracia, o poder pertence ao povo, que o exerce diretamente ou por meio de representantes. A Constituição brasileira de 1988 diz isso logo no início: “Todo o poder emana do povo”.</p><p>Mas atenção: eleger não é o mesmo que viver em uma democracia. Para que uma eleição seja democrática, o voto precisa ser livre (secreto e sem pressão), amplo (aberto à maioria dos adultos) e competitivo (com candidatos e partidos de verdade e resultados respeitados). Também são necessárias a liberdade de imprensa e de associação, a separação entre os Poderes Executivo, Legislativo e Judiciário e o respeito aos direitos das minorias.</p><p>Você já viveu uma experiência democrática em escala pequena: a eleição do representante de turma ou do grêmio estudantil. Ela só tem valor se o voto for secreto, se houver mais de um candidato e se todos aceitarem o resultado, inclusive quem perdeu.</p><div class="destaque" style="margin-top:14px"><b>Democracia:</b> regime em que o poder vem do povo, por eleições livres e competitivas, com liberdade de expressão e de organização e respeito às regras e aos direitos de todos. Eleições sem liberdade ou sem concorrência são só uma aparência de democracia.</div></section>
+      <h2 class="questoes-titulo">Questões sobre o conceito</h2>
+<div class="questao" data-questao="1"><div class="enunciado"><span class="num-q">1</span> O texto afirma que “eleger não é o mesmo que viver em uma democracia”. Explique essa frase usando os três requisitos de uma eleição democrática (voto livre, amplo e competitivo) e pelo menos duas das condições adicionais citadas (liberdade de imprensa e de associação, separação dos Poderes, respeito às minorias). Depois, relembre uma eleição de representante de turma, de grêmio ou de outro grupo de que você já participou e avalie, com base nesses critérios, se ela foi democrática, justificando com o que de fato aconteceu.</div><textarea id="resp-1" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Eleger é um ato; viver em democracia depende de condições que garantam que o ato tenha sentido: voto secreto e sem pressão (livre), aberto à maioria dos adultos (amplo) e com candidatos e partidos reais e resultados respeitados (competitivo); além disso, imprensa e associação livres permitem informar-se e se organizar, a separação dos Poderes limita abusos e os direitos das minorias impedem que a maioria esmague quem pensa diferente. Na segunda parte, valorizar respostas que apliquem cada critério ao caso real (voto secreto ou aberto, mais de um candidato, aceitação do resultado por quem perdeu) e que reconheçam falhas, se houve, sem exigir que a eleição relatada tenha sido perfeita.</div></div>
+<div class="questao" data-questao="2"><div class="enunciado"><span class="num-q">2</span> O texto define democracia como o regime em que o poder vem do povo e diz que eleições sem liberdade ou sem concorrência são só uma “aparência de democracia”. Explique o que significa essa aparência e por que ela pode ser mais perigosa do que a ausência declarada de eleições. Em seguida, pense em uma decisão coletiva de que você participa (em casa, na escola, em um grupo de amigos, em uma igreja, em um time ou em uma comunidade virtual) e analise se ela tem substância democrática ou apenas aparência, indicando quem decide de fato.</div><textarea id="resp-2" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Aparência de democracia é o ritual (urnas, votação, discurso) sem as condições que dão poder real ao povo: pressão sobre o eleitor, ausência de oposição, resultados que não são respeitados. Pode ser mais perigosa porque dá legitimidade a quem governa e desencoraja a contestação, já que “houve eleição”. A segunda parte pede uma análise concreta: valorizar quem identifica quem decide de fato (muitas vezes alguém com mais autoridade ou influência), se há abertura para discordar, se a decisão é revista, e distingue consulta de decisão. Não há resposta única.</div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Eleições sem democracia: da Primeira República à ditadura</h3><span class="fonte-tag">Parte 2 de 3 · Primeira República ao regime militar</span><p>Entre 1894 e 1930, o Brasil realizou eleições presidenciais regulares. No entanto, o voto era aberto, o que permitia a patrões e coronéis vigiar os eleitores, o chamado voto de cabresto. Havia fraudes na contagem e a recusa de reconhecer candidatos de oposição eleitos, a “degola”. Os resultados falam por si: em 1906, o vencedor teve 97,9% dos votos válidos; em 1918, 99,1%. Disputas reais não produzem números assim.</p><p>Em 1932, o Código Eleitoral criou a Justiça Eleitoral para combater a fraude. Mas, em 1937, Getúlio Vargas deu um golpe, usando como pretexto o Plano Cohen, um documento forjado sobre uma suposta conspiração comunista. O Congresso foi fechado e os partidos foram extintos. Depois da queda de Vargas, a Constituição de 1946 trouxe eleições competitivas e partidos nacionais, mas os analfabetos continuavam sem voto e as crises políticas eram constantes. Em 1964, um golpe civil-militar inaugurou uma ditadura de 21 anos. O Brasil ficou 29 anos sem eleição direta para presidente, de 1960 a 1989.</p></section>
+      <h2 class="questoes-titulo">Questões sobre eleições e regimes</h2>
+<div class="questao" data-questao="3"><div class="enunciado"><span class="num-q">3</span> Na Primeira República, o Brasil realizava eleições presidenciais regulares. Explique, a partir do voto aberto, do voto de cabresto, da fraude e da “degola”, por que esse período é descrito como de “eleições sem democracia”. Interprete também os números: por que 97,9% dos votos válidos em 1906 e 99,1% em 1918 indicam ausência de competição? Imagine, por fim, que você fosse empregado de uma fazenda no interior em 1910 e o patrão acompanhasse seu voto: como você agiria e o que isso diz sobre a liberdade do eleitor?</div><textarea id="resp-3" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>O voto aberto permitia que patrões e coronéis vigiassem o eleitor (voto de cabresto); a fraude na contagem e a degola (recusa de reconhecer oposicionistas eleitos) anulavam a competição, de modo que os resultados já eram esperados. Em uma disputa real, é quase impossível um vencedor chegar a mais de 97% dos válidos, pois a sociedade tem interesses e opiniões distintas; os números mostram que não havia concorrência efetiva nem resultado respeitado. A parte final é de raciocínio: a maioria perceberá que votaria como o patrão mandasse por medo de perder emprego, moradia ou proteção, o que mostra que o voto não era livre. Valorizar quem relacionar a dependência econômica e pessoal à falta de liberdade.</div></div>
+<div class="questao" data-questao="4"><div class="enunciado"><span class="num-q">4</span> Compare três situações descritas no texto: a Constituição de 1946, o Estado Novo (1937-1945) e a ditadura iniciada em 1964. Em qual delas havia eleições competitivas e partidos nacionais e, mesmo assim, por que a democracia era limitada? Explique também o que o episódio do Plano Cohen, um documento forjado usado como pretexto para o golpe de 1937, revela sobre a importância de informações verdadeiras para a democracia. Por fim, descreva como você verifica se uma informação política que chega até você é confiável e avalie se esse método seria suficiente para desmascarar um documento como o Plano Cohen.</div><textarea id="resp-4" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>1946: eleições competitivas e partidos nacionais, mas os analfabetos continuavam sem voto (voto não amplo) e havia crises políticas constantes. Estado Novo: golpe, fechamento do Congresso e extinção dos partidos, sem competição. A ditadura de 1964, com 21 anos, manteve o país sem eleição direta para presidente de 1960 a 1989 (29 anos). O Plano Cohen mostra que a mentira pode ser instrumento para destruir a democracia, e que a liberdade de imprensa e a checagem são parte da defesa do regime. A parte final pede um método real de verificação (checar a fonte, comparar veículos, procurar a origem do documento, desconfiar de conteúdo que só confirma o que se quer ouvir); avaliar a consciência dos limites do método, pois documentos forjados podem enganar mesmo quem checa, e por isso imprensa livre e instituições independentes são necessárias.</div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Da redemocratização à atualidade</h3><span class="fonte-tag">Parte 3 de 3</span><p>A campanha das Diretas Já (1983-1984), a eleição indireta de Tancredo Neves (1985) e a Constituição de 1988 abriram o período democrático mais longo da história republicana: são mais de 41 anos. Nesse tempo, o país elegeu presidentes por voto direto, realizou plebiscitos, afastou um presidente por impeachment dentro das regras constitucionais (Collor, em 1992) e viu a oposição chegar ao poder (2002).</p><p>Isso não significa que a democracia esteja garantida para sempre. Em 8 de janeiro de 2023, a Praça dos Três Poderes foi invadida por manifestantes que não aceitavam o resultado da eleição. Em 11 de setembro de 2025, a 1ª Turma do Supremo Tribunal Federal condenou o ex-presidente Jair Bolsonaro a 27 anos e 3 meses de prisão por crimes ligados à trama golpista, por quatro votos a um. E em outubro de 2026 o país vive novas eleições gerais, com o primeiro turno realizado em 4 de outubro e o segundo marcado para 25 de outubro. A democracia se mantém quando vencedores e perdedores respeitam as regras.</p><p>Recorte regional, Goiás: depois da Revolução de 1930, Pedro Ludovico Teixeira foi nomeado interventor em Goiás e pôs fim ao domínio das oligarquias tradicionais. Em 1933, foi lançada a pedra fundamental de Goiânia, símbolo de modernização do Centro-Oeste. Repare que esse processo ocorreu em um governo provisório, em que interventores substituíam governadores eleitos.</p></section>
+      <h2 class="questoes-titulo">Questões sobre a democracia hoje</h2>
+<div class="questao" data-questao="5"><div class="enunciado"><span class="num-q">5</span> O texto afirma que “a democracia se mantém quando vencedores e perdedores respeitam as regras”. Usando o impeachment de Collor (1992), a chegada da oposição ao poder (2002) e os ataques de 8 de janeiro de 2023, explique como o respeito ou o desrespeito às regras aparece em cada caso. Em seguida, lembre uma situação em que você, ou alguém próximo, perdeu uma disputa (uma votação, um campeonato, uma decisão em grupo) e diga se aceitou o resultado, justificando por que aceitar ou não aceitar a derrota importa para a convivência coletiva.</div><textarea id="resp-5" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>Collor: o afastamento ocorreu dentro das regras constitucionais, o que mostra que as instituições podem corrigir abusos sem ruptura. 2002: a oposição chegou ao poder pelo voto, e o governo anterior aceitou a alternância, sinal de democracia consolidada. 8 de janeiro de 2023: manifestantes que não aceitavam o resultado da eleição invadiram a sede dos Três Poderes; é o caso de desrespeito às regras, e a responsabilização posterior (como a condenação de 2025 mencionada no texto) mostra que a democracia também se defende aplicando a lei a todos. A segunda parte aceita relatos diversos: valorizar respostas que relacionem aceitar a derrota a manter a confiança no processo, a possibilidade de tentar de novo e a convivência com quem pensa diferente.</div></div>
+<div class="questao" data-questao="6"><div class="enunciado"><span class="num-q">6</span> Um país pode ter eleições e, mesmo assim, não ser democrático? Responda usando a Primeira República como exemplo central. Considere também o caso de Goiás: depois de 1930, Pedro Ludovico Teixeira, nomeado interventor em um governo provisório, pôs fim ao domínio das oligarquias, embora interventores substituíssem governadores eleitos. Avalie se é possível combater uma oligarquia por meios que não são democráticos e quais seriam os riscos. Conclua propondo uma regra simples que, na sua escola ou na sua cidade, ajudaria a proteger as decisões coletivas de abusos, e explique como ela funcionaria.</div><textarea id="resp-6" class="campo-resposta dissertativa" data-min="140" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 140)</div><div class="comentario-prof"><b>Comentário do professor</b>Sim: a Primeira República tinha eleições regulares, mas sem voto livre (voto aberto, cabresto), sem competição (fraude, degola) e sem resultados respeitados; o ritual existia, mas não o poder do povo. Em Goiás, o fim do domínio de oligarquias tradicionais por um interventor nomeado é ambíguo: quebrou um poder concentrado, mas o fez em governo provisório, sem governadores eleitos, e por isso não pode ser chamado de democrático. A avaliação deve reconhecer o argumento a favor (romper privilégios) e os riscos (concentrar poder em quem não foi escolhido, abrir caminho para novo autoritarismo). A proposta final deve ser concreta e viável (voto secreto, mandato com prazo, prestação de contas, registro das decisões em ata, canal para contestar), com explicação de seu funcionamento; aceitar propostas diversas.</div></div>
+
+      <section class="texto-apoio selecionavel">
+        <div class="referencia-box" style="margin-top:0"><span class="rot">Fontes</span><p>Texto de leitura do capítulo “Democracia: o poder vem do povo” (Conceito 2), com ideias resumidas com palavras próprias.</p><p>BRASIL. Constituição da República Federativa do Brasil de 1988, art. 1º, parágrafo único: “Todo o poder emana do povo”.</p><p>Dados sobre as eleições de 1906 e 1918, o Plano Cohen (1937), as eleições diretas (1960-1989), a Constituição de 1946, o impeachment de 1992, os atos de 8 de janeiro de 2023 e a condenação de 11 de setembro de 2025, conforme apresentados no material de apoio.</p><p>Recorte regional: Pedro Ludovico Teixeira e a fundação de Goiânia (1933), conforme o material de apoio.</p></div>
+      </section>
+      <div class="alerta-incompleto" id="alerta-incompleto">Ainda há questões incompletas. Revise o tamanho mínimo de cada resposta antes de finalizar.</div>
+      <div class="acoes-finais">
+        <button class="btn btn-primario" onclick="finalizarAtividade()">Finalizar e ver comentários</button>
+        <button class="btn btn-secundario" onclick="refazerAtividade()">Refazer</button>
+        <button class="btn btn-pdf" id="btn-pdf" onclick="exportarPDF()" disabled aria-disabled="true">Exportar em PDF</button>
+        <span id="dica-pdf" style="flex-basis:100%;font-size:.84rem;color:#50577a;">O botão de PDF é liberado quando todas as questões estiverem respondidas (tamanho mínimo de cada resposta).</span>
+      </div>
+    </main>
+  </div>
+  <footer class="rodape">Colégio Estadual Rodolfo de Oliveira · CERO · 2026</footer>
+</div>
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card">
+    <h3>Atividade concluída!</h3>
+    <p>Suas seis respostas foram registradas. Os comentários do professor já estão disponíveis abaixo de cada questão para você comparar com o que escreveu.</p>
+    <button class="btn btn-primario" onclick="fecharPopup()">Continuar</button>
+  </div>
+</div>
+<script>
+/* ===== GATE DE NOME ===== */
+function iniciarAtividade(){
+  const nome = document.getElementById('nome-aluno').value.trim();
+  const turma = document.getElementById('turma-aluno').value.trim();
+  const aviso = document.getElementById('capa-aviso');
+  if(!nome){
+    aviso.style.display = 'block';
+    return;
+  }
+  aviso.style.display = 'none';
+  const hoje = new Date();
+  const dataFormatada = String(hoje.getDate()).padStart(2,'0') + '/' + String(hoje.getMonth()+1).padStart(2,'0') + '/' + hoje.getFullYear();
+  document.getElementById('header-nome').textContent = nome;
+  document.getElementById('ficha-nome').textContent = nome;
+  document.getElementById('ficha-data').textContent = dataFormatada;
+  document.getElementById('ficha-turma').textContent = turma || '—';
+  document.getElementById('capa').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+/* ===== CONTADOR DE CARACTERES E PROGRESSO ===== */
+const textareas = document.querySelectorAll('textarea.dissertativa');
+
+function atualizarProgresso(){
+  let respondidas = 0;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length >= min) respondidas++;
+  });
+  document.getElementById('contador-geral').textContent = 'Respondidas: ' + respondidas + '/' + textareas.length;
+  document.getElementById('barra-fill').style.width = (respondidas / textareas.length * 100) + '%';
+}
+
+textareas.forEach(function(t){
+  const contadorEl = t.parentElement.querySelector('.contador-chars');
+  const min = parseInt(t.dataset.min, 10);
+  t.addEventListener('input', function(){
+    contadorEl.textContent = t.value.length + ' caracteres (mínimo ' + min + ')';
+    atualizarProgresso();
+  });
+});
+
+/* ===== FINALIZAR ===== */
+function finalizarAtividade(){
+  let completo = true;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length < min) completo = false;
+  });
+
+  const alerta = document.getElementById('alerta-incompleto');
+  if(!completo){
+    alerta.classList.add('show');
+    alerta.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  alerta.classList.remove('show');
+
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.add('show');
+  });
+
+  document.getElementById('popup-overlay').classList.add('show');
+}
+
+function fecharPopup(){
+  document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function refazerAtividade(){
+  textareas.forEach(function(t){
+    t.value = '';
+    t.parentElement.querySelector('.contador-chars').textContent = '0 caracteres (mínimo ' + t.dataset.min + ')';
+  });
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.remove('show');
+  });
+  document.getElementById('alerta-incompleto').classList.remove('show');
+  atualizarProgresso();
+  window.scrollTo(0,0);
+}
+
+
+/* ===== EXPORTAR PDF ===== */
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function esc(str){ const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML.replace(/\n/g,'<br>'); }
+const QUESTOES = [{"num": "1", "enunc": "O texto afirma que “eleger não é o mesmo que viver em uma democracia”. Explique essa frase usando os três requisitos de uma eleição democrática (voto livre, amplo e competitivo) e pelo menos duas das condições adicionais citadas (liberdade de imprensa e de associação, separação dos Poderes, respeito às minorias). Depois, relembre uma eleição de representante de turma, de grêmio ou de outro grupo de que você já participou e avalie, com base nesses critérios, se ela foi democrática, justificando com o que de fato aconteceu.", "id": "resp-1", "coment": "Eleger é um ato; viver em democracia depende de condições que garantam que o ato tenha sentido: voto secreto e sem pressão (livre), aberto à maioria dos adultos (amplo) e com candidatos e partidos reais e resultados respeitados (competitivo); além disso, imprensa e associação livres permitem informar-se e se organizar, a separação dos Poderes limita abusos e os direitos das minorias impedem que a maioria esmague quem pensa diferente. Na segunda parte, valorizar respostas que apliquem cada critério ao caso real (voto secreto ou aberto, mais de um candidato, aceitação do resultado por quem perdeu) e que reconheçam falhas, se houve, sem exigir que a eleição relatada tenha sido perfeita."}, {"num": "2", "enunc": "O texto define democracia como o regime em que o poder vem do povo e diz que eleições sem liberdade ou sem concorrência são só uma “aparência de democracia”. Explique o que significa essa aparência e por que ela pode ser mais perigosa do que a ausência declarada de eleições. Em seguida, pense em uma decisão coletiva de que você participa (em casa, na escola, em um grupo de amigos, em uma igreja, em um time ou em uma comunidade virtual) e analise se ela tem substância democrática ou apenas aparência, indicando quem decide de fato.", "id": "resp-2", "coment": "Aparência de democracia é o ritual (urnas, votação, discurso) sem as condições que dão poder real ao povo: pressão sobre o eleitor, ausência de oposição, resultados que não são respeitados. Pode ser mais perigosa porque dá legitimidade a quem governa e desencoraja a contestação, já que “houve eleição”. A segunda parte pede uma análise concreta: valorizar quem identifica quem decide de fato (muitas vezes alguém com mais autoridade ou influência), se há abertura para discordar, se a decisão é revista, e distingue consulta de decisão. Não há resposta única."}, {"num": "3", "enunc": "Na Primeira República, o Brasil realizava eleições presidenciais regulares. Explique, a partir do voto aberto, do voto de cabresto, da fraude e da “degola”, por que esse período é descrito como de “eleições sem democracia”. Interprete também os números: por que 97,9% dos votos válidos em 1906 e 99,1% em 1918 indicam ausência de competição? Imagine, por fim, que você fosse empregado de uma fazenda no interior em 1910 e o patrão acompanhasse seu voto: como você agiria e o que isso diz sobre a liberdade do eleitor?", "id": "resp-3", "coment": "O voto aberto permitia que patrões e coronéis vigiassem o eleitor (voto de cabresto); a fraude na contagem e a degola (recusa de reconhecer oposicionistas eleitos) anulavam a competição, de modo que os resultados já eram esperados. Em uma disputa real, é quase impossível um vencedor chegar a mais de 97% dos válidos, pois a sociedade tem interesses e opiniões distintas; os números mostram que não havia concorrência efetiva nem resultado respeitado. A parte final é de raciocínio: a maioria perceberá que votaria como o patrão mandasse por medo de perder emprego, moradia ou proteção, o que mostra que o voto não era livre. Valorizar quem relacionar a dependência econômica e pessoal à falta de liberdade."}, {"num": "4", "enunc": "Compare três situações descritas no texto: a Constituição de 1946, o Estado Novo (1937-1945) e a ditadura iniciada em 1964. Em qual delas havia eleições competitivas e partidos nacionais e, mesmo assim, por que a democracia era limitada? Explique também o que o episódio do Plano Cohen, um documento forjado usado como pretexto para o golpe de 1937, revela sobre a importância de informações verdadeiras para a democracia. Por fim, descreva como você verifica se uma informação política que chega até você é confiável e avalie se esse método seria suficiente para desmascarar um documento como o Plano Cohen.", "id": "resp-4", "coment": "1946: eleições competitivas e partidos nacionais, mas os analfabetos continuavam sem voto (voto não amplo) e havia crises políticas constantes. Estado Novo: golpe, fechamento do Congresso e extinção dos partidos, sem competição. A ditadura de 1964, com 21 anos, manteve o país sem eleição direta para presidente de 1960 a 1989 (29 anos). O Plano Cohen mostra que a mentira pode ser instrumento para destruir a democracia, e que a liberdade de imprensa e a checagem são parte da defesa do regime. A parte final pede um método real de verificação (checar a fonte, comparar veículos, procurar a origem do documento, desconfiar de conteúdo que só confirma o que se quer ouvir); avaliar a consciência dos limites do método, pois documentos forjados podem enganar mesmo quem checa, e por isso imprensa livre e instituições independentes são necessárias."}, {"num": "5", "enunc": "O texto afirma que “a democracia se mantém quando vencedores e perdedores respeitam as regras”. Usando o impeachment de Collor (1992), a chegada da oposição ao poder (2002) e os ataques de 8 de janeiro de 2023, explique como o respeito ou o desrespeito às regras aparece em cada caso. Em seguida, lembre uma situação em que você, ou alguém próximo, perdeu uma disputa (uma votação, um campeonato, uma decisão em grupo) e diga se aceitou o resultado, justificando por que aceitar ou não aceitar a derrota importa para a convivência coletiva.", "id": "resp-5", "coment": "Collor: o afastamento ocorreu dentro das regras constitucionais, o que mostra que as instituições podem corrigir abusos sem ruptura. 2002: a oposição chegou ao poder pelo voto, e o governo anterior aceitou a alternância, sinal de democracia consolidada. 8 de janeiro de 2023: manifestantes que não aceitavam o resultado da eleição invadiram a sede dos Três Poderes; é o caso de desrespeito às regras, e a responsabilização posterior (como a condenação de 2025 mencionada no texto) mostra que a democracia também se defende aplicando a lei a todos. A segunda parte aceita relatos diversos: valorizar respostas que relacionem aceitar a derrota a manter a confiança no processo, a possibilidade de tentar de novo e a convivência com quem pensa diferente."}, {"num": "6", "enunc": "Um país pode ter eleições e, mesmo assim, não ser democrático? Responda usando a Primeira República como exemplo central. Considere também o caso de Goiás: depois de 1930, Pedro Ludovico Teixeira, nomeado interventor em um governo provisório, pôs fim ao domínio das oligarquias, embora interventores substituíssem governadores eleitos. Avalie se é possível combater uma oligarquia por meios que não são democráticos e quais seriam os riscos. Conclua propondo uma regra simples que, na sua escola ou na sua cidade, ajudaria a proteger as decisões coletivas de abusos, e explique como ela funcionaria.", "id": "resp-6", "coment": "Sim: a Primeira República tinha eleições regulares, mas sem voto livre (voto aberto, cabresto), sem competição (fraude, degola) e sem resultados respeitados; o ritual existia, mas não o poder do povo. Em Goiás, o fim do domínio de oligarquias tradicionais por um interventor nomeado é ambíguo: quebrou um poder concentrado, mas o fez em governo provisório, sem governadores eleitos, e por isso não pode ser chamado de democrático. A avaliação deve reconhecer o argumento a favor (romper privilégios) e os riscos (concentrar poder em quem não foi escolhido, abrir caminho para novo autoritarismo). A proposta final deve ser concreta e viável (voto secreto, mandato com prazo, prestação de contas, registro das decisões em ata, canal para contestar), com explicação de seu funcionamento; aceitar propostas diversas."}];
+const APOIO = [["Por que ter eleições não basta", "A palavra democracia vem do grego e junta demos (povo) e kratos (poder). Em uma democracia, o poder pertence ao povo, que o exerce diretamente ou por meio de representantes. A Constituição brasileira de 1988 diz isso logo no início: “Todo o poder emana do povo”. Mas atenção: eleger não é o mesmo que viver em uma democracia. Para que uma eleição seja democrática, o voto precisa ser livre (secreto e sem pressão), amplo (aberto à maioria dos adultos) e competitivo (com candidatos e partidos de verdade e resultados respeitados). Também são necessárias a liberdade de imprensa e de associação, a separação entre os Poderes Executivo, Legislativo e Judiciário e o respeito aos direitos das minorias. Você já viveu uma experiência democrática em escala pequena: a eleição do representante de turma ou do grêmio estudantil. Ela só tem valor se o voto for secreto, se houver mais de um candidato e se todos aceitarem o resultado, inclusive quem perdeu. Democracia: regime em que o poder vem do povo, por eleições livres e competitivas, com liberdade de expressão e de organização e respeito às regras e aos direitos de todos. Eleições sem liberdade ou sem concorrência são só uma aparência de democracia."], ["Eleições sem democracia: da Primeira República à ditadura", "Entre 1894 e 1930, o Brasil realizou eleições presidenciais regulares. No entanto, o voto era aberto, o que permitia a patrões e coronéis vigiar os eleitores, o chamado voto de cabresto. Havia fraudes na contagem e a recusa de reconhecer candidatos de oposição eleitos, a “degola”. Os resultados falam por si: em 1906, o vencedor teve 97,9% dos votos válidos; em 1918, 99,1%. Disputas reais não produzem números assim. Em 1932, o Código Eleitoral criou a Justiça Eleitoral para combater a fraude. Mas, em 1937, Getúlio Vargas deu um golpe, usando como pretexto o Plano Cohen, um documento forjado sobre uma suposta conspiração comunista. O Congresso foi fechado e os partidos foram extintos. Depois da queda de Vargas, a Constituição de 1946 trouxe eleições competitivas e partidos nacionais, mas os analfabetos continuavam sem voto e as crises políticas eram constantes. Em 1964, um golpe civil-militar inaugurou uma ditadura de 21 anos. O Brasil ficou 29 anos sem eleição direta para presidente, de 1960 a 1989."], ["Da redemocratização à atualidade", "A campanha das Diretas Já (1983-1984), a eleição indireta de Tancredo Neves (1985) e a Constituição de 1988 abriram o período democrático mais longo da história republicana: são mais de 41 anos. Nesse tempo, o país elegeu presidentes por voto direto, realizou plebiscitos, afastou um presidente por impeachment dentro das regras constitucionais (Collor, em 1992) e viu a oposição chegar ao poder (2002). Isso não significa que a democracia esteja garantida para sempre. Em 8 de janeiro de 2023, a Praça dos Três Poderes foi invadida por manifestantes que não aceitavam o resultado da eleição. Em 11 de setembro de 2025, a 1ª Turma do Supremo Tribunal Federal condenou o ex-presidente Jair Bolsonaro a 27 anos e 3 meses de prisão por crimes ligados à trama golpista, por quatro votos a um. E em outubro de 2026 o país vive novas eleições gerais, com o primeiro turno realizado em 4 de outubro e o segundo marcado para 25 de outubro. A democracia se mantém quando vencedores e perdedores respeitam as regras. Recorte regional, Goiás: depois da Revolução de 1930, Pedro Ludovico Teixeira foi nomeado interventor em Goiás e pôs fim ao domínio das oligarquias tradicionais. Em 1933, foi lançada a pedra fundamental de Goiânia, símbolo de modernização do Centro-Oeste. Repare que esse processo ocorreu em um governo provisório, em que interventores substituíam governadores eleitos."]];
+const GRUPOS = [[0,1],[2,3],[4,5]];
+function todasRespondidas(){
+  const tas=document.querySelectorAll('textarea.dissertativa');
+  if(!tas.length) return false;
+  return Array.prototype.every.call(tas,function(t){ return t.value.trim().length >= (parseInt(t.dataset.min,10)||1); });
+}
+function atualizarBotaoPDF(){
+  const b=document.getElementById('btn-pdf'); if(!b) return;
+  const ok=todasRespondidas();
+  b.disabled=!ok; b.setAttribute('aria-disabled',String(!ok));
+  b.title=ok?'':'Responda todas as questões para liberar a exportação.';
+  const d=document.getElementById('dica-pdf'); if(d) d.style.display=ok?'none':'block';
+}
+document.addEventListener('input',function(e){ if(e.target&&e.target.matches&&e.target.matches('textarea.dissertativa')) atualizarBotaoPDF(); });
+document.addEventListener('DOMContentLoaded',atualizarBotaoPDF);
+setTimeout(atualizarBotaoPDF,0);
+async function exportarPDF(){
+  if(!todasRespondidas()){ atualizarBotaoPDF(); const a=document.getElementById('alerta-incompleto'); if(a){a.classList.add('show');a.scrollIntoView({behavior:'smooth',block:'center'});} return; }
+  const overlay=document.createElement('div'); overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(11,20,56,.6);display:flex;align-items:center;justify-content:center;z-index:999;';
+  overlay.innerHTML='<div style="background:#fff;border-radius:14px;padding:32px 36px;text-align:center;max-width:300px;box-shadow:0 10px 30px rgba(47,74,156,.3);font-family:\'Source Serif 4\',serif;"><h4 style="margin:0 0 4px;color:#14214f;font-family:\'Playfair Display\',serif;">Gerando PDF…</h4><p style="margin:0 0 14px;color:#50577a;font-size:.86rem;">Aguarde alguns instantes.</p><div style="background:#dbe2f1;border-radius:6px;overflow:hidden;height:8px;"><div id="pdf-prog" style="height:100%;width:0%;background:#2f4a9c;transition:width .2s ease;"></div></div><div id="pdf-prog-txt" style="margin-top:8px;font-family:\'JetBrains Mono\',monospace;font-size:.74rem;color:#50577a;">0%</div></div>';
+  document.body.appendChild(overlay); await sleep(80);
+  function setP(pct,msg){ const pp=document.getElementById('pdf-prog'),pt=document.getElementById('pdf-prog-txt'); if(pp)pp.style.width=pct+'%'; if(pt)pt.textContent=msg||(pct+'%'); }
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:'a4',hotfixes:['px_scaling']});
+    const PW=pdf.internal.pageSize.getWidth(),PH=pdf.internal.pageSize.getHeight();
+    const ML=28,CW=PW-ML*2; let y=ML;
+    async function addImg(el){
+      const canvas=await html2canvas(el,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0,windowWidth:860});
+      const imgW=CW,imgH=(canvas.height/canvas.width)*imgW; const dataUrl=canvas.toDataURL('image/jpeg',.92),avail=PH-ML*2;
+      if(imgH<=avail){ if(y+imgH>PH-ML){pdf.addPage();y=ML;} pdf.addImage(dataUrl,'JPEG',ML,y,imgW,imgH); y+=imgH+8; }
+      else{
+        const pxPerPt=canvas.width/imgW; let srcY=0;
+        while(srcY<canvas.height){
+          const availPt=PH-y-ML,sliceH_pt=Math.min(availPt,avail);
+          const sliceH_px=Math.round(sliceH_pt*pxPerPt),actualH=Math.min(sliceH_px,canvas.height-srcY);
+          const tmp=document.createElement('canvas'); tmp.width=canvas.width; tmp.height=actualH;
+          tmp.getContext('2d').drawImage(canvas,0,srcY,canvas.width,actualH,0,0,canvas.width,actualH);
+          const sliceUrl=tmp.toDataURL('image/jpeg',.92),slicePt=(actualH/canvas.width)*imgW;
+          pdf.addImage(sliceUrl,'JPEG',ML,y,imgW,slicePt); srcY+=actualH; y+=slicePt;
+          if(srcY<canvas.height){pdf.addPage();y=ML;}
+        } y+=8;
+      }
+    }
+    async function band(tag,txt){
+      const b=document.createElement('div'); b.style.cssText='width:860px;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      b.innerHTML='<div style="background:linear-gradient(90deg,#2f4a9c,#14214f);border-radius:8px;padding:12px 22px;display:flex;align-items:center;gap:12px"><span style="background:rgba(255,255,255,.2);color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;border-radius:20px;padding:3px 12px">'+tag+'</span><span style="color:#fff;font-size:15px;font-weight:700">'+txt+'</span></div>';
+      document.body.appendChild(b); await sleep(20); await addImg(b); document.body.removeChild(b);
+    }
+    const nome=document.getElementById('header-nome').textContent||'Aluno(a)';
+    const turma=document.getElementById('ficha-turma').textContent||'—';
+    const now=new Date(); const dtStr=now.toLocaleDateString('pt-BR')+' às '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    setP(5,'Preparando capa…'); await sleep(40);
+    const coverEl=document.createElement('div'); coverEl.style.cssText='width:860px;font-family:Arial,sans-serif;overflow:hidden;position:absolute;left:-9999px;top:0';
+    coverEl.innerHTML='<div style="background:linear-gradient(135deg,#0b1438 0%,#2f4a9c 60%,#8fa3e0 100%);padding:32px 48px 28px;color:white"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.85;font-weight:700;margin-bottom:6px">História · 2ª Série do Ensino Médio · GO-EMCHS602A</div><div style="font-size:26px;font-weight:900;line-height:1.2;margin-bottom:5px">Democracia: o poder vem do povo</div><div style="font-size:13px;opacity:.9;font-style:italic">Texto de leitura · Democracia · 6 questões dissertativas</div></div><div style="background:#eef1f8;padding:22px 48px 26px;border-bottom:3px solid #f4dfb4"><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#2f4a9c;font-weight:700;margin-bottom:5px">Aluno(a)</div><div style="font-size:20px;font-weight:700;color:#161b2e;border-bottom:2.5px solid #2f4a9c;padding-bottom:6px;display:inline-block;margin-bottom:16px">'+esc(nome)+'</div><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#2f4a9c">'+esc(turma)+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Turma</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#b7791f">6</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Dissertativas</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:140px"><div style="font-size:13px;font-weight:700;color:#333">'+dtStr+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Gerado em</div></div></div><div style="font-size:9px;color:#bbb;margin-top:14px">Colégio Estadual Rodolfo de Oliveira · Goiás · 2026</div></div>';
+    document.body.appendChild(coverEl); await sleep(60); await addImg(coverEl); document.body.removeChild(coverEl);
+    setP(15,'Preparando texto de apoio…'); await sleep(20);
+    async function bloco(el){ document.body.appendChild(el); await sleep(20); await addImg(el); document.body.removeChild(el); }
+    for(let k=0;k<APOIO.length;k++){
+      await band('TEXTO '+(k+1)+' DE '+APOIO.length, APOIO[k][0]);
+      const textoEl=document.createElement('div'); textoEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #d3daec;border-radius:10px;position:absolute;left:-9999px;top:0';
+      textoEl.innerHTML='<div style="padding:18px 24px;background:#fafbfe"><p style="font-size:12.5px;color:#161b2e;line-height:1.8;margin:0;text-align:justify">'+esc(APOIO[k][1])+'</p></div>';
+      await bloco(textoEl);
+      for(let j=0;j<GRUPOS[k].length;j++){
+        const i=GRUPOS[k][j]; const q=QUESTOES[i]; setP(20+Math.round(i/QUESTOES.length*65),'Questão '+q.num+'/'+QUESTOES.length+'…'); await sleep(12);
+      const valor=document.getElementById(q.id)?document.getElementById(q.id).value:'';
+      const qEl=document.createElement('div'); qEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #d3daec;border-radius:10px;position:absolute;left:-9999px;top:0';
+      qEl.innerHTML='<div style="background:linear-gradient(90deg,#2f4a9c,#14214f);padding:10px 22px;display:flex;justify-content:space-between;align-items:center"><span style="color:white;font-weight:700;font-size:13px;letter-spacing:.8px">QUESTÃO '+q.num+'</span><span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;padding:3px 12px;border-radius:20px;font-weight:600">Dissertativa</span></div><div style="padding:18px 24px 16px;background:#fafbfe"><div style="font-size:13px;font-weight:700;color:#161b2e;line-height:1.6;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee">'+esc(q.enunc)+'</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:4px;height:15px;background:#2f4a9c;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#2f4a9c;text-transform:uppercase;letter-spacing:1.5px">Resposta do Aluno(a)</div></div><div style="background:#e4e9f6;border:1.5px solid #aebbe3;border-radius:8px;padding:13px 16px;min-height:50px;margin-bottom:12px"><div style="font-size:12.5px;color:#161b2e;line-height:1.8;white-space:pre-wrap">'+(esc(valor)||'<span style="color:#aaa">(sem resposta)</span>')+'</div></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div style="width:4px;height:15px;background:#b7791f;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#b7791f;text-transform:uppercase;letter-spacing:1.5px">Comentário do Professor</div></div><div style="background:#eef1fa;border:1.5px solid #f4dfb4;border-radius:8px;padding:13px 16px"><div style="font-size:12px;color:#14214f;line-height:1.8">'+esc(q.coment)+'</div></div></div>';
+      document.body.appendChild(qEl); await sleep(12); await addImg(qEl); document.body.removeChild(qEl);
+      }
+    }
+    const fEl0=document.createElement('div'); fEl0.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #d3daec;border-radius:10px;position:absolute;left:-9999px;top:0';
+    fEl0.innerHTML='<div style="padding:14px 24px;background:#fafbfe"><div style="font-size:10px;color:#50577a;font-family:monospace">Texto de leitura do capítulo “Democracia: o poder vem do povo” (Conceito 2), com ideias resumidas com palavras próprias. · BRASIL. Constituição da República Federativa do Brasil de 1988, art. 1º, parágrafo único: “Todo o poder emana do povo”. · Dados sobre as eleições de 1906 e 1918, o Plano Cohen (1937), as eleições diretas (1960-1989), a Constituição de 1946, o impeachment de 1992, os atos de 8 de janeiro de 2023 e a condenação de 11 de setembro de 2025, conforme apresentados no material de apoio. · Recorte regional: Pedro Ludovico Teixeira e a fundação de Goiânia (1933), conforme o material de apoio.</div></div>';
+    await bloco(fEl0);
+    setP(92,'Finalizando…'); await sleep(30);
+    const totalPages=pdf.getNumberOfPages();
+    for(let p=1;p<=totalPages;p++){
+      pdf.setPage(p);
+      const fEl=document.createElement('div');
+      fEl.style.cssText='width:'+Math.round(CW)+'px;height:22px;background:#eef1f8;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:10px;color:#888;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      fEl.innerHTML='<span>Democracia: o poder vem do povo · '+esc(nome)+'</span><span>Página '+p+' de '+totalPages+'</span>';
+      document.body.appendChild(fEl);
+      const fc=await html2canvas(fEl,{scale:2,logging:false,backgroundColor:'#eef1f8'}); document.body.removeChild(fEl);
+      const fUrl=fc.toDataURL('image/jpeg',.9),fH=(fc.height/fc.width)*CW;
+      pdf.setFillColor(253,238,244); pdf.rect(ML,PH-fH,CW,fH,'F'); pdf.addImage(fUrl,'JPEG',ML,PH-fH,CW,fH);
+    }
+    setP(100,'Salvando…'); await sleep(200);
+    pdf.save('Democracia_o_poder_vem_do_povo_'+nome.replace(/[^a-zA-Z0-9_\-]/g,'_')+'.pdf');
+  }catch(err){ console.error(err); alert('Erro ao gerar PDF: '+err.message); }
+  finally{ const ov=document.getElementById('pdf-overlay'); if(ov)document.body.removeChild(ov); }
+}
+
+/* ===== PROTEÇÃO ANTI-COLA E ANTI-CÓPIA (página inteira) ===== */
+(function () {
+  const LIMITE_BLOCO = 25;
+  const CAMPOS = document.querySelectorAll('textarea.dissertativa, .campo-resposta');
+  const ehCampo = function (el) { return el && el.closest && el.closest('textarea.dissertativa, .campo-resposta'); };
+
+  function mostrarToast(mensagem) {
+    let toast = document.getElementById('anti-cola-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'anti-cola-toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#14214f;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = mensagem;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function () { toast.style.opacity = '0'; }, 2500);
+  }
+  function bloquear(e, msg) { e.preventDefault(); e.stopPropagation(); mostrarToast(msg || 'Copiar e colar não são permitidos nesta atividade.'); return false; }
+
+  /* 1) Página inteira: copiar, recortar, colar, arrastar, selecionar e menu de contexto */
+  ['copy', 'cut', 'paste', 'dragstart', 'drop', 'dragover', 'contextmenu', 'selectstart'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      if (evt === 'selectstart' && ehCampo(e.target)) return;      /* permite posicionar o cursor no campo */
+      if (evt === 'selectstart') { e.preventDefault(); return; }
+      bloquear(e);
+    }, true);
+  });
+
+  /* 2) Atalhos de teclado */
+  document.addEventListener('keydown', function (e) {
+    const k = (e.key || '').toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    if (mod && ['c', 'x', 'v', 'a', 'p', 's', 'u'].indexOf(k) >= 0) return bloquear(e);
+    if (e.shiftKey && k === 'insert') return bloquear(e);                 /* Shift+Insert (colar) */
+    if (e.ctrlKey && k === 'insert') return bloquear(e);                  /* Ctrl+Insert (copiar) */
+    if (e.shiftKey && k === 'delete') return bloquear(e);                 /* Shift+Delete (recortar) */
+    if (k === 'f12' || (mod && e.shiftKey && ['i', 'j', 'c'].indexOf(k) >= 0)) return bloquear(e, 'Esta função está desativada nesta atividade.');
+    if (k === 'printscreen') {
+      try { navigator.clipboard.writeText(''); } catch (_) {}
+      mostrarToast('Captura de tela não recomendada nesta atividade.');
+    }
+  }, true);
+
+  /* 3) Campos de resposta: colar por qualquer via, texto em bloco e autocomplete */
+  CAMPOS.forEach(function (campo) {
+    campo.setAttribute('autocomplete', 'off');
+    campo.setAttribute('autocorrect', 'off');
+    campo.setAttribute('autocapitalize', 'off');
+    campo.setAttribute('spellcheck', 'false');
+
+    campo.addEventListener('beforeinput', function (e) {
+      const t = e.inputType || '';
+      if (t === 'insertFromPaste' || t === 'insertFromDrop' || t === 'insertFromYank' || t === 'insertFromPasteAsQuotation') {
+        bloquear(e);
+      }
+    });
+
+    let valorAnterior = campo.value;
+    campo.addEventListener('input', function (e) {
+      const diferenca = campo.value.length - valorAnterior.length;
+      if (diferenca >= LIMITE_BLOCO) {                                    /* texto entrou de uma vez só */
+        campo.value = valorAnterior;
+        mostrarToast('Escreva com suas palavras: texto colado foi removido.');
+        campo.dispatchEvent(new Event('input'));                          /* atualiza contador e progresso */
+      } else {
+        valorAnterior = campo.value;
+      }
+    });
+  });
+
+  /* 4) Impressão do conteúdo da página desativada (use o botão Exportar em PDF) */
+  const st = document.createElement('style');
+  st.textContent = '@media print{body *{visibility:hidden!important}body::before{content:"Impressão desativada. Use o botão Exportar em PDF.";visibility:visible!important;display:block;padding:40px;font:16px sans-serif}}';
+  document.head.appendChild(st);
+})();
+
+</script>
+</body>
+</html>

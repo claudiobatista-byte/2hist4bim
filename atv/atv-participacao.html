@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texto de Apoio — Participação popular: além do voto | CERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f3f8f2;
+    --bg-alt:#fff3c4;
+    --paper:#ffffff;
+    --ink:#10223b;
+    --ink-soft:#4b5b73;
+    --roxo:#1a8a4a;
+    --roxo-dark:#0e2f6b;
+    --roxo-2:#2a62c9;
+    --cobre:#a67800;
+    --cobre-light:#ffd23f;
+    --line:#d4e3d8;
+    --shadow:0 10px 30px rgba(26,138,74,.18);
+    --radius:14px;
+    --font-title:'Playfair Display', serif;
+    --font-body:'Source Serif 4', serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    -webkit-user-select:none; -ms-user-select:none;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.7;
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  
+  .campo-resposta{user-select:text; -webkit-user-select:text;}
+
+  /* ===== CAPA / GATE ===== */
+  #capa{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(to bottom, #0a2a66, #1a8a4a, #f2c94c);
+    padding:24px;
+  }
+  #capa .grade-centralizada{
+    position:absolute;
+    top:0; bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:896px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.08;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px);
+    background-size:40px 40px;
+  }
+  .capa-card{
+    position:relative;
+    z-index:1;
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    max-width:480px;
+    width:100%;
+    padding:36px 32px;
+    text-align:center;
+  }
+  .capa-card .tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.7rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(26,138,74,.1); padding:5px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .capa-card h1{font-family:var(--font-title); font-size:1.6rem; margin:0 0 10px; color:var(--roxo-dark);}
+  .capa-card p.desc{color:var(--ink-soft); font-size:.94rem; margin:0 0 22px;}
+  .capa-card input{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:1rem; margin-bottom:14px;
+  }
+  .capa-card button{
+    width:100%; padding:13px; border:none; border-radius:8px;
+    background:var(--roxo); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+    font-family:var(--font-body); transition:filter .15s ease;
+  }
+  .capa-card button:hover{filter:brightness(1.15);}
+  .capa-aviso{font-size:.78rem; color:#a33; margin-top:8px; display:none;}
+
+  /* ===== APP ===== */
+  #app{display:none;}
+  .sticky-header{
+    position:sticky; top:0; z-index:50;
+    background:var(--roxo-dark); color:#e6f3ea;
+    padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    font-family:var(--font-mono); font-size:.82rem;
+  }
+  .sticky-header .aluno{font-family:var(--font-body); font-weight:600; font-size:.92rem;}
+  .barra-progresso-trilho{
+    flex:1; min-width:120px; height:8px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; margin:0 14px;
+  }
+  .barra-progresso-fill{height:100%; background:#ffd23f; width:0%; transition:width .3s ease;}
+
+  .wrap{max-width:800px; margin:0 auto; padding:32px 24px 60px;}
+
+  header.topo{margin-bottom:28px;}
+  header.topo .hero-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(26,138,74,.1); padding:5px 12px; border-radius:999px; margin-bottom:12px;
+  }
+  header.topo h1{font-family:var(--font-title); font-size:clamp(1.5rem,4vw,2rem); margin:0 0 8px; color:var(--ink);}
+  header.topo p.sub{color:var(--ink-soft); margin:0; font-size:.98rem;}
+  .descritor-bar{
+    font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; margin-bottom:14px; display:inline-block;
+  }
+  .ficha-id{
+    display:flex; flex-wrap:wrap; gap:10px 26px;
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-top:12px; font-family:var(--font-mono); font-size:.84rem; color:var(--ink);
+  }
+  .ficha-id span b{color:var(--roxo-dark);}
+
+  /* ===== TEXTO DE APOIO ===== */
+  .texto-apoio{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:28px 30px; margin-bottom:30px;
+  }
+  .texto-apoio h2{font-family:var(--font-title); font-size:1.25rem; color:var(--roxo-dark); margin:0 0 4px;}
+  .texto-apoio h3{font-family:var(--font-title); font-size:1.05rem; color:var(--roxo-2); margin:22px 0 8px;}
+  .texto-apoio .fonte-tag{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-bottom:16px; display:block;}
+  .texto-apoio p{margin:0 0 14px; color:var(--ink);}
+  .texto-apoio p:last-of-type{margin-bottom:0;}
+  .texto-apoio .destaque{
+    background:var(--bg-alt); border-left:4px solid var(--cobre); border-radius:0 8px 8px 0;
+    padding:12px 16px; margin:0 0 14px; font-size:.95rem;
+  }
+  .texto-apoio .mito{
+    background:#f7fbf8; border:1px solid var(--line); border-top:4px solid var(--roxo-2);
+    border-radius:10px; padding:16px 18px; margin:0 0 14px;
+  }
+  .texto-apoio .mito .rot{
+    font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--cobre); display:block; margin-bottom:6px;
+  }
+  .texto-apoio .mito p{font-size:.93rem;}
+
+  .tabela-lentes{width:100%; border-collapse:collapse; margin:6px 0 14px; font-size:.9rem;}
+  .tabela-lentes caption{
+    caption-side:top; text-align:left; font-family:var(--font-mono); font-size:.68rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--cobre); padding-bottom:6px;
+  }
+  .tabela-lentes th, .tabela-lentes td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top;}
+  .tabela-lentes th{background:var(--roxo); color:#fff; font-family:var(--font-title); font-weight:600; font-size:.9rem;}
+  .tabela-lentes tbody tr:nth-child(even){background:var(--bg-alt);}
+  .tabela-lentes td:first-child{font-weight:700; color:var(--roxo-dark); white-space:nowrap;}
+  .tabela-wrap{overflow-x:auto;}
+
+  .referencia-box{
+    margin-top:20px; padding:14px 16px;
+    background:var(--bg-alt); border-left:3px solid var(--cobre); border-radius:0 8px 8px 0;
+  }
+  .referencia-box .rot{
+    font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--roxo-dark); display:block; margin-bottom:6px;
+  }
+  .referencia-box p{margin:0 0 6px; font-size:.86rem; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.6;}
+  .referencia-box p:last-child{margin-bottom:0;}
+
+  /* ===== QUESTOES ===== */
+  .questoes-titulo{
+    font-family:var(--font-title); font-size:1.2rem; color:var(--roxo-dark);
+    margin:0 0 18px; display:flex; align-items:center; gap:10px;
+  }
+  .questao{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; margin-bottom:18px;
+  }
+  .questao .num-q{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--roxo);
+    color:#fff; font-family:var(--font-mono); font-size:.78rem; margin-right:8px; flex-shrink:0;
+  }
+  .questao .enunciado{font-weight:600; color:var(--ink); margin-bottom:12px; display:flex; align-items:flex-start;}
+  .questao textarea{
+    width:100%; min-height:100px; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--ink);
+  }
+  .questao textarea:focus{outline:2px solid var(--roxo-2); outline-offset:1px;}
+  .contador-chars{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-top:6px; text-align:right;}
+
+  .comentario-prof{
+    display:none; margin-top:14px; padding:14px 16px;
+    background:#e6f3ea; border:1px solid #b9dcc6; border-radius:8px; font-size:.9rem; color:var(--roxo-dark);
+  }
+  .comentario-prof.show{display:block;}
+  .comentario-prof b{display:block; margin-bottom:4px; font-family:var(--font-title); font-size:.92rem;}
+
+  /* ===== ALERTA / FINALIZAR ===== */
+  .alerta-incompleto{
+    display:none; background:#fdf1e6; border:1px solid #f0d2b3; color:#8a4a10;
+    padding:12px 16px; border-radius:8px; font-size:.9rem; margin-bottom:16px;
+  }
+  .alerta-incompleto.show{display:block;}
+
+  .acoes-finais{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;}
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:.94rem; padding:12px 22px;
+    border-radius:8px; border:none; cursor:pointer; transition:filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.1);}
+  .btn-primario{background:var(--roxo); color:#fff;}
+  .btn-secundario{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-pdf{background:var(--cobre); color:#fff;}
+  .btn[disabled]{opacity:.5; cursor:not-allowed;}
+
+  /* ===== POPUP ===== */
+  .popup-overlay{
+    display:none; position:fixed; inset:0; background:rgba(10,42,102,.6);
+    align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .popup-overlay.show{display:flex;}
+  .popup-card{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    max-width:420px; width:100%; padding:32px 28px; text-align:center;
+  }
+  .popup-card .emoji{display:none;}
+  .popup-card h3{font-family:var(--font-title); margin:0 0 8px; color:var(--roxo-dark);}
+  .popup-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 20px;}
+
+  footer.rodape{text-align:center; padding:24px; color:var(--ink-soft); font-family:var(--font-mono); font-size:.8rem;}
+
+  @media (max-width:600px){
+    .wrap{padding:24px 16px 50px;}
+    .texto-apoio, .questao{padding:18px 18px;}
+  }
+
+  *{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+  textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:none}
+  .chip-tema{display:inline-block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--roxo);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .btn-pdf{background:#a67800}
+  .btn-pdf:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+  .questao .pessoal{display:inline-block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#a67800;background:var(--cobre-light);border-radius:999px;padding:3px 10px;margin:0 0 10px 34px}
+  .texto-apoio .mito{border-top-color:var(--roxo-2)}
+</style>
+</head>
+<body>
+<div id="capa">
+  <div class="grade-centralizada"></div>
+  <div class="capa-card">
+    <span class="tag">2ª série · História · CERO</span>
+    <h1>Participação popular: além do voto</h1>
+    <p class="desc">Texto de leitura e seis questões dissertativas sobre as formas pelas quais as pessoas influenciam as decisões coletivas na história do Brasil. Preencha os dados para começar.</p>
+    <input type="text" id="nome-aluno" placeholder="Seu nome completo">
+    <input type="text" id="turma-aluno" placeholder="Turma (ex.: 2º A)">
+    <button onclick="iniciarAtividade()">Iniciar atividade</button>
+    <div class="capa-aviso" id="capa-aviso">Por favor, digite seu nome para continuar.</div>
+  </div>
+</div>
+<div id="app">
+  <div class="sticky-header">
+    <span class="aluno" id="header-nome"></span>
+    <div class="barra-progresso-trilho"><div class="barra-progresso-fill" id="barra-fill"></div></div>
+    <span id="contador-geral">Respondidas: 0/6</span>
+  </div>
+  <div class="wrap">
+    <header class="topo selecionavel">
+      <span class="descritor-bar">Ciências Humanas e Sociais Aplicadas / História · 2ª série do Ensino Médio &nbsp;|&nbsp; (GO-EMCHS602A) – Primeira República e República contemporânea</span>
+      <span class="chip-tema" style="display:block;width:max-content;margin-top:10px;">Conceito 3 · Participação popular</span>
+      <h1>Participação popular: além do voto</h1>
+      <p class="sub">Leia cada parte com atenção e responda às seis questões que vêm logo abaixo dela. Fundamente suas respostas no texto.</p>
+      <div class="ficha-id" id="ficha-id">
+        <span><b>NOME:</b> <span id="ficha-nome"></span></span>
+        <span><b>DATA:</b> <span id="ficha-data"></span></span>
+        <span><b>TURMA:</b> <span id="ficha-turma"></span></span>
+      </div>
+    </header>
+    <main>
+      <section class="texto-apoio selecionavel"><h2>Participar não é apenas votar de dois em dois anos</h2><span class="fonte-tag">Texto de leitura para a 2ª série do Ensino Médio · Parte 1 de 3</span><p>Participação popular é tudo o que as pessoas fazem para influenciar decisões que afetam a vida coletiva: votar, filiar-se a um partido, criar um sindicato, escrever na imprensa, assinar um abaixo-assinado, fazer greve, ocupar uma praça, pressionar um parlamentar.</p><p>Podemos reunir essas formas em dois caminhos. A participação institucional acontece pelos canais previstos em lei: o voto, o plebiscito (consulta antes de uma decisão), o referendo (consulta para confirmar uma decisão), a iniciativa popular de projetos de lei e os conselhos de políticas públicas. A participação direta acontece pela mobilização coletiva: greves, passeatas, comícios, ocupações e campanhas na imprensa e nas redes sociais. Muitas vezes, ela nasce justamente quando os canais legais estão fechados.</p><div class="destaque" style="margin-top:14px"><b>Participação popular:</b> conjunto de ações pelas quais as pessoas influenciam decisões coletivas. Inclui o voto, mas também a organização em sindicatos, associações e movimentos sociais, a imprensa, a greve e as manifestações.</div></section>
+      <h2 class="questoes-titulo">Questões sobre o conceito de participação</h2>
+<div class="questao" data-questao="1"><div class="enunciado"><span class="num-q">1</span> Com suas palavras, defina participação popular e diferencie participação institucional de participação direta, citando pelo menos dois exemplos de cada uma. Depois, pense nas formas de participação que você já exerceu ou presenciou (na escola, em casa, na comunidade, em grupos ou na internet) e classifique cada uma delas como institucional ou direta, justificando a classificação.</div><textarea id="resp-1" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Participação popular: conjunto de ações pelas quais as pessoas influenciam decisões coletivas, incluindo, mas não se limitando ao, voto. Institucional: pelos canais previstos em lei (voto, plebiscito, referendo, iniciativa popular, conselhos de políticas públicas). Direta: mobilização coletiva (greves, passeatas, comícios, ocupações, campanhas na imprensa e nas redes). A segunda parte aceita exemplos variados (eleição de grêmio ou de representante de turma, conselho escolar, abaixo-assinado, grupo de moradores, campanha em rede social). Valorizar a classificação coerente e a justificativa pelo critério correto: a previsão em lei, e não a importância do assunto ou o tamanho do grupo.</div></div>
+<div class="questao" data-questao="2"><div class="enunciado"><span class="num-q">2</span> O texto diz que a participação direta “muitas vezes nasce justamente quando os canais legais estão fechados”. Diferencie plebiscito de referendo e explique por que a existência desses canais não elimina a participação direta. Depois, relate uma situação da sua vida (na escola, na família, no bairro ou em um grupo) em que você quis influenciar uma decisão e percebeu que o canal oficial não existia ou não bastava, dizendo o que fez ou poderia ter feito.</div><textarea id="resp-2" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Plebiscito: consulta antes de uma decisão; referendo: consulta para confirmar uma decisão já tomada. Canais legais podem ser limitados, lentos, difíceis de acessar ou controlados por quem decide, e há temas e grupos que não chegam às instituições; por isso a mobilização continua importante mesmo em regimes com canais abertos. A segunda parte aceita relatos diversos: valorizar respostas que identifiquem com clareza o canal que faltava ou não funcionou (conselho, direção, reunião de pais, associação de moradores) e a alternativa usada ou possível (abaixo-assinado, conversa coletiva, campanha, denúncia).</div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Do povo “bestializado” aos grandes movimentos do século XX</h3><span class="fonte-tag">Parte 2 de 3 · De 1889 à redemocratização</span><p>“O povo assistiu àquilo bestializado, atônito, surpreso, sem conhecer o que significava.” A frase é do jornalista republicano Aristides Lobo, sobre a Proclamação da República, em 1889, e foi discutida por José Murilo de Carvalho em Os bestializados (1987). Ela mostra que a mudança de regime foi feita sem consultar o povo. Como o voto era restrito e controlado, a participação foi para as ruas e para as fábricas. Em 1904, na Revolta da Vacina, a população do Rio de Janeiro protestou contra a vacinação obrigatória e contra reformas urbanas que expulsavam os pobres do centro. Em 1917, na Greve Geral, cerca de 70 mil trabalhadores pararam São Paulo e conquistaram, nos anos seguintes, as primeiras leis de proteção ao trabalho.</p><p>Entre 1947 e 1953, a campanha “O petróleo é nosso” reuniu estudantes, militares e sindicatos e contribuiu diretamente para a criação da Petrobras. Nos anos 1950, as Ligas Camponesas reuniram trabalhadores do campo que lutavam contra a expulsão das terras. Mesmo sob a ditadura militar, o povo voltou às ruas: em 1968, a Passeata dos Cem Mil, no Rio de Janeiro, protestou contra a violência da repressão; em 1978, os metalúrgicos do ABC paulista desafiaram a legislação autoritária e paralisaram as fábricas. Em 1984, os comícios das Diretas Já reuniram até 1,5 milhão de pessoas exigindo a volta do voto direto para presidente.</p></section>
+      <h2 class="questoes-titulo">Questões sobre os movimentos populares</h2>
+<div class="questao" data-questao="3"><div class="enunciado"><span class="num-q">3</span> Em 1889, segundo Aristides Lobo, o povo assistiu à Proclamação da República “bestializado, atônito”. Explique o que essa expressão revela sobre a relação entre o povo e o poder naquele momento e por que a Revolta da Vacina (1904) e a Greve Geral (1917) podem ser consideradas participação popular, mesmo sem canais institucionais acessíveis. Em seguida, descreva uma situação em que você ou alguém do seu convívio ficou “bestializado” diante de uma decisão importante tomada sem consulta (na escola, na família, no bairro ou na cidade) e diga o que teria mudado se houvesse um canal de participação.</div><textarea id="resp-3" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>A expressão indica que a mudança de regime foi feita sem consultar o povo e que a maioria não foi chamada a decidir nem entendia o que acontecia, em um contexto de voto restrito e controlado. Como os canais formais estavam fechados ou viciados, a participação foi para as ruas e as fábricas: a Revolta da Vacina reuniu moradores do Rio contra a vacinação obrigatória e contra reformas urbanas que expulsavam os pobres do centro; a Greve Geral de 1917 parou São Paulo (cerca de 70 mil trabalhadores) e levou, nos anos seguintes, às primeiras leis de proteção ao trabalho. A segunda parte exige uma situação concreta: valorizar quem identifica quem decidiu, por que a pessoa não foi ouvida e o que um canal (reunião, consulta, conselho) mudaria.</div></div>
+<div class="questao" data-questao="4"><div class="enunciado"><span class="num-q">4</span> Compare a campanha “O petróleo é nosso” (1947-1953), a Passeata dos Cem Mil (1968), as greves do ABC (1978) e as Diretas Já (1984). Que movimentos conseguiram resultados diretos e quais enfrentaram mais riscos por agir sob a ditadura? O que esses exemplos mostram sobre o que a participação direta consegue ou não consegue alcançar? Por fim, escolha um desses movimentos e explique se você teria participado dele naquele contexto, considerando as consequências possíveis.</div><textarea id="resp-4" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>“O petróleo é nosso” reuniu estudantes, militares e sindicatos e contribuiu diretamente para a criação da Petrobras, ou seja, teve resultado concreto. Passeata dos Cem Mil e greves do ABC aconteceram sob a ditadura: a primeira protestou contra a violência da repressão; a segunda desafiou a legislação autoritária, com riscos de repressão. As Diretas Já mobilizaram até 1,5 milhão de pessoas por uma mudança institucional; embora a emenda tenha sido derrotada em 1984, a pressão enfraqueceu o regime. Os exemplos mostram que a participação direta pode conquistar resultados imediatos ou, em outros casos, produzir efeitos graduais e simbólicos. A última parte aceita posições variadas, desde que ponderem riscos (repressão, perda de emprego) e motivos.</div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Participação institucionalizada e participação das ruas às redes</h3><span class="fonte-tag">Parte 3 de 3 · Da Constituinte às redes</span><p>Quando a ditadura acabou, a participação passou a integrar o desenho institucional. A Assembleia Nacional Constituinte recebeu cerca de 72 mil sugestões da população, e a Constituição de 1988 institucionalizou plebiscito, referendo, iniciativa popular e conselhos de políticas públicas. Em 1992, os “caras-pintadas”, jovens com o rosto pintado de verde e amarelo, ocuparam as ruas em manifestações pelo impeachment de Fernando Collor.</p><p>Em 2013, nas Jornadas de Junho, o Movimento Passe Livre protestou contra o aumento das tarifas de ônibus em São Paulo, desencadeando manifestações por todo o país. Em 2015, estudantes secundaristas ocuparam escolas em São Paulo contra a reorganização escolar. Em 2023, após os ataques antidemocráticos de 8 de janeiro, movimentos sociais e cidadãos foram às ruas em defesa das instituições democráticas. As redes sociais ampliaram a capacidade de mobilização em tempo recorde, mas também facilitaram a circulação de desinformação. Participar de modo consciente exige checar os fatos e conhecer as regras do jogo democrático.</p><p>Recorte regional, Goiás: entre 1950 e 1957, posseiros do norte de Goiás, na região de Trombas e Formoso, organizaram conselhos próprios e resistiram à grilagem de terras. O episódio mostra como a participação popular nasceu, no interior do Brasil, da luta por terra e por autonomia.</p></section>
+      <h2 class="questoes-titulo">Questões sobre participação hoje</h2>
+<div class="questao" data-questao="5"><div class="enunciado"><span class="num-q">5</span> Quando a ditadura acabou, a participação passou a integrar o desenho institucional. Explique o que significa institucionalizar a participação, citando as 72 mil sugestões à Constituinte e os canais previstos na Constituição de 1988. Mesmo assim, os caras-pintadas (1992), as Jornadas de Junho (2013) e as ocupações de escolas (2015) ocorreram: o que esses movimentos têm em comum e por que os canais institucionais não os substituíram? Por fim, indique uma causa ou um problema que levaria você a participar de um movimento desse tipo e diga que forma de participação escolheria.</div><textarea id="resp-5" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>Institucionalizar é transformar a participação em canais previstos em lei: a Constituinte recebeu cerca de 72 mil sugestões e a Constituição de 1988 previu plebiscito, referendo, iniciativa popular e conselhos de políticas públicas. Caras-pintadas, Jornadas de Junho e ocupações têm em comum a forte presença de jovens, a mobilização de rua ou ocupação e a pressão por decisões específicas (impeachment, tarifas de ônibus, reorganização escolar). Os canais formais podem ser lentos, de difícil acesso ou insuficientes para demandas urgentes, e a mobilização dá visibilidade e pressiona. A última parte aceita causas e formas diversas: valorizar a coerência entre a causa e a forma escolhida (abaixo-assinado, grêmio, conselho, campanha, ocupação, ato) e a consciência dos limites e das regras.</div></div>
+<div class="questao" data-questao="6"><div class="enunciado"><span class="num-q">6</span> O texto afirma que as redes sociais ampliaram a mobilização “em tempo recorde”, mas também facilitaram a desinformação. Explique esse duplo efeito e indique pelo menos dois cuidados necessários para participar de modo consciente. Relacione, depois, o caso de Trombas e Formoso, em Goiás (1950-1957), com a ideia de que a participação direta nasce quando os canais estão fechados. Por fim, responda: que formas de participação estão ao seu alcance hoje, na escola e no seu bairro, e alguma delas já produziu mudanças concretas?</div><textarea id="resp-6" class="campo-resposta dissertativa" data-min="140" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 140)</div><div class="comentario-prof"><b>Comentário do professor</b>As redes permitem convocar, organizar e dar visibilidade a causas rapidamente, mas também espalham boatos e informações falsas que podem enganar quem participa; por isso, participar exige checar os fatos (fonte, data, outras fontes) e conhecer as regras do jogo democrático. Em Trombas e Formoso, posseiros do norte de Goiás organizaram conselhos próprios e resistiram à grilagem de terras: sem proteção dos canais oficiais, criaram suas próprias formas de decidir, o que mostra participação popular nascida da luta por terra e por autonomia. Na última parte, valorizar respostas concretas sobre os canais realmente acessíveis ao aluno (grêmio, conselho escolar, representante de turma, associação de moradores, abaixo-assinado, campanhas) e, se houver, mudança concreta observada; se não houver, valorizar a análise do que impediu.</div></div>
+
+      <section class="texto-apoio selecionavel">
+        <div class="referencia-box" style="margin-top:0"><span class="rot">Fontes</span><p>Texto de leitura do capítulo “Participação popular: além do voto” (Conceito 3), com ideias resumidas com palavras próprias.</p><p>CARVALHO, José Murilo de. Os bestializados: o Rio de Janeiro e a República que não foi. São Paulo: Companhia das Letras, 1987.</p><p>BRASIL. Constituição da República Federativa do Brasil de 1988, art. 14 (plebiscito, referendo e iniciativa popular).</p><p>Dados sobre a Revolta da Vacina, a Greve Geral de 1917, “O petróleo é nosso”, a Passeata dos Cem Mil, as greves do ABC, as Diretas Já, a Constituinte de 1987-1988, os caras-pintadas, as Jornadas de Junho e as ocupações de escolas, conforme apresentados no material de apoio.</p><p>Recorte regional: Trombas e Formoso, norte de Goiás (1950-1957), conforme o material de apoio.</p></div>
+      </section>
+      <div class="alerta-incompleto" id="alerta-incompleto">Ainda há questões incompletas. Revise o tamanho mínimo de cada resposta antes de finalizar.</div>
+      <div class="acoes-finais">
+        <button class="btn btn-primario" onclick="finalizarAtividade()">Finalizar e ver comentários</button>
+        <button class="btn btn-secundario" onclick="refazerAtividade()">Refazer</button>
+        <button class="btn btn-pdf" id="btn-pdf" onclick="exportarPDF()" disabled aria-disabled="true">Exportar em PDF</button>
+        <span id="dica-pdf" style="flex-basis:100%;font-size:.84rem;color:#4b5b73;">O botão de PDF é liberado quando todas as questões estiverem respondidas (tamanho mínimo de cada resposta).</span>
+      </div>
+    </main>
+  </div>
+  <footer class="rodape">Colégio Estadual Rodolfo de Oliveira · CERO · 2026</footer>
+</div>
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card">
+    <h3>Atividade concluída!</h3>
+    <p>Suas seis respostas foram registradas. Os comentários do professor já estão disponíveis abaixo de cada questão para você comparar com o que escreveu.</p>
+    <button class="btn btn-primario" onclick="fecharPopup()">Continuar</button>
+  </div>
+</div>
+<script>
+/* ===== GATE DE NOME ===== */
+function iniciarAtividade(){
+  const nome = document.getElementById('nome-aluno').value.trim();
+  const turma = document.getElementById('turma-aluno').value.trim();
+  const aviso = document.getElementById('capa-aviso');
+  if(!nome){
+    aviso.style.display = 'block';
+    return;
+  }
+  aviso.style.display = 'none';
+  const hoje = new Date();
+  const dataFormatada = String(hoje.getDate()).padStart(2,'0') + '/' + String(hoje.getMonth()+1).padStart(2,'0') + '/' + hoje.getFullYear();
+  document.getElementById('header-nome').textContent = nome;
+  document.getElementById('ficha-nome').textContent = nome;
+  document.getElementById('ficha-data').textContent = dataFormatada;
+  document.getElementById('ficha-turma').textContent = turma || '—';
+  document.getElementById('capa').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+/* ===== CONTADOR DE CARACTERES E PROGRESSO ===== */
+const textareas = document.querySelectorAll('textarea.dissertativa');
+
+function atualizarProgresso(){
+  let respondidas = 0;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length >= min) respondidas++;
+  });
+  document.getElementById('contador-geral').textContent = 'Respondidas: ' + respondidas + '/' + textareas.length;
+  document.getElementById('barra-fill').style.width = (respondidas / textareas.length * 100) + '%';
+}
+
+textareas.forEach(function(t){
+  const contadorEl = t.parentElement.querySelector('.contador-chars');
+  const min = parseInt(t.dataset.min, 10);
+  t.addEventListener('input', function(){
+    contadorEl.textContent = t.value.length + ' caracteres (mínimo ' + min + ')';
+    atualizarProgresso();
+  });
+});
+
+/* ===== FINALIZAR ===== */
+function finalizarAtividade(){
+  let completo = true;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length < min) completo = false;
+  });
+
+  const alerta = document.getElementById('alerta-incompleto');
+  if(!completo){
+    alerta.classList.add('show');
+    alerta.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  alerta.classList.remove('show');
+
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.add('show');
+  });
+
+  document.getElementById('popup-overlay').classList.add('show');
+}
+
+function fecharPopup(){
+  document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function refazerAtividade(){
+  textareas.forEach(function(t){
+    t.value = '';
+    t.parentElement.querySelector('.contador-chars').textContent = '0 caracteres (mínimo ' + t.dataset.min + ')';
+  });
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.remove('show');
+  });
+  document.getElementById('alerta-incompleto').classList.remove('show');
+  atualizarProgresso();
+  window.scrollTo(0,0);
+}
+
+
+/* ===== EXPORTAR PDF ===== */
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function esc(str){ const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML.replace(/\n/g,'<br>'); }
+const QUESTOES = [{"num": "1", "enunc": "Com suas palavras, defina participação popular e diferencie participação institucional de participação direta, citando pelo menos dois exemplos de cada uma. Depois, pense nas formas de participação que você já exerceu ou presenciou (na escola, em casa, na comunidade, em grupos ou na internet) e classifique cada uma delas como institucional ou direta, justificando a classificação.", "id": "resp-1", "coment": "Participação popular: conjunto de ações pelas quais as pessoas influenciam decisões coletivas, incluindo, mas não se limitando ao, voto. Institucional: pelos canais previstos em lei (voto, plebiscito, referendo, iniciativa popular, conselhos de políticas públicas). Direta: mobilização coletiva (greves, passeatas, comícios, ocupações, campanhas na imprensa e nas redes). A segunda parte aceita exemplos variados (eleição de grêmio ou de representante de turma, conselho escolar, abaixo-assinado, grupo de moradores, campanha em rede social). Valorizar a classificação coerente e a justificativa pelo critério correto: a previsão em lei, e não a importância do assunto ou o tamanho do grupo."}, {"num": "2", "enunc": "O texto diz que a participação direta “muitas vezes nasce justamente quando os canais legais estão fechados”. Diferencie plebiscito de referendo e explique por que a existência desses canais não elimina a participação direta. Depois, relate uma situação da sua vida (na escola, na família, no bairro ou em um grupo) em que você quis influenciar uma decisão e percebeu que o canal oficial não existia ou não bastava, dizendo o que fez ou poderia ter feito.", "id": "resp-2", "coment": "Plebiscito: consulta antes de uma decisão; referendo: consulta para confirmar uma decisão já tomada. Canais legais podem ser limitados, lentos, difíceis de acessar ou controlados por quem decide, e há temas e grupos que não chegam às instituições; por isso a mobilização continua importante mesmo em regimes com canais abertos. A segunda parte aceita relatos diversos: valorizar respostas que identifiquem com clareza o canal que faltava ou não funcionou (conselho, direção, reunião de pais, associação de moradores) e a alternativa usada ou possível (abaixo-assinado, conversa coletiva, campanha, denúncia)."}, {"num": "3", "enunc": "Em 1889, segundo Aristides Lobo, o povo assistiu à Proclamação da República “bestializado, atônito”. Explique o que essa expressão revela sobre a relação entre o povo e o poder naquele momento e por que a Revolta da Vacina (1904) e a Greve Geral (1917) podem ser consideradas participação popular, mesmo sem canais institucionais acessíveis. Em seguida, descreva uma situação em que você ou alguém do seu convívio ficou “bestializado” diante de uma decisão importante tomada sem consulta (na escola, na família, no bairro ou na cidade) e diga o que teria mudado se houvesse um canal de participação.", "id": "resp-3", "coment": "A expressão indica que a mudança de regime foi feita sem consultar o povo e que a maioria não foi chamada a decidir nem entendia o que acontecia, em um contexto de voto restrito e controlado. Como os canais formais estavam fechados ou viciados, a participação foi para as ruas e as fábricas: a Revolta da Vacina reuniu moradores do Rio contra a vacinação obrigatória e contra reformas urbanas que expulsavam os pobres do centro; a Greve Geral de 1917 parou São Paulo (cerca de 70 mil trabalhadores) e levou, nos anos seguintes, às primeiras leis de proteção ao trabalho. A segunda parte exige uma situação concreta: valorizar quem identifica quem decidiu, por que a pessoa não foi ouvida e o que um canal (reunião, consulta, conselho) mudaria."}, {"num": "4", "enunc": "Compare a campanha “O petróleo é nosso” (1947-1953), a Passeata dos Cem Mil (1968), as greves do ABC (1978) e as Diretas Já (1984). Que movimentos conseguiram resultados diretos e quais enfrentaram mais riscos por agir sob a ditadura? O que esses exemplos mostram sobre o que a participação direta consegue ou não consegue alcançar? Por fim, escolha um desses movimentos e explique se você teria participado dele naquele contexto, considerando as consequências possíveis.", "id": "resp-4", "coment": "“O petróleo é nosso” reuniu estudantes, militares e sindicatos e contribuiu diretamente para a criação da Petrobras, ou seja, teve resultado concreto. Passeata dos Cem Mil e greves do ABC aconteceram sob a ditadura: a primeira protestou contra a violência da repressão; a segunda desafiou a legislação autoritária, com riscos de repressão. As Diretas Já mobilizaram até 1,5 milhão de pessoas por uma mudança institucional; embora a emenda tenha sido derrotada em 1984, a pressão enfraqueceu o regime. Os exemplos mostram que a participação direta pode conquistar resultados imediatos ou, em outros casos, produzir efeitos graduais e simbólicos. A última parte aceita posições variadas, desde que ponderem riscos (repressão, perda de emprego) e motivos."}, {"num": "5", "enunc": "Quando a ditadura acabou, a participação passou a integrar o desenho institucional. Explique o que significa institucionalizar a participação, citando as 72 mil sugestões à Constituinte e os canais previstos na Constituição de 1988. Mesmo assim, os caras-pintadas (1992), as Jornadas de Junho (2013) e as ocupações de escolas (2015) ocorreram: o que esses movimentos têm em comum e por que os canais institucionais não os substituíram? Por fim, indique uma causa ou um problema que levaria você a participar de um movimento desse tipo e diga que forma de participação escolheria.", "id": "resp-5", "coment": "Institucionalizar é transformar a participação em canais previstos em lei: a Constituinte recebeu cerca de 72 mil sugestões e a Constituição de 1988 previu plebiscito, referendo, iniciativa popular e conselhos de políticas públicas. Caras-pintadas, Jornadas de Junho e ocupações têm em comum a forte presença de jovens, a mobilização de rua ou ocupação e a pressão por decisões específicas (impeachment, tarifas de ônibus, reorganização escolar). Os canais formais podem ser lentos, de difícil acesso ou insuficientes para demandas urgentes, e a mobilização dá visibilidade e pressiona. A última parte aceita causas e formas diversas: valorizar a coerência entre a causa e a forma escolhida (abaixo-assinado, grêmio, conselho, campanha, ocupação, ato) e a consciência dos limites e das regras."}, {"num": "6", "enunc": "O texto afirma que as redes sociais ampliaram a mobilização “em tempo recorde”, mas também facilitaram a desinformação. Explique esse duplo efeito e indique pelo menos dois cuidados necessários para participar de modo consciente. Relacione, depois, o caso de Trombas e Formoso, em Goiás (1950-1957), com a ideia de que a participação direta nasce quando os canais estão fechados. Por fim, responda: que formas de participação estão ao seu alcance hoje, na escola e no seu bairro, e alguma delas já produziu mudanças concretas?", "id": "resp-6", "coment": "As redes permitem convocar, organizar e dar visibilidade a causas rapidamente, mas também espalham boatos e informações falsas que podem enganar quem participa; por isso, participar exige checar os fatos (fonte, data, outras fontes) e conhecer as regras do jogo democrático. Em Trombas e Formoso, posseiros do norte de Goiás organizaram conselhos próprios e resistiram à grilagem de terras: sem proteção dos canais oficiais, criaram suas próprias formas de decidir, o que mostra participação popular nascida da luta por terra e por autonomia. Na última parte, valorizar respostas concretas sobre os canais realmente acessíveis ao aluno (grêmio, conselho escolar, representante de turma, associação de moradores, abaixo-assinado, campanhas) e, se houver, mudança concreta observada; se não houver, valorizar a análise do que impediu."}];
+const APOIO = [["Participar não é apenas votar de dois em dois anos", "Participação popular é tudo o que as pessoas fazem para influenciar decisões que afetam a vida coletiva: votar, filiar-se a um partido, criar um sindicato, escrever na imprensa, assinar um abaixo-assinado, fazer greve, ocupar uma praça, pressionar um parlamentar. Podemos reunir essas formas em dois caminhos. A participação institucional acontece pelos canais previstos em lei: o voto, o plebiscito (consulta antes de uma decisão), o referendo (consulta para confirmar uma decisão), a iniciativa popular de projetos de lei e os conselhos de políticas públicas. A participação direta acontece pela mobilização coletiva: greves, passeatas, comícios, ocupações e campanhas na imprensa e nas redes sociais. Muitas vezes, ela nasce justamente quando os canais legais estão fechados. Participação popular: conjunto de ações pelas quais as pessoas influenciam decisões coletivas. Inclui o voto, mas também a organização em sindicatos, associações e movimentos sociais, a imprensa, a greve e as manifestações."], ["Do povo “bestializado” aos grandes movimentos do século XX", "“O povo assistiu àquilo bestializado, atônito, surpreso, sem conhecer o que significava.” A frase é do jornalista republicano Aristides Lobo, sobre a Proclamação da República, em 1889, e foi discutida por José Murilo de Carvalho em Os bestializados (1987). Ela mostra que a mudança de regime foi feita sem consultar o povo. Como o voto era restrito e controlado, a participação foi para as ruas e para as fábricas. Em 1904, na Revolta da Vacina, a população do Rio de Janeiro protestou contra a vacinação obrigatória e contra reformas urbanas que expulsavam os pobres do centro. Em 1917, na Greve Geral, cerca de 70 mil trabalhadores pararam São Paulo e conquistaram, nos anos seguintes, as primeiras leis de proteção ao trabalho. Entre 1947 e 1953, a campanha “O petróleo é nosso” reuniu estudantes, militares e sindicatos e contribuiu diretamente para a criação da Petrobras. Nos anos 1950, as Ligas Camponesas reuniram trabalhadores do campo que lutavam contra a expulsão das terras. Mesmo sob a ditadura militar, o povo voltou às ruas: em 1968, a Passeata dos Cem Mil, no Rio de Janeiro, protestou contra a violência da repressão; em 1978, os metalúrgicos do ABC paulista desafiaram a legislação autoritária e paralisaram as fábricas. Em 1984, os comícios das Diretas Já reuniram até 1,5 milhão de pessoas exigindo a volta do voto direto para presidente."], ["Participação institucionalizada e participação das ruas às redes", "Quando a ditadura acabou, a participação passou a integrar o desenho institucional. A Assembleia Nacional Constituinte recebeu cerca de 72 mil sugestões da população, e a Constituição de 1988 institucionalizou plebiscito, referendo, iniciativa popular e conselhos de políticas públicas. Em 1992, os “caras-pintadas”, jovens com o rosto pintado de verde e amarelo, ocuparam as ruas em manifestações pelo impeachment de Fernando Collor. Em 2013, nas Jornadas de Junho, o Movimento Passe Livre protestou contra o aumento das tarifas de ônibus em São Paulo, desencadeando manifestações por todo o país. Em 2015, estudantes secundaristas ocuparam escolas em São Paulo contra a reorganização escolar. Em 2023, após os ataques antidemocráticos de 8 de janeiro, movimentos sociais e cidadãos foram às ruas em defesa das instituições democráticas. As redes sociais ampliaram a capacidade de mobilização em tempo recorde, mas também facilitaram a circulação de desinformação. Participar de modo consciente exige checar os fatos e conhecer as regras do jogo democrático. Recorte regional, Goiás: entre 1950 e 1957, posseiros do norte de Goiás, na região de Trombas e Formoso, organizaram conselhos próprios e resistiram à grilagem de terras. O episódio mostra como a participação popular nasceu, no interior do Brasil, da luta por terra e por autonomia."]];
+const GRUPOS = [[0,1],[2,3],[4,5]];
+function todasRespondidas(){
+  const tas=document.querySelectorAll('textarea.dissertativa');
+  if(!tas.length) return false;
+  return Array.prototype.every.call(tas,function(t){ return t.value.trim().length >= (parseInt(t.dataset.min,10)||1); });
+}
+function atualizarBotaoPDF(){
+  const b=document.getElementById('btn-pdf'); if(!b) return;
+  const ok=todasRespondidas();
+  b.disabled=!ok; b.setAttribute('aria-disabled',String(!ok));
+  b.title=ok?'':'Responda todas as questões para liberar a exportação.';
+  const d=document.getElementById('dica-pdf'); if(d) d.style.display=ok?'none':'block';
+}
+document.addEventListener('input',function(e){ if(e.target&&e.target.matches&&e.target.matches('textarea.dissertativa')) atualizarBotaoPDF(); });
+document.addEventListener('DOMContentLoaded',atualizarBotaoPDF);
+setTimeout(atualizarBotaoPDF,0);
+async function exportarPDF(){
+  if(!todasRespondidas()){ atualizarBotaoPDF(); const a=document.getElementById('alerta-incompleto'); if(a){a.classList.add('show');a.scrollIntoView({behavior:'smooth',block:'center'});} return; }
+  const overlay=document.createElement('div'); overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(10,42,102,.6);display:flex;align-items:center;justify-content:center;z-index:999;';
+  overlay.innerHTML='<div style="background:#fff;border-radius:14px;padding:32px 36px;text-align:center;max-width:300px;box-shadow:0 10px 30px rgba(26,138,74,.3);font-family:\'Source Serif 4\',serif;"><h4 style="margin:0 0 4px;color:#0e2f6b;font-family:\'Playfair Display\',serif;">Gerando PDF…</h4><p style="margin:0 0 14px;color:#4b5b73;font-size:.86rem;">Aguarde alguns instantes.</p><div style="background:#fff3c4;border-radius:6px;overflow:hidden;height:8px;"><div id="pdf-prog" style="height:100%;width:0%;background:#1a8a4a;transition:width .2s ease;"></div></div><div id="pdf-prog-txt" style="margin-top:8px;font-family:\'JetBrains Mono\',monospace;font-size:.74rem;color:#4b5b73;">0%</div></div>';
+  document.body.appendChild(overlay); await sleep(80);
+  function setP(pct,msg){ const pp=document.getElementById('pdf-prog'),pt=document.getElementById('pdf-prog-txt'); if(pp)pp.style.width=pct+'%'; if(pt)pt.textContent=msg||(pct+'%'); }
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:'a4',hotfixes:['px_scaling']});
+    const PW=pdf.internal.pageSize.getWidth(),PH=pdf.internal.pageSize.getHeight();
+    const ML=28,CW=PW-ML*2; let y=ML;
+    async function addImg(el){
+      const canvas=await html2canvas(el,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0,windowWidth:860});
+      const imgW=CW,imgH=(canvas.height/canvas.width)*imgW; const dataUrl=canvas.toDataURL('image/jpeg',.92),avail=PH-ML*2;
+      if(imgH<=avail){ if(y+imgH>PH-ML){pdf.addPage();y=ML;} pdf.addImage(dataUrl,'JPEG',ML,y,imgW,imgH); y+=imgH+8; }
+      else{
+        const pxPerPt=canvas.width/imgW; let srcY=0;
+        while(srcY<canvas.height){
+          const availPt=PH-y-ML,sliceH_pt=Math.min(availPt,avail);
+          const sliceH_px=Math.round(sliceH_pt*pxPerPt),actualH=Math.min(sliceH_px,canvas.height-srcY);
+          const tmp=document.createElement('canvas'); tmp.width=canvas.width; tmp.height=actualH;
+          tmp.getContext('2d').drawImage(canvas,0,srcY,canvas.width,actualH,0,0,canvas.width,actualH);
+          const sliceUrl=tmp.toDataURL('image/jpeg',.92),slicePt=(actualH/canvas.width)*imgW;
+          pdf.addImage(sliceUrl,'JPEG',ML,y,imgW,slicePt); srcY+=actualH; y+=slicePt;
+          if(srcY<canvas.height){pdf.addPage();y=ML;}
+        } y+=8;
+      }
+    }
+    async function band(tag,txt){
+      const b=document.createElement('div'); b.style.cssText='width:860px;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      b.innerHTML='<div style="background:linear-gradient(90deg,#1a8a4a,#0e2f6b);border-radius:8px;padding:12px 22px;display:flex;align-items:center;gap:12px"><span style="background:rgba(255,255,255,.2);color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;border-radius:20px;padding:3px 12px">'+tag+'</span><span style="color:#fff;font-size:15px;font-weight:700">'+txt+'</span></div>';
+      document.body.appendChild(b); await sleep(20); await addImg(b); document.body.removeChild(b);
+    }
+    const nome=document.getElementById('header-nome').textContent||'Aluno(a)';
+    const turma=document.getElementById('ficha-turma').textContent||'—';
+    const now=new Date(); const dtStr=now.toLocaleDateString('pt-BR')+' às '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    setP(5,'Preparando capa…'); await sleep(40);
+    const coverEl=document.createElement('div'); coverEl.style.cssText='width:860px;font-family:Arial,sans-serif;overflow:hidden;position:absolute;left:-9999px;top:0';
+    coverEl.innerHTML='<div style="background:linear-gradient(135deg,#0a2a66 0%,#1a8a4a 60%,#f2c94c 100%);padding:32px 48px 28px;color:white"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.85;font-weight:700;margin-bottom:6px">História · 2ª Série do Ensino Médio · GO-EMCHS602A</div><div style="font-size:26px;font-weight:900;line-height:1.2;margin-bottom:5px">Participação popular: além do voto</div><div style="font-size:13px;opacity:.9;font-style:italic">Texto de leitura · Participação popular · 6 questões dissertativas</div></div><div style="background:#f3f8f2;padding:22px 48px 26px;border-bottom:3px solid #ffd23f"><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#1a8a4a;font-weight:700;margin-bottom:5px">Aluno(a)</div><div style="font-size:20px;font-weight:700;color:#10223b;border-bottom:2.5px solid #1a8a4a;padding-bottom:6px;display:inline-block;margin-bottom:16px">'+esc(nome)+'</div><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#1a8a4a">'+esc(turma)+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Turma</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#a67800">6</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Dissertativas</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:140px"><div style="font-size:13px;font-weight:700;color:#333">'+dtStr+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Gerado em</div></div></div><div style="font-size:9px;color:#bbb;margin-top:14px">Colégio Estadual Rodolfo de Oliveira · Goiás · 2026</div></div>';
+    document.body.appendChild(coverEl); await sleep(60); await addImg(coverEl); document.body.removeChild(coverEl);
+    setP(15,'Preparando texto de apoio…'); await sleep(20);
+    async function bloco(el){ document.body.appendChild(el); await sleep(20); await addImg(el); document.body.removeChild(el); }
+    for(let k=0;k<APOIO.length;k++){
+      await band('TEXTO '+(k+1)+' DE '+APOIO.length, APOIO[k][0]);
+      const textoEl=document.createElement('div'); textoEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #d4e3d8;border-radius:10px;position:absolute;left:-9999px;top:0';
+      textoEl.innerHTML='<div style="padding:18px 24px;background:#ffffff"><p style="font-size:12.5px;color:#10223b;line-height:1.8;margin:0;text-align:justify">'+esc(APOIO[k][1])+'</p></div>';
+      await bloco(textoEl);
+      for(let j=0;j<GRUPOS[k].length;j++){
+        const i=GRUPOS[k][j]; const q=QUESTOES[i]; setP(20+Math.round(i/QUESTOES.length*65),'Questão '+q.num+'/'+QUESTOES.length+'…'); await sleep(12);
+      const valor=document.getElementById(q.id)?document.getElementById(q.id).value:'';
+      const qEl=document.createElement('div'); qEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #d4e3d8;border-radius:10px;position:absolute;left:-9999px;top:0';
+      qEl.innerHTML='<div style="background:linear-gradient(90deg,#1a8a4a,#0e2f6b);padding:10px 22px;display:flex;justify-content:space-between;align-items:center"><span style="color:white;font-weight:700;font-size:13px;letter-spacing:.8px">QUESTÃO '+q.num+'</span><span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;padding:3px 12px;border-radius:20px;font-weight:600">Dissertativa</span></div><div style="padding:18px 24px 16px;background:#ffffff"><div style="font-size:13px;font-weight:700;color:#10223b;line-height:1.6;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee">'+esc(q.enunc)+'</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:4px;height:15px;background:#1a8a4a;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#1a8a4a;text-transform:uppercase;letter-spacing:1.5px">Resposta do Aluno(a)</div></div><div style="background:#e6f3ea;border:1.5px solid #a9c6ee;border-radius:8px;padding:13px 16px;min-height:50px;margin-bottom:12px"><div style="font-size:12.5px;color:#10223b;line-height:1.8;white-space:pre-wrap">'+(esc(valor)||'<span style="color:#aaa">(sem resposta)</span>')+'</div></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div style="width:4px;height:15px;background:#a67800;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#a67800;text-transform:uppercase;letter-spacing:1.5px">Comentário do Professor</div></div><div style="background:#eef6ff;border:1.5px solid #ffd23f;border-radius:8px;padding:13px 16px"><div style="font-size:12px;color:#0e2f6b;line-height:1.8">'+esc(q.coment)+'</div></div></div>';
+      document.body.appendChild(qEl); await sleep(12); await addImg(qEl); document.body.removeChild(qEl);
+      }
+    }
+    const fEl0=document.createElement('div'); fEl0.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #d4e3d8;border-radius:10px;position:absolute;left:-9999px;top:0';
+    fEl0.innerHTML='<div style="padding:14px 24px;background:#ffffff"><div style="font-size:10px;color:#4b5b73;font-family:monospace">Texto de leitura do capítulo “Participação popular: além do voto” (Conceito 3), com ideias resumidas com palavras próprias. · CARVALHO, José Murilo de. Os bestializados: o Rio de Janeiro e a República que não foi. São Paulo: Companhia das Letras, 1987. · BRASIL. Constituição da República Federativa do Brasil de 1988, art. 14 (plebiscito, referendo e iniciativa popular). · Dados sobre a Revolta da Vacina, a Greve Geral de 1917, “O petróleo é nosso”, a Passeata dos Cem Mil, as greves do ABC, as Diretas Já, a Constituinte de 1987-1988, os caras-pintadas, as Jornadas de Junho e as ocupações de escolas, conforme apresentados no material de apoio. · Recorte regional: Trombas e Formoso, norte de Goiás (1950-1957), conforme o material de apoio.</div></div>';
+    await bloco(fEl0);
+    setP(92,'Finalizando…'); await sleep(30);
+    const totalPages=pdf.getNumberOfPages();
+    for(let p=1;p<=totalPages;p++){
+      pdf.setPage(p);
+      const fEl=document.createElement('div');
+      fEl.style.cssText='width:'+Math.round(CW)+'px;height:22px;background:#f3f8f2;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:10px;color:#888;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      fEl.innerHTML='<span>Participação popular: além do voto · '+esc(nome)+'</span><span>Página '+p+' de '+totalPages+'</span>';
+      document.body.appendChild(fEl);
+      const fc=await html2canvas(fEl,{scale:2,logging:false,backgroundColor:'#f3f8f2'}); document.body.removeChild(fEl);
+      const fUrl=fc.toDataURL('image/jpeg',.9),fH=(fc.height/fc.width)*CW;
+      pdf.setFillColor(253,238,244); pdf.rect(ML,PH-fH,CW,fH,'F'); pdf.addImage(fUrl,'JPEG',ML,PH-fH,CW,fH);
+    }
+    setP(100,'Salvando…'); await sleep(200);
+    pdf.save('Participacao_popular_alem_do_voto_'+nome.replace(/[^a-zA-Z0-9_\-]/g,'_')+'.pdf');
+  }catch(err){ console.error(err); alert('Erro ao gerar PDF: '+err.message); }
+  finally{ const ov=document.getElementById('pdf-overlay'); if(ov)document.body.removeChild(ov); }
+}
+
+/* ===== PROTEÇÃO ANTI-COLA E ANTI-CÓPIA (página inteira) ===== */
+(function () {
+  const LIMITE_BLOCO = 25;
+  const CAMPOS = document.querySelectorAll('textarea.dissertativa, .campo-resposta');
+  const ehCampo = function (el) { return el && el.closest && el.closest('textarea.dissertativa, .campo-resposta'); };
+
+  function mostrarToast(mensagem) {
+    let toast = document.getElementById('anti-cola-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'anti-cola-toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0e2f6b;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = mensagem;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function () { toast.style.opacity = '0'; }, 2500);
+  }
+  function bloquear(e, msg) { e.preventDefault(); e.stopPropagation(); mostrarToast(msg || 'Copiar e colar não são permitidos nesta atividade.'); return false; }
+
+  /* 1) Página inteira: copiar, recortar, colar, arrastar, selecionar e menu de contexto */
+  ['copy', 'cut', 'paste', 'dragstart', 'drop', 'dragover', 'contextmenu', 'selectstart'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      if (evt === 'selectstart' && ehCampo(e.target)) return;      /* permite posicionar o cursor no campo */
+      if (evt === 'selectstart') { e.preventDefault(); return; }
+      bloquear(e);
+    }, true);
+  });
+
+  /* 2) Atalhos de teclado */
+  document.addEventListener('keydown', function (e) {
+    const k = (e.key || '').toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    if (mod && ['c', 'x', 'v', 'a', 'p', 's', 'u'].indexOf(k) >= 0) return bloquear(e);
+    if (e.shiftKey && k === 'insert') return bloquear(e);                 /* Shift+Insert (colar) */
+    if (e.ctrlKey && k === 'insert') return bloquear(e);                  /* Ctrl+Insert (copiar) */
+    if (e.shiftKey && k === 'delete') return bloquear(e);                 /* Shift+Delete (recortar) */
+    if (k === 'f12' || (mod && e.shiftKey && ['i', 'j', 'c'].indexOf(k) >= 0)) return bloquear(e, 'Esta função está desativada nesta atividade.');
+    if (k === 'printscreen') {
+      try { navigator.clipboard.writeText(''); } catch (_) {}
+      mostrarToast('Captura de tela não recomendada nesta atividade.');
+    }
+  }, true);
+
+  /* 3) Campos de resposta: colar por qualquer via, texto em bloco e autocomplete */
+  CAMPOS.forEach(function (campo) {
+    campo.setAttribute('autocomplete', 'off');
+    campo.setAttribute('autocorrect', 'off');
+    campo.setAttribute('autocapitalize', 'off');
+    campo.setAttribute('spellcheck', 'false');
+
+    campo.addEventListener('beforeinput', function (e) {
+      const t = e.inputType || '';
+      if (t === 'insertFromPaste' || t === 'insertFromDrop' || t === 'insertFromYank' || t === 'insertFromPasteAsQuotation') {
+        bloquear(e);
+      }
+    });
+
+    let valorAnterior = campo.value;
+    campo.addEventListener('input', function (e) {
+      const diferenca = campo.value.length - valorAnterior.length;
+      if (diferenca >= LIMITE_BLOCO) {                                    /* texto entrou de uma vez só */
+        campo.value = valorAnterior;
+        mostrarToast('Escreva com suas palavras: texto colado foi removido.');
+        campo.dispatchEvent(new Event('input'));                          /* atualiza contador e progresso */
+      } else {
+        valorAnterior = campo.value;
+      }
+    });
+  });
+
+  /* 4) Impressão do conteúdo da página desativada (use o botão Exportar em PDF) */
+  const st = document.createElement('style');
+  st.textContent = '@media print{body *{visibility:hidden!important}body::before{content:"Impressão desativada. Use o botão Exportar em PDF.";visibility:visible!important;display:block;padding:40px;font:16px sans-serif}}';
+  document.head.appendChild(st);
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texto de Apoio — Resistência: dizer não a uma ordem injusta | CERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f4f4;
+    --bg-alt:#fbe4e7;
+    --paper:#ffffff;
+    --ink:#121212;
+    --ink-soft:#55595f;
+    --roxo:#c8102e;
+    --roxo-dark:#141414;
+    --roxo-2:#e0314b;
+    --cobre:#1c1c1c;
+    --cobre-light:#ff4d5e;
+    --line:#e3dcdd;
+    --shadow:0 10px 30px rgba(200,16,46,.18);
+    --radius:14px;
+    --font-title:'Playfair Display', serif;
+    --font-body:'Source Serif 4', serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    -webkit-user-select:none; -ms-user-select:none;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.7;
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  
+  .campo-resposta{user-select:text; -webkit-user-select:text;}
+
+  /* ===== CAPA / GATE ===== */
+  #capa{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(to bottom, #0a0a0a, #c8102e, #e85a6c);
+    padding:24px;
+  }
+  #capa .grade-centralizada{
+    position:absolute;
+    top:0; bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:896px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.08;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.5) 39px, rgba(255,255,255,.5) 40px);
+    background-size:40px 40px;
+  }
+  .capa-card{
+    position:relative;
+    z-index:1;
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    max-width:480px;
+    width:100%;
+    padding:36px 32px;
+    text-align:center;
+  }
+  .capa-card .tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.7rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(200,16,46,.1); padding:5px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .capa-card h1{font-family:var(--font-title); font-size:1.6rem; margin:0 0 10px; color:var(--roxo-dark);}
+  .capa-card p.desc{color:var(--ink-soft); font-size:.94rem; margin:0 0 22px;}
+  .capa-card input{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:1rem; margin-bottom:14px;
+  }
+  .capa-card button{
+    width:100%; padding:13px; border:none; border-radius:8px;
+    background:var(--roxo); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+    font-family:var(--font-body); transition:filter .15s ease;
+  }
+  .capa-card button:hover{filter:brightness(1.15);}
+  .capa-aviso{font-size:.78rem; color:#a33; margin-top:8px; display:none;}
+
+  /* ===== APP ===== */
+  #app{display:none;}
+  .sticky-header{
+    position:sticky; top:0; z-index:50;
+    background:var(--roxo-dark); color:#fdecee;
+    padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    font-family:var(--font-mono); font-size:.82rem;
+  }
+  .sticky-header .aluno{font-family:var(--font-body); font-weight:600; font-size:.92rem;}
+  .barra-progresso-trilho{
+    flex:1; min-width:120px; height:8px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; margin:0 14px;
+  }
+  .barra-progresso-fill{height:100%; background:#ff4d5e; width:0%; transition:width .3s ease;}
+
+  .wrap{max-width:800px; margin:0 auto; padding:32px 24px 60px;}
+
+  header.topo{margin-bottom:28px;}
+  header.topo .hero-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--roxo-dark);
+    background:rgba(200,16,46,.1); padding:5px 12px; border-radius:999px; margin-bottom:12px;
+  }
+  header.topo h1{font-family:var(--font-title); font-size:clamp(1.5rem,4vw,2rem); margin:0 0 8px; color:var(--ink);}
+  header.topo p.sub{color:var(--ink-soft); margin:0; font-size:.98rem;}
+  .descritor-bar{
+    font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; margin-bottom:14px; display:inline-block;
+  }
+  .ficha-id{
+    display:flex; flex-wrap:wrap; gap:10px 26px;
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-top:12px; font-family:var(--font-mono); font-size:.84rem; color:var(--ink);
+  }
+  .ficha-id span b{color:var(--roxo-dark);}
+
+  /* ===== TEXTO DE APOIO ===== */
+  .texto-apoio{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:28px 30px; margin-bottom:30px;
+  }
+  .texto-apoio h2{font-family:var(--font-title); font-size:1.25rem; color:var(--roxo-dark); margin:0 0 4px;}
+  .texto-apoio h3{font-family:var(--font-title); font-size:1.05rem; color:var(--roxo-2); margin:22px 0 8px;}
+  .texto-apoio .fonte-tag{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-bottom:16px; display:block;}
+  .texto-apoio p{margin:0 0 14px; color:var(--ink);}
+  .texto-apoio p:last-of-type{margin-bottom:0;}
+  .texto-apoio .destaque{
+    background:var(--bg-alt); border-left:4px solid var(--cobre); border-radius:0 8px 8px 0;
+    padding:12px 16px; margin:0 0 14px; font-size:.95rem;
+  }
+  .texto-apoio .mito{
+    background:#fff8f8; border:1px solid var(--line); border-top:4px solid var(--roxo-2);
+    border-radius:10px; padding:16px 18px; margin:0 0 14px;
+  }
+  .texto-apoio .mito .rot{
+    font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--cobre); display:block; margin-bottom:6px;
+  }
+  .texto-apoio .mito p{font-size:.93rem;}
+
+  .tabela-lentes{width:100%; border-collapse:collapse; margin:6px 0 14px; font-size:.9rem;}
+  .tabela-lentes caption{
+    caption-side:top; text-align:left; font-family:var(--font-mono); font-size:.68rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--cobre); padding-bottom:6px;
+  }
+  .tabela-lentes th, .tabela-lentes td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top;}
+  .tabela-lentes th{background:var(--roxo); color:#fff; font-family:var(--font-title); font-weight:600; font-size:.9rem;}
+  .tabela-lentes tbody tr:nth-child(even){background:var(--bg-alt);}
+  .tabela-lentes td:first-child{font-weight:700; color:var(--roxo-dark); white-space:nowrap;}
+  .tabela-wrap{overflow-x:auto;}
+
+  .referencia-box{
+    margin-top:20px; padding:14px 16px;
+    background:var(--bg-alt); border-left:3px solid var(--cobre); border-radius:0 8px 8px 0;
+  }
+  .referencia-box .rot{
+    font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--roxo-dark); display:block; margin-bottom:6px;
+  }
+  .referencia-box p{margin:0 0 6px; font-size:.86rem; color:var(--ink-soft); font-family:var(--font-mono); line-height:1.6;}
+  .referencia-box p:last-child{margin-bottom:0;}
+
+  /* ===== QUESTOES ===== */
+  .questoes-titulo{
+    font-family:var(--font-title); font-size:1.2rem; color:var(--roxo-dark);
+    margin:0 0 18px; display:flex; align-items:center; gap:10px;
+  }
+  .questao{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; margin-bottom:18px;
+  }
+  .questao .num-q{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--roxo);
+    color:#fff; font-family:var(--font-mono); font-size:.78rem; margin-right:8px; flex-shrink:0;
+  }
+  .questao .enunciado{font-weight:600; color:var(--ink); margin-bottom:12px; display:flex; align-items:flex-start;}
+  .questao textarea{
+    width:100%; min-height:100px; padding:12px 14px; border:1px solid var(--line); border-radius:8px;
+    font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--ink);
+  }
+  .questao textarea:focus{outline:2px solid var(--roxo-2); outline-offset:1px;}
+  .contador-chars{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-top:6px; text-align:right;}
+
+  .comentario-prof{
+    display:none; margin-top:14px; padding:14px 16px;
+    background:#fdecee; border:1px solid #f3bcc3; border-radius:8px; font-size:.9rem; color:var(--roxo-dark);
+  }
+  .comentario-prof.show{display:block;}
+  .comentario-prof b{display:block; margin-bottom:4px; font-family:var(--font-title); font-size:.92rem;}
+
+  /* ===== ALERTA / FINALIZAR ===== */
+  .alerta-incompleto{
+    display:none; background:#fdf1e6; border:1px solid #f0d2b3; color:#8a4a10;
+    padding:12px 16px; border-radius:8px; font-size:.9rem; margin-bottom:16px;
+  }
+  .alerta-incompleto.show{display:block;}
+
+  .acoes-finais{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;}
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:.94rem; padding:12px 22px;
+    border-radius:8px; border:none; cursor:pointer; transition:filter .15s ease;
+  }
+  .btn:hover{filter:brightness(1.1);}
+  .btn-primario{background:var(--roxo); color:#fff;}
+  .btn-secundario{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-pdf{background:var(--cobre); color:#fff;}
+  .btn[disabled]{opacity:.5; cursor:not-allowed;}
+
+  /* ===== POPUP ===== */
+  .popup-overlay{
+    display:none; position:fixed; inset:0; background:rgba(10,10,10,.6);
+    align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .popup-overlay.show{display:flex;}
+  .popup-card{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    max-width:420px; width:100%; padding:32px 28px; text-align:center;
+  }
+  .popup-card .emoji{display:none;}
+  .popup-card h3{font-family:var(--font-title); margin:0 0 8px; color:var(--roxo-dark);}
+  .popup-card p{color:var(--ink-soft); font-size:.94rem; margin:0 0 20px;}
+
+  footer.rodape{text-align:center; padding:24px; color:var(--ink-soft); font-family:var(--font-mono); font-size:.8rem;}
+
+  @media (max-width:600px){
+    .wrap{padding:24px 16px 50px;}
+    .texto-apoio, .questao{padding:18px 18px;}
+  }
+
+  *{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+  textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:none}
+  .chip-tema{display:inline-block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--roxo);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .btn-pdf{background:#1c1c1c}
+  .btn-pdf:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+  .questao .pessoal{display:inline-block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#1c1c1c;background:var(--cobre-light);border-radius:999px;padding:3px 10px;margin:0 0 10px 34px}
+  .texto-apoio .mito{border-top-color:var(--roxo-2)}
+</style>
+</head>
+<body>
+<div id="capa">
+  <div class="grade-centralizada"></div>
+  <div class="capa-card">
+    <span class="tag">2ª série · História · CERO</span>
+    <h1>Resistência: dizer não a uma ordem injusta</h1>
+    <p class="desc">Texto de leitura e seis questões dissertativas sobre as formas de resistência a ordens consideradas injustas na história do Brasil. Preencha os dados para começar.</p>
+    <input type="text" id="nome-aluno" placeholder="Seu nome completo">
+    <input type="text" id="turma-aluno" placeholder="Turma (ex.: 2º A)">
+    <button onclick="iniciarAtividade()">Iniciar atividade</button>
+    <div class="capa-aviso" id="capa-aviso">Por favor, digite seu nome para continuar.</div>
+  </div>
+</div>
+<div id="app">
+  <div class="sticky-header">
+    <span class="aluno" id="header-nome"></span>
+    <div class="barra-progresso-trilho"><div class="barra-progresso-fill" id="barra-fill"></div></div>
+    <span id="contador-geral">Respondidas: 0/6</span>
+  </div>
+  <div class="wrap">
+    <header class="topo selecionavel">
+      <span class="descritor-bar">Ciências Humanas e Sociais Aplicadas / História · 2ª série do Ensino Médio &nbsp;|&nbsp; (GO-EMCHS602A) – Primeira República e República contemporânea</span>
+      <span class="chip-tema" style="display:block;width:max-content;margin-top:10px;">Conceito 4 · Resistência</span>
+      <h1>Resistência: dizer não a uma ordem injusta</h1>
+      <p class="sub">Leia cada parte com atenção e responda às seis questões que vêm logo abaixo dela. Fundamente suas respostas no texto.</p>
+      <div class="ficha-id" id="ficha-id">
+        <span><b>NOME:</b> <span id="ficha-nome"></span></span>
+        <span><b>DATA:</b> <span id="ficha-data"></span></span>
+        <span><b>TURMA:</b> <span id="ficha-turma"></span></span>
+      </div>
+    </header>
+    <main>
+      <section class="texto-apoio selecionavel"><h2>Revoltas, greves, guerrilhas, arte e defesa de modos de vida</h2><span class="fonte-tag">Texto de leitura para a 2ª série do Ensino Médio · Parte 1 de 3</span><p>Resistência é a reação organizada ou espontânea contra uma ordem considerada injusta. Ela pode ser armada ou pacífica, coletiva ou individual, aberta ou discreta. Na história da República, aparece nos sertões, nas fábricas, nos quartéis, nas escolas e nas artes.</p><p>Podemos distinguir quatro formas principais. A resistência armada usa a força, como nas revoltas e guerrilhas. A resistência civil recorre a greves, passeatas e desobediência a leis injustas. A resistência cultural denuncia a opressão por meio da música, do teatro, do cinema e da literatura. A resistência cotidiana consiste em manter modos de vida, línguas e tradições ameaçados, como fazem comunidades quilombolas, indígenas e camponesas.</p><div class="destaque" style="margin-top:14px"><b>Resistência:</b> reação organizada ou espontânea contra uma ordem considerada injusta. Pode visar a um governo, a uma lei ou a uma situação de opressão.</div></section>
+      <h2 class="questoes-titulo">Questões sobre o conceito de resistência</h2>
+<div class="questao" data-questao="1"><div class="enunciado"><span class="num-q">1</span> Defina resistência com suas palavras e explique o que significa dizer que ela pode ser “armada ou pacífica, coletiva ou individual, aberta ou discreta”. Em seguida, lembre uma ocasião em que você, ou alguém do seu convívio, disse “não” a algo que considerou injusto (uma regra, um tratamento, uma decisão) e classifique essa atitude segundo esses três pares, avaliando que efeito ela teve.</div><textarea id="resp-1" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Resistência: reação organizada ou espontânea contra uma ordem considerada injusta, podendo visar a um governo, a uma lei ou a uma situação de opressão. Os pares mostram a variedade: armada ou pacífica (uso ou não da força), coletiva ou individual (quem reage) e aberta ou discreta (se é pública ou escondida, como a desobediência silenciosa). A segunda parte aceita relatos diversos: valorizar a classificação coerente nos três pares e uma avaliação honesta do efeito (mudança concreta, desgaste, punição, nenhum efeito visível), reconhecendo que resistir nem sempre traz resultados imediatos.</div></div>
+<div class="questao" data-questao="2"><div class="enunciado"><span class="num-q">2</span> Diferencie resistência cultural de resistência cotidiana, usando como exemplos a Tropicália e o Cinema Novo, de um lado, e as comunidades quilombolas, indígenas e camponesas, de outro. Por que manter uma língua, um modo de vida ou uma tradição pode ser considerado uma forma de resistência? Depois, pense em um costume, uma língua, uma receita, uma festa ou uma tradição da sua família ou da sua comunidade e avalie se manter isso vivo, hoje, teria o sentido de resistir a alguma coisa.</div><textarea id="resp-2" class="campo-resposta dissertativa" data-min="100" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 100)</div><div class="comentario-prof"><b>Comentário do professor</b>Cultural: denuncia a opressão por meio de música, teatro, cinema e literatura (Tropicália e Cinema Novo desafiaram a censura). Cotidiana: mantém modos de vida, línguas e tradições ameaçados, como fazem quilombolas, indígenas e camponeses. Manter um modo de vida é resistir quando ele é pressionado a desaparecer (perda de terras, preconceito, imposição de outra cultura): permanecer já é dizer não. A segunda parte aceita muitos exemplos; valorizar quem identifica a pressão que ameaça o costume (desvalorização, pressa do mundo moderno, preconceito) e discute se a manutenção tem esse sentido, sem exigir que a resposta seja afirmativa.</div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Revoltas contra a violência do Estado e resistência na ditadura</h3><span class="fonte-tag">Parte 2 de 3 · Da Primeira República à ditadura</span><p>Na Primeira República, houve revoltas contra a violência do Estado. Entre 1896 e 1897, na Guerra de Canudos, milhares de sertanejos se reuniram na Bahia em torno de Antônio Conselheiro; a comunidade enfrentou quatro expedições militares e foi destruída em 1897. Em 1910, na Revolta da Chibata, marinheiros, em sua maioria negros, tomaram navios na Baía de Guanabara exigindo o fim dos castigos físicos herdados da escravidão. Entre 1912 e 1916, na Guerra do Contestado, camponeses em Santa Catarina e no Paraná resistiram à perda de terras e ao avanço da ferrovia. Nem todas essas resistências venceram, mas todas revelaram que havia uma insatisfação que o sistema político não conseguia ouvir.</p><p>Depois de 1964 e, sobretudo, do AI-5 (1968), a resistência à ditadura civil-militar assumiu várias formas. Houve a luta armada, realizada por pequenos grupos de esquerda e pela Guerrilha do Araguaia (1972-1974), na divisa entre Pará, Goiás (atual Tocantins) e Maranhão. O movimento estudantil organizou grandes manifestações, como a Passeata dos Cem Mil. A resistência cultural se expressou na Tropicália, no Cinema Novo e no teatro, que desafiavam a censura. Setores progressistas da Igreja e da imprensa ganharam ainda mais força após o assassinato do jornalista Vladimir Herzog, em 1975. E a campanha pela Anistia, uma ampla mobilização civil, culminou na Lei da Anistia, em 1979.</p></section>
+      <h2 class="questoes-titulo">Questões sobre revoltas e ditadura</h2>
+<div class="questao" data-questao="3"><div class="enunciado"><span class="num-q">3</span> Canudos (1896-1897), a Revolta da Chibata (1910) e o Contestado (1912-1916) tiveram motivos e protagonistas diferentes. Compare o que cada um contestava e explique a frase do texto: “todas revelaram que havia uma insatisfação que o sistema político não conseguia ouvir”. Relacione sua resposta com o fato de o voto ser restrito na Primeira República. Por fim, indique com qual dessas três situações você mais se identifica ao pensar em injustiças que conhece hoje e justifique.</div><textarea id="resp-3" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>Canudos: comunidade sertaneja em torno de Antônio Conselheiro, enfrentou quatro expedições militares e foi destruída em 1897. Chibata: marinheiros, em maioria negros, exigiram o fim dos castigos físicos herdados da escravidão. Contestado: camponeses resistiram à perda de terras e ao avanço da ferrovia. Em comum: grupos sem voz efetiva em um sistema de voto restrito e controlado, sem canais para serem ouvidos, e a resposta do Estado foi a força. A última parte é aberta: valorizar a ligação entre a situação escolhida e uma injustiça atual concreta (terra, violência, preconceito) e a justificativa coerente.</div></div>
+<div class="questao" data-questao="4"><div class="enunciado"><span class="num-q">4</span> Depois do AI-5 (1968), a resistência à ditadura assumiu várias formas: a luta armada, o movimento estudantil, a resistência cultural, a atuação da Igreja e da imprensa e a campanha pela Anistia. Explique por que a repressão contribuiu para que a resistência se diversificasse e como a morte de Vladimir Herzog (1975) alterou a força de alguns desses setores. Compare os riscos e o alcance da luta armada e da resistência cultural. Imagine, então, que você vivesse sob censura: qual dessas formas você escolheria e por quê?</div><textarea id="resp-4" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>Com o fechamento dos canais legais e a censura, a oposição procurou outros caminhos: cada forma atingia públicos e riscos diferentes. O assassinato de Herzog, em 1975, deu ainda mais força a setores progressistas da Igreja e da imprensa, que passaram a denunciar a violência do regime. A luta armada, de pequenos grupos como na Guerrilha do Araguaia, enfrentava o poder militar com forte risco de morte; a resistência cultural (Tropicália, Cinema Novo, teatro) driblava a censura com linguagem artística e alcançava mais gente, embora sofresse censura e perseguição. A campanha pela Anistia mostrou a força da mobilização civil, que culminou na lei de 1979. A última parte aceita escolhas diversas, desde que o aluno pondere riscos, alcance e valores.</div></div>
+      <section class="texto-apoio selecionavel"><h3 style="margin-top:0">Da Constituição de 1988 à atualidade</h3><span class="fonte-tag">Parte 3 de 3 · Democracia e atualidade</span><p>Com a democracia, a resistência passou a se expressar principalmente por meios legais, mas não desapareceu. Em 1988, o líder seringueiro Chico Mendes, assassinado por fazendeiros, tornou-se símbolo global da defesa socioambiental da floresta. Em 1996, o massacre de Eldorado dos Carajás, com a morte de 21 sem-terra, reforçou e deu visibilidade nacional à luta pela reforma agrária. Em 2018, o assassinato da vereadora Marielle Franco transformou seu nome em símbolo da resistência de mulheres negras, periféricas e dos direitos humanos. Em 2023 e 2024, o Congresso aprovou a tese do marco temporal para a demarcação de terras indígenas, que exige ocupação em 5 de outubro de 1988; contestada por entidades e lideranças indígenas, a matéria foi levada ao STF, que criou uma comissão de conciliação em 2024.</p><p>Cuidado com o conceito: nem todo ato contra o governo é resistência democrática. Nos ataques de 8 de janeiro de 2023, manifestantes invadiram e depredaram as sedes dos Três Poderes, e a resposta de cidadãos, entidades e instituições foi defender a Constituição. Um bom critério é perguntar: o movimento defende direitos e regras que protegem todos ou procura impor a vontade de um grupo pela força?</p><p>Recorte regional, Goiás: na década de 1920, a líder religiosa Santa Dica reuniu fiéis e estabeleceu uma comunidade autônoma na região de Pirenópolis, sendo reprimida pelas forças estaduais. Entre 1925 e 1926, a Coluna Prestes, movimento tenentista, atravessou o interior goiano, passando por municípios como Jataí, Niquelândia e Posse. E a Guerrilha do Araguaia, nos anos 1970, atuou em região que hoje pertence ao Tocantins, mas que na época integrava o território de Goiás.</p></section>
+      <h2 class="questoes-titulo">Questões sobre resistência hoje</h2>
+<div class="questao" data-questao="5"><div class="enunciado"><span class="num-q">5</span> Com a democracia, a resistência passou a se expressar principalmente por meios legais, mas não desapareceu. Escolha dois dos casos do texto (Chico Mendes, Eldorado dos Carajás, Marielle Franco e o marco temporal) e explique o que cada um contestava, a que forma de resistência se associa e por que, em alguns casos, o nome ou o episódio se transformou em símbolo. Em seguida, diga se algum desses casos, ou outro semelhante, já chegou até você (por notícia, rede social, escola ou conversa) e como isso influenciou sua opinião.</div><textarea id="resp-5" class="campo-resposta dissertativa" data-min="120" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 120)</div><div class="comentario-prof"><b>Comentário do professor</b>Chico Mendes: defesa socioambiental da floresta, assassinado por fazendeiros em 1988, símbolo global. Eldorado dos Carajás: 21 sem-terra mortos em 1996, deu visibilidade nacional à luta pela reforma agrária. Marielle Franco: vereadora assassinada em 2018, símbolo da resistência de mulheres negras, periféricas e dos direitos humanos. Marco temporal: tese aprovada em 2023-2024 que exige ocupação das terras em 5 de outubro de 1988; contestada por lideranças indígenas e levada ao STF, que criou uma comissão de conciliação em 2024 (resistência civil e jurídica, e cotidiana). A violência e o desfecho trágico, somados à mobilização posterior, ajudam a explicar o caráter simbólico. A parte final aceita respostas variadas; valorizar a identificação da fonte da informação e a reflexão sobre ela (como foi dada, se foi checada).</div></div>
+<div class="questao" data-questao="6"><div class="enunciado"><span class="num-q">6</span> O texto adverte que “nem todo ato contra o governo é resistência democrática” e propõe um critério: o movimento defende direitos e regras que protegem todos ou procura impor a vontade de um grupo pela força? Aplique esse critério aos ataques de 8 de janeiro de 2023 e a um dos casos de Goiás (Santa Dica, Coluna Prestes ou Guerrilha do Araguaia), indicando as dificuldades que o critério pode ter. Depois, responda à pergunta final do capítulo: Canudos foi destruído, mas a Revolta da Chibata levou ao fim dos castigos físicos na Marinha; como saber se uma resistência “deu certo”? Termine dizendo que critério você usaria para avaliar o resultado de uma causa que você apoia.</div><textarea id="resp-6" class="campo-resposta dissertativa" data-min="140" placeholder="Escreva sua resposta aqui..."></textarea><div class="contador-chars">0 caracteres (mínimo 140)</div><div class="comentario-prof"><b>Comentário do professor</b>Aplicação do critério: em 8 de janeiro de 2023, manifestantes invadiram e depredaram as sedes dos Três Poderes, e a resposta das instituições foi defender a Constituição; o ataque buscava impor a vontade de um grupo pela força, não defendia regras que protegem todos. Nos casos de Goiás: Santa Dica (comunidade autônoma reprimida pelas forças estaduais), Coluna Prestes (movimento tenentista) e Guerrilha do Araguaia (luta armada): o critério exige analisar objetivos, meios e contexto, e há dificuldade quando a causa é considerada justa, mas o meio é a força. Sobre “dar certo”: pode-se avaliar pelo resultado imediato (como o fim dos castigos físicos), pelos efeitos de longo prazo, por mudar o debate público, por dar visibilidade, e não apenas pela vitória; Canudos foi destruído, mas revelou a insatisfação. A parte final é aberta: valorizar critérios claros e coerentes.</div></div>
+
+      <section class="texto-apoio selecionavel">
+        <div class="referencia-box" style="margin-top:0"><span class="rot">Fontes</span><p>Texto de leitura do capítulo “Resistência: dizer não a uma ordem injusta” (Conceito 4), com ideias resumidas com palavras próprias.</p><p>Dados sobre Canudos, a Revolta da Chibata, o Contestado, o AI-5, a Guerrilha do Araguaia, a Passeata dos Cem Mil, Vladimir Herzog, a Lei da Anistia (1979), Chico Mendes, Eldorado dos Carajás, Marielle Franco, o marco temporal e os atos de 8 de janeiro de 2023, conforme apresentados no material de apoio.</p><p>Recorte regional: Santa Dica, Coluna Prestes e Guerrilha do Araguaia em Goiás, conforme o material de apoio.</p></div>
+      </section>
+      <div class="alerta-incompleto" id="alerta-incompleto">Ainda há questões incompletas. Revise o tamanho mínimo de cada resposta antes de finalizar.</div>
+      <div class="acoes-finais">
+        <button class="btn btn-primario" onclick="finalizarAtividade()">Finalizar e ver comentários</button>
+        <button class="btn btn-secundario" onclick="refazerAtividade()">Refazer</button>
+        <button class="btn btn-pdf" id="btn-pdf" onclick="exportarPDF()" disabled aria-disabled="true">Exportar em PDF</button>
+        <span id="dica-pdf" style="flex-basis:100%;font-size:.84rem;color:#55595f;">O botão de PDF é liberado quando todas as questões estiverem respondidas (tamanho mínimo de cada resposta).</span>
+      </div>
+    </main>
+  </div>
+  <footer class="rodape">Colégio Estadual Rodolfo de Oliveira · CERO · 2026</footer>
+</div>
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card">
+    <h3>Atividade concluída!</h3>
+    <p>Suas seis respostas foram registradas. Os comentários do professor já estão disponíveis abaixo de cada questão para você comparar com o que escreveu.</p>
+    <button class="btn btn-primario" onclick="fecharPopup()">Continuar</button>
+  </div>
+</div>
+<script>
+/* ===== GATE DE NOME ===== */
+function iniciarAtividade(){
+  const nome = document.getElementById('nome-aluno').value.trim();
+  const turma = document.getElementById('turma-aluno').value.trim();
+  const aviso = document.getElementById('capa-aviso');
+  if(!nome){
+    aviso.style.display = 'block';
+    return;
+  }
+  aviso.style.display = 'none';
+  const hoje = new Date();
+  const dataFormatada = String(hoje.getDate()).padStart(2,'0') + '/' + String(hoje.getMonth()+1).padStart(2,'0') + '/' + hoje.getFullYear();
+  document.getElementById('header-nome').textContent = nome;
+  document.getElementById('ficha-nome').textContent = nome;
+  document.getElementById('ficha-data').textContent = dataFormatada;
+  document.getElementById('ficha-turma').textContent = turma || '—';
+  document.getElementById('capa').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+/* ===== CONTADOR DE CARACTERES E PROGRESSO ===== */
+const textareas = document.querySelectorAll('textarea.dissertativa');
+
+function atualizarProgresso(){
+  let respondidas = 0;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length >= min) respondidas++;
+  });
+  document.getElementById('contador-geral').textContent = 'Respondidas: ' + respondidas + '/' + textareas.length;
+  document.getElementById('barra-fill').style.width = (respondidas / textareas.length * 100) + '%';
+}
+
+textareas.forEach(function(t){
+  const contadorEl = t.parentElement.querySelector('.contador-chars');
+  const min = parseInt(t.dataset.min, 10);
+  t.addEventListener('input', function(){
+    contadorEl.textContent = t.value.length + ' caracteres (mínimo ' + min + ')';
+    atualizarProgresso();
+  });
+});
+
+/* ===== FINALIZAR ===== */
+function finalizarAtividade(){
+  let completo = true;
+  textareas.forEach(function(t){
+    const min = parseInt(t.dataset.min, 10);
+    if(t.value.trim().length < min) completo = false;
+  });
+
+  const alerta = document.getElementById('alerta-incompleto');
+  if(!completo){
+    alerta.classList.add('show');
+    alerta.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  alerta.classList.remove('show');
+
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.add('show');
+  });
+
+  document.getElementById('popup-overlay').classList.add('show');
+}
+
+function fecharPopup(){
+  document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function refazerAtividade(){
+  textareas.forEach(function(t){
+    t.value = '';
+    t.parentElement.querySelector('.contador-chars').textContent = '0 caracteres (mínimo ' + t.dataset.min + ')';
+  });
+  document.querySelectorAll('.comentario-prof').forEach(function(c){
+    c.classList.remove('show');
+  });
+  document.getElementById('alerta-incompleto').classList.remove('show');
+  atualizarProgresso();
+  window.scrollTo(0,0);
+}
+
+
+/* ===== EXPORTAR PDF ===== */
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function esc(str){ const d=document.createElement('div'); d.textContent=str||''; return d.innerHTML.replace(/\n/g,'<br>'); }
+const QUESTOES = [{"num": "1", "enunc": "Defina resistência com suas palavras e explique o que significa dizer que ela pode ser “armada ou pacífica, coletiva ou individual, aberta ou discreta”. Em seguida, lembre uma ocasião em que você, ou alguém do seu convívio, disse “não” a algo que considerou injusto (uma regra, um tratamento, uma decisão) e classifique essa atitude segundo esses três pares, avaliando que efeito ela teve.", "id": "resp-1", "coment": "Resistência: reação organizada ou espontânea contra uma ordem considerada injusta, podendo visar a um governo, a uma lei ou a uma situação de opressão. Os pares mostram a variedade: armada ou pacífica (uso ou não da força), coletiva ou individual (quem reage) e aberta ou discreta (se é pública ou escondida, como a desobediência silenciosa). A segunda parte aceita relatos diversos: valorizar a classificação coerente nos três pares e uma avaliação honesta do efeito (mudança concreta, desgaste, punição, nenhum efeito visível), reconhecendo que resistir nem sempre traz resultados imediatos."}, {"num": "2", "enunc": "Diferencie resistência cultural de resistência cotidiana, usando como exemplos a Tropicália e o Cinema Novo, de um lado, e as comunidades quilombolas, indígenas e camponesas, de outro. Por que manter uma língua, um modo de vida ou uma tradição pode ser considerado uma forma de resistência? Depois, pense em um costume, uma língua, uma receita, uma festa ou uma tradição da sua família ou da sua comunidade e avalie se manter isso vivo, hoje, teria o sentido de resistir a alguma coisa.", "id": "resp-2", "coment": "Cultural: denuncia a opressão por meio de música, teatro, cinema e literatura (Tropicália e Cinema Novo desafiaram a censura). Cotidiana: mantém modos de vida, línguas e tradições ameaçados, como fazem quilombolas, indígenas e camponeses. Manter um modo de vida é resistir quando ele é pressionado a desaparecer (perda de terras, preconceito, imposição de outra cultura): permanecer já é dizer não. A segunda parte aceita muitos exemplos; valorizar quem identifica a pressão que ameaça o costume (desvalorização, pressa do mundo moderno, preconceito) e discute se a manutenção tem esse sentido, sem exigir que a resposta seja afirmativa."}, {"num": "3", "enunc": "Canudos (1896-1897), a Revolta da Chibata (1910) e o Contestado (1912-1916) tiveram motivos e protagonistas diferentes. Compare o que cada um contestava e explique a frase do texto: “todas revelaram que havia uma insatisfação que o sistema político não conseguia ouvir”. Relacione sua resposta com o fato de o voto ser restrito na Primeira República. Por fim, indique com qual dessas três situações você mais se identifica ao pensar em injustiças que conhece hoje e justifique.", "id": "resp-3", "coment": "Canudos: comunidade sertaneja em torno de Antônio Conselheiro, enfrentou quatro expedições militares e foi destruída em 1897. Chibata: marinheiros, em maioria negros, exigiram o fim dos castigos físicos herdados da escravidão. Contestado: camponeses resistiram à perda de terras e ao avanço da ferrovia. Em comum: grupos sem voz efetiva em um sistema de voto restrito e controlado, sem canais para serem ouvidos, e a resposta do Estado foi a força. A última parte é aberta: valorizar a ligação entre a situação escolhida e uma injustiça atual concreta (terra, violência, preconceito) e a justificativa coerente."}, {"num": "4", "enunc": "Depois do AI-5 (1968), a resistência à ditadura assumiu várias formas: a luta armada, o movimento estudantil, a resistência cultural, a atuação da Igreja e da imprensa e a campanha pela Anistia. Explique por que a repressão contribuiu para que a resistência se diversificasse e como a morte de Vladimir Herzog (1975) alterou a força de alguns desses setores. Compare os riscos e o alcance da luta armada e da resistência cultural. Imagine, então, que você vivesse sob censura: qual dessas formas você escolheria e por quê?", "id": "resp-4", "coment": "Com o fechamento dos canais legais e a censura, a oposição procurou outros caminhos: cada forma atingia públicos e riscos diferentes. O assassinato de Herzog, em 1975, deu ainda mais força a setores progressistas da Igreja e da imprensa, que passaram a denunciar a violência do regime. A luta armada, de pequenos grupos como na Guerrilha do Araguaia, enfrentava o poder militar com forte risco de morte; a resistência cultural (Tropicália, Cinema Novo, teatro) driblava a censura com linguagem artística e alcançava mais gente, embora sofresse censura e perseguição. A campanha pela Anistia mostrou a força da mobilização civil, que culminou na lei de 1979. A última parte aceita escolhas diversas, desde que o aluno pondere riscos, alcance e valores."}, {"num": "5", "enunc": "Com a democracia, a resistência passou a se expressar principalmente por meios legais, mas não desapareceu. Escolha dois dos casos do texto (Chico Mendes, Eldorado dos Carajás, Marielle Franco e o marco temporal) e explique o que cada um contestava, a que forma de resistência se associa e por que, em alguns casos, o nome ou o episódio se transformou em símbolo. Em seguida, diga se algum desses casos, ou outro semelhante, já chegou até você (por notícia, rede social, escola ou conversa) e como isso influenciou sua opinião.", "id": "resp-5", "coment": "Chico Mendes: defesa socioambiental da floresta, assassinado por fazendeiros em 1988, símbolo global. Eldorado dos Carajás: 21 sem-terra mortos em 1996, deu visibilidade nacional à luta pela reforma agrária. Marielle Franco: vereadora assassinada em 2018, símbolo da resistência de mulheres negras, periféricas e dos direitos humanos. Marco temporal: tese aprovada em 2023-2024 que exige ocupação das terras em 5 de outubro de 1988; contestada por lideranças indígenas e levada ao STF, que criou uma comissão de conciliação em 2024 (resistência civil e jurídica, e cotidiana). A violência e o desfecho trágico, somados à mobilização posterior, ajudam a explicar o caráter simbólico. A parte final aceita respostas variadas; valorizar a identificação da fonte da informação e a reflexão sobre ela (como foi dada, se foi checada)."}, {"num": "6", "enunc": "O texto adverte que “nem todo ato contra o governo é resistência democrática” e propõe um critério: o movimento defende direitos e regras que protegem todos ou procura impor a vontade de um grupo pela força? Aplique esse critério aos ataques de 8 de janeiro de 2023 e a um dos casos de Goiás (Santa Dica, Coluna Prestes ou Guerrilha do Araguaia), indicando as dificuldades que o critério pode ter. Depois, responda à pergunta final do capítulo: Canudos foi destruído, mas a Revolta da Chibata levou ao fim dos castigos físicos na Marinha; como saber se uma resistência “deu certo”? Termine dizendo que critério você usaria para avaliar o resultado de uma causa que você apoia.", "id": "resp-6", "coment": "Aplicação do critério: em 8 de janeiro de 2023, manifestantes invadiram e depredaram as sedes dos Três Poderes, e a resposta das instituições foi defender a Constituição; o ataque buscava impor a vontade de um grupo pela força, não defendia regras que protegem todos. Nos casos de Goiás: Santa Dica (comunidade autônoma reprimida pelas forças estaduais), Coluna Prestes (movimento tenentista) e Guerrilha do Araguaia (luta armada): o critério exige analisar objetivos, meios e contexto, e há dificuldade quando a causa é considerada justa, mas o meio é a força. Sobre “dar certo”: pode-se avaliar pelo resultado imediato (como o fim dos castigos físicos), pelos efeitos de longo prazo, por mudar o debate público, por dar visibilidade, e não apenas pela vitória; Canudos foi destruído, mas revelou a insatisfação. A parte final é aberta: valorizar critérios claros e coerentes."}];
+const APOIO = [["Revoltas, greves, guerrilhas, arte e defesa de modos de vida", "Resistência é a reação organizada ou espontânea contra uma ordem considerada injusta. Ela pode ser armada ou pacífica, coletiva ou individual, aberta ou discreta. Na história da República, aparece nos sertões, nas fábricas, nos quartéis, nas escolas e nas artes. Podemos distinguir quatro formas principais. A resistência armada usa a força, como nas revoltas e guerrilhas. A resistência civil recorre a greves, passeatas e desobediência a leis injustas. A resistência cultural denuncia a opressão por meio da música, do teatro, do cinema e da literatura. A resistência cotidiana consiste em manter modos de vida, línguas e tradições ameaçados, como fazem comunidades quilombolas, indígenas e camponesas. Resistência: reação organizada ou espontânea contra uma ordem considerada injusta. Pode visar a um governo, a uma lei ou a uma situação de opressão."], ["Revoltas contra a violência do Estado e resistência na ditadura", "Na Primeira República, houve revoltas contra a violência do Estado. Entre 1896 e 1897, na Guerra de Canudos, milhares de sertanejos se reuniram na Bahia em torno de Antônio Conselheiro; a comunidade enfrentou quatro expedições militares e foi destruída em 1897. Em 1910, na Revolta da Chibata, marinheiros, em sua maioria negros, tomaram navios na Baía de Guanabara exigindo o fim dos castigos físicos herdados da escravidão. Entre 1912 e 1916, na Guerra do Contestado, camponeses em Santa Catarina e no Paraná resistiram à perda de terras e ao avanço da ferrovia. Nem todas essas resistências venceram, mas todas revelaram que havia uma insatisfação que o sistema político não conseguia ouvir. Depois de 1964 e, sobretudo, do AI-5 (1968), a resistência à ditadura civil-militar assumiu várias formas. Houve a luta armada, realizada por pequenos grupos de esquerda e pela Guerrilha do Araguaia (1972-1974), na divisa entre Pará, Goiás (atual Tocantins) e Maranhão. O movimento estudantil organizou grandes manifestações, como a Passeata dos Cem Mil. A resistência cultural se expressou na Tropicália, no Cinema Novo e no teatro, que desafiavam a censura. Setores progressistas da Igreja e da imprensa ganharam ainda mais força após o assassinato do jornalista Vladimir Herzog, em 1975. E a campanha pela Anistia, uma ampla mobilização civil, culminou na Lei da Anistia, em 1979."], ["Da Constituição de 1988 à atualidade", "Com a democracia, a resistência passou a se expressar principalmente por meios legais, mas não desapareceu. Em 1988, o líder seringueiro Chico Mendes, assassinado por fazendeiros, tornou-se símbolo global da defesa socioambiental da floresta. Em 1996, o massacre de Eldorado dos Carajás, com a morte de 21 sem-terra, reforçou e deu visibilidade nacional à luta pela reforma agrária. Em 2018, o assassinato da vereadora Marielle Franco transformou seu nome em símbolo da resistência de mulheres negras, periféricas e dos direitos humanos. Em 2023 e 2024, o Congresso aprovou a tese do marco temporal para a demarcação de terras indígenas, que exige ocupação em 5 de outubro de 1988; contestada por entidades e lideranças indígenas, a matéria foi levada ao STF, que criou uma comissão de conciliação em 2024. Cuidado com o conceito: nem todo ato contra o governo é resistência democrática. Nos ataques de 8 de janeiro de 2023, manifestantes invadiram e depredaram as sedes dos Três Poderes, e a resposta de cidadãos, entidades e instituições foi defender a Constituição. Um bom critério é perguntar: o movimento defende direitos e regras que protegem todos ou procura impor a vontade de um grupo pela força? Recorte regional, Goiás: na década de 1920, a líder religiosa Santa Dica reuniu fiéis e estabeleceu uma comunidade autônoma na região de Pirenópolis, sendo reprimida pelas forças estaduais. Entre 1925 e 1926, a Coluna Prestes, movimento tenentista, atravessou o interior goiano, passando por municípios como Jataí, Niquelândia e Posse. E a Guerrilha do Araguaia, nos anos 1970, atuou em região que hoje pertence ao Tocantins, mas que na época integrava o território de Goiás."]];
+const GRUPOS = [[0,1],[2,3],[4,5]];
+function todasRespondidas(){
+  const tas=document.querySelectorAll('textarea.dissertativa');
+  if(!tas.length) return false;
+  return Array.prototype.every.call(tas,function(t){ return t.value.trim().length >= (parseInt(t.dataset.min,10)||1); });
+}
+function atualizarBotaoPDF(){
+  const b=document.getElementById('btn-pdf'); if(!b) return;
+  const ok=todasRespondidas();
+  b.disabled=!ok; b.setAttribute('aria-disabled',String(!ok));
+  b.title=ok?'':'Responda todas as questões para liberar a exportação.';
+  const d=document.getElementById('dica-pdf'); if(d) d.style.display=ok?'none':'block';
+}
+document.addEventListener('input',function(e){ if(e.target&&e.target.matches&&e.target.matches('textarea.dissertativa')) atualizarBotaoPDF(); });
+document.addEventListener('DOMContentLoaded',atualizarBotaoPDF);
+setTimeout(atualizarBotaoPDF,0);
+async function exportarPDF(){
+  if(!todasRespondidas()){ atualizarBotaoPDF(); const a=document.getElementById('alerta-incompleto'); if(a){a.classList.add('show');a.scrollIntoView({behavior:'smooth',block:'center'});} return; }
+  const overlay=document.createElement('div'); overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(10,10,10,.6);display:flex;align-items:center;justify-content:center;z-index:999;';
+  overlay.innerHTML='<div style="background:#fff;border-radius:14px;padding:32px 36px;text-align:center;max-width:300px;box-shadow:0 10px 30px rgba(200,16,46,.3);font-family:\'Source Serif 4\',serif;"><h4 style="margin:0 0 4px;color:#141414;font-family:\'Playfair Display\',serif;">Gerando PDF…</h4><p style="margin:0 0 14px;color:#55595f;font-size:.86rem;">Aguarde alguns instantes.</p><div style="background:#fbe4e7;border-radius:6px;overflow:hidden;height:8px;"><div id="pdf-prog" style="height:100%;width:0%;background:#c8102e;transition:width .2s ease;"></div></div><div id="pdf-prog-txt" style="margin-top:8px;font-family:\'JetBrains Mono\',monospace;font-size:.74rem;color:#55595f;">0%</div></div>';
+  document.body.appendChild(overlay); await sleep(80);
+  function setP(pct,msg){ const pp=document.getElementById('pdf-prog'),pt=document.getElementById('pdf-prog-txt'); if(pp)pp.style.width=pct+'%'; if(pt)pt.textContent=msg||(pct+'%'); }
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:'a4',hotfixes:['px_scaling']});
+    const PW=pdf.internal.pageSize.getWidth(),PH=pdf.internal.pageSize.getHeight();
+    const ML=28,CW=PW-ML*2; let y=ML;
+    async function addImg(el){
+      const canvas=await html2canvas(el,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0,windowWidth:860});
+      const imgW=CW,imgH=(canvas.height/canvas.width)*imgW; const dataUrl=canvas.toDataURL('image/jpeg',.92),avail=PH-ML*2;
+      if(imgH<=avail){ if(y+imgH>PH-ML){pdf.addPage();y=ML;} pdf.addImage(dataUrl,'JPEG',ML,y,imgW,imgH); y+=imgH+8; }
+      else{
+        const pxPerPt=canvas.width/imgW; let srcY=0;
+        while(srcY<canvas.height){
+          const availPt=PH-y-ML,sliceH_pt=Math.min(availPt,avail);
+          const sliceH_px=Math.round(sliceH_pt*pxPerPt),actualH=Math.min(sliceH_px,canvas.height-srcY);
+          const tmp=document.createElement('canvas'); tmp.width=canvas.width; tmp.height=actualH;
+          tmp.getContext('2d').drawImage(canvas,0,srcY,canvas.width,actualH,0,0,canvas.width,actualH);
+          const sliceUrl=tmp.toDataURL('image/jpeg',.92),slicePt=(actualH/canvas.width)*imgW;
+          pdf.addImage(sliceUrl,'JPEG',ML,y,imgW,slicePt); srcY+=actualH; y+=slicePt;
+          if(srcY<canvas.height){pdf.addPage();y=ML;}
+        } y+=8;
+      }
+    }
+    async function band(tag,txt){
+      const b=document.createElement('div'); b.style.cssText='width:860px;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      b.innerHTML='<div style="background:linear-gradient(90deg,#c8102e,#141414);border-radius:8px;padding:12px 22px;display:flex;align-items:center;gap:12px"><span style="background:rgba(255,255,255,.2);color:#fff;font-weight:700;font-size:12px;letter-spacing:1px;border-radius:20px;padding:3px 12px">'+tag+'</span><span style="color:#fff;font-size:15px;font-weight:700">'+txt+'</span></div>';
+      document.body.appendChild(b); await sleep(20); await addImg(b); document.body.removeChild(b);
+    }
+    const nome=document.getElementById('header-nome').textContent||'Aluno(a)';
+    const turma=document.getElementById('ficha-turma').textContent||'—';
+    const now=new Date(); const dtStr=now.toLocaleDateString('pt-BR')+' às '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    setP(5,'Preparando capa…'); await sleep(40);
+    const coverEl=document.createElement('div'); coverEl.style.cssText='width:860px;font-family:Arial,sans-serif;overflow:hidden;position:absolute;left:-9999px;top:0';
+    coverEl.innerHTML='<div style="background:linear-gradient(135deg,#0a0a0a 0%,#c8102e 60%,#e85a6c 100%);padding:32px 48px 28px;color:white"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.85;font-weight:700;margin-bottom:6px">História · 2ª Série do Ensino Médio · GO-EMCHS602A</div><div style="font-size:26px;font-weight:900;line-height:1.2;margin-bottom:5px">Resistência: dizer não a uma ordem injusta</div><div style="font-size:13px;opacity:.9;font-style:italic">Texto de leitura · Resistência · 6 questões dissertativas</div></div><div style="background:#f6f4f4;padding:22px 48px 26px;border-bottom:3px solid #ff4d5e"><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#c8102e;font-weight:700;margin-bottom:5px">Aluno(a)</div><div style="font-size:20px;font-weight:700;color:#121212;border-bottom:2.5px solid #c8102e;padding-bottom:6px;display:inline-block;margin-bottom:16px">'+esc(nome)+'</div><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#c8102e">'+esc(turma)+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Turma</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:84px"><div style="font-size:22px;font-weight:900;color:#1c1c1c">6</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Dissertativas</div></div><div style="background:white;border-radius:8px;padding:12px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:140px"><div style="font-size:13px;font-weight:700;color:#333">'+dtStr+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:2px">Gerado em</div></div></div><div style="font-size:9px;color:#bbb;margin-top:14px">Colégio Estadual Rodolfo de Oliveira · Goiás · 2026</div></div>';
+    document.body.appendChild(coverEl); await sleep(60); await addImg(coverEl); document.body.removeChild(coverEl);
+    setP(15,'Preparando texto de apoio…'); await sleep(20);
+    async function bloco(el){ document.body.appendChild(el); await sleep(20); await addImg(el); document.body.removeChild(el); }
+    for(let k=0;k<APOIO.length;k++){
+      await band('TEXTO '+(k+1)+' DE '+APOIO.length, APOIO[k][0]);
+      const textoEl=document.createElement('div'); textoEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #e3dcdd;border-radius:10px;position:absolute;left:-9999px;top:0';
+      textoEl.innerHTML='<div style="padding:18px 24px;background:#ffffff"><p style="font-size:12.5px;color:#121212;line-height:1.8;margin:0;text-align:justify">'+esc(APOIO[k][1])+'</p></div>';
+      await bloco(textoEl);
+      for(let j=0;j<GRUPOS[k].length;j++){
+        const i=GRUPOS[k][j]; const q=QUESTOES[i]; setP(20+Math.round(i/QUESTOES.length*65),'Questão '+q.num+'/'+QUESTOES.length+'…'); await sleep(12);
+      const valor=document.getElementById(q.id)?document.getElementById(q.id).value:'';
+      const qEl=document.createElement('div'); qEl.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #e3dcdd;border-radius:10px;position:absolute;left:-9999px;top:0';
+      qEl.innerHTML='<div style="background:linear-gradient(90deg,#c8102e,#141414);padding:10px 22px;display:flex;justify-content:space-between;align-items:center"><span style="color:white;font-weight:700;font-size:13px;letter-spacing:.8px">QUESTÃO '+q.num+'</span><span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;padding:3px 12px;border-radius:20px;font-weight:600">Dissertativa</span></div><div style="padding:18px 24px 16px;background:#ffffff"><div style="font-size:13px;font-weight:700;color:#121212;line-height:1.6;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee">'+esc(q.enunc)+'</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="width:4px;height:15px;background:#c8102e;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#c8102e;text-transform:uppercase;letter-spacing:1.5px">Resposta do Aluno(a)</div></div><div style="background:#fdecee;border:1.5px solid #d9b4b9;border-radius:8px;padding:13px 16px;min-height:50px;margin-bottom:12px"><div style="font-size:12.5px;color:#121212;line-height:1.8;white-space:pre-wrap">'+(esc(valor)||'<span style="color:#aaa">(sem resposta)</span>')+'</div></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div style="width:4px;height:15px;background:#1c1c1c;border-radius:2px"></div><div style="font-size:10px;font-weight:700;color:#1c1c1c;text-transform:uppercase;letter-spacing:1.5px">Comentário do Professor</div></div><div style="background:#f4f4f4;border:1.5px solid #ff4d5e;border-radius:8px;padding:13px 16px"><div style="font-size:12px;color:#141414;line-height:1.8">'+esc(q.coment)+'</div></div></div>';
+      document.body.appendChild(qEl); await sleep(12); await addImg(qEl); document.body.removeChild(qEl);
+      }
+    }
+    const fEl0=document.createElement('div'); fEl0.style.cssText='width:860px;font-family:Arial,sans-serif;background:white;overflow:hidden;border:1px solid #e3dcdd;border-radius:10px;position:absolute;left:-9999px;top:0';
+    fEl0.innerHTML='<div style="padding:14px 24px;background:#ffffff"><div style="font-size:10px;color:#55595f;font-family:monospace">Texto de leitura do capítulo “Resistência: dizer não a uma ordem injusta” (Conceito 4), com ideias resumidas com palavras próprias. · Dados sobre Canudos, a Revolta da Chibata, o Contestado, o AI-5, a Guerrilha do Araguaia, a Passeata dos Cem Mil, Vladimir Herzog, a Lei da Anistia (1979), Chico Mendes, Eldorado dos Carajás, Marielle Franco, o marco temporal e os atos de 8 de janeiro de 2023, conforme apresentados no material de apoio. · Recorte regional: Santa Dica, Coluna Prestes e Guerrilha do Araguaia em Goiás, conforme o material de apoio.</div></div>';
+    await bloco(fEl0);
+    setP(92,'Finalizando…'); await sleep(30);
+    const totalPages=pdf.getNumberOfPages();
+    for(let p=1;p<=totalPages;p++){
+      pdf.setPage(p);
+      const fEl=document.createElement('div');
+      fEl.style.cssText='width:'+Math.round(CW)+'px;height:22px;background:#f6f4f4;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:10px;color:#888;font-family:Arial,sans-serif;position:absolute;left:-9999px;top:0';
+      fEl.innerHTML='<span>Resistência: dizer não a uma ordem injusta · '+esc(nome)+'</span><span>Página '+p+' de '+totalPages+'</span>';
+      document.body.appendChild(fEl);
+      const fc=await html2canvas(fEl,{scale:2,logging:false,backgroundColor:'#f6f4f4'}); document.body.removeChild(fEl);
+      const fUrl=fc.toDataURL('image/jpeg',.9),fH=(fc.height/fc.width)*CW;
+      pdf.setFillColor(253,238,244); pdf.rect(ML,PH-fH,CW,fH,'F'); pdf.addImage(fUrl,'JPEG',ML,PH-fH,CW,fH);
+    }
+    setP(100,'Salvando…'); await sleep(200);
+    pdf.save('Resistencia_dizer_nao_a_uma_ordem_injusta_'+nome.replace(/[^a-zA-Z0-9_\-]/g,'_')+'.pdf');
+  }catch(err){ console.error(err); alert('Erro ao gerar PDF: '+err.message); }
+  finally{ const ov=document.getElementById('pdf-overlay'); if(ov)document.body.removeChild(ov); }
+}
+
+/* ===== PROTEÇÃO ANTI-COLA E ANTI-CÓPIA (página inteira) ===== */
+(function () {
+  const LIMITE_BLOCO = 25;
+  const CAMPOS = document.querySelectorAll('textarea.dissertativa, .campo-resposta');
+  const ehCampo = function (el) { return el && el.closest && el.closest('textarea.dissertativa, .campo-resposta'); };
+
+  function mostrarToast(mensagem) {
+    let toast = document.getElementById('anti-cola-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'anti-cola-toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#141414;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = mensagem;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function () { toast.style.opacity = '0'; }, 2500);
+  }
+  function bloquear(e, msg) { e.preventDefault(); e.stopPropagation(); mostrarToast(msg || 'Copiar e colar não são permitidos nesta atividade.'); return false; }
+
+  /* 1) Página inteira: copiar, recortar, colar, arrastar, selecionar e menu de contexto */
+  ['copy', 'cut', 'paste', 'dragstart', 'drop', 'dragover', 'contextmenu', 'selectstart'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      if (evt === 'selectstart' && ehCampo(e.target)) return;      /* permite posicionar o cursor no campo */
+      if (evt === 'selectstart') { e.preventDefault(); return; }
+      bloquear(e);
+    }, true);
+  });
+
+  /* 2) Atalhos de teclado */
+  document.addEventListener('keydown', function (e) {
+    const k = (e.key || '').toLowerCase();
+    const mod = e.ctrlKey || e.metaKey;
+    if (mod && ['c', 'x', 'v', 'a', 'p', 's', 'u'].indexOf(k) >= 0) return bloquear(e);
+    if (e.shiftKey && k === 'insert') return bloquear(e);                 /* Shift+Insert (colar) */
+    if (e.ctrlKey && k === 'insert') return bloquear(e);                  /* Ctrl+Insert (copiar) */
+    if (e.shiftKey && k === 'delete') return bloquear(e);                 /* Shift+Delete (recortar) */
+    if (k === 'f12' || (mod && e.shiftKey && ['i', 'j', 'c'].indexOf(k) >= 0)) return bloquear(e, 'Esta função está desativada nesta atividade.');
+    if (k === 'printscreen') {
+      try { navigator.clipboard.writeText(''); } catch (_) {}
+      mostrarToast('Captura de tela não recomendada nesta atividade.');
+    }
+  }, true);
+
+  /* 3) Campos de resposta: colar por qualquer via, texto em bloco e autocomplete */
+  CAMPOS.forEach(function (campo) {
+    campo.setAttribute('autocomplete', 'off');
+    campo.setAttribute('autocorrect', 'off');
+    campo.setAttribute('autocapitalize', 'off');
+    campo.setAttribute('spellcheck', 'false');
+
+    campo.addEventListener('beforeinput', function (e) {
+      const t = e.inputType || '';
+      if (t === 'insertFromPaste' || t === 'insertFromDrop' || t === 'insertFromYank' || t === 'insertFromPasteAsQuotation') {
+        bloquear(e);
+      }
+    });
+
+    let valorAnterior = campo.value;
+    campo.addEventListener('input', function (e) {
+      const diferenca = campo.value.length - valorAnterior.length;
+      if (diferenca >= LIMITE_BLOCO) {                                    /* texto entrou de uma vez só */
+        campo.value = valorAnterior;
+        mostrarToast('Escreva com suas palavras: texto colado foi removido.');
+        campo.dispatchEvent(new Event('input'));                          /* atualiza contador e progresso */
+      } else {
+        valorAnterior = campo.value;
+      }
+    });
+  });
+
+  /* 4) Impressão do conteúdo da página desativada (use o botão Exportar em PDF) */
+  const st = document.createElement('style');
+  st.textContent = '@media print{body *{visibility:hidden!important}body::before{content:"Impressão desativada. Use o botão Exportar em PDF.";visibility:visible!important;display:block;padding:40px;font:16px sans-serif}}';
+  document.head.appendChild(st);
+})();
+
+</script>
+</body>
+</html>
