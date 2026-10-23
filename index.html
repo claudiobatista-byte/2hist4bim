@@ -1332,15 +1332,68 @@ $$('[data-goto]').forEach(function(b){b.addEventListener('click',function(){
 <script>function toggleCover(button){const cover=document.getElementById("capa");const picture=cover.querySelector(".cover-image");if(picture.dataset.missing==="1"){alert("Imagem não encontrada. Coloque capa.webp na pasta img/, ao lado de index.html.");return;}const showing=cover.classList.toggle("show-image");button.setAttribute("aria-label",showing?"Voltar à capa original":"Revelar imagem");button.title=showing?"Voltar à capa original":"Revelar imagem";button.setAttribute("aria-pressed",String(showing));}</script>
 
 <script>
-/* Gera a página da questão dentro do próprio arquivo, sem data: URL bloqueada. */
-(function(){
- const link=document.getElementById('questao-reflexao-link');
- if(!link)return;
- const question='Em toda comunidade existem decisões que chegam prontas: alguém com autoridade decide e os demais cumprem. Escolha uma decisão assim que mexa com o seu dia a dia, na escola ou no bairro, como um horário, uma regra ou o uso de um espaço comum. Se você quisesse que a sua opinião pesasse nessa decisão, o que faria, levando em conta quem decidiu e com que autoridade, se você tem o direito de opinar por fazer parte daquela comunidade ou só porque alguém permite, e quais caminhos além do voto estariam ao seu alcance?';
- const page=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Questão para reflexão</title><style>body{margin:0;padding:7vh 20px;background:#efece4;color:#1d2731;font:20px/1.75 Georgia,serif}.panel{max-width:780px;margin:auto;background:#fcfbf7;padding:clamp(25px,6vw,60px);border-radius:16px;border-top:7px solid #b8842b;box-shadow:0 12px 40px #12304a20}h1{font:700 clamp(25px,4vw,36px) Georgia;color:#12304a;margin:0 0 22px}p{margin:0;text-align:justify}small{font:700 12px Arial;letter-spacing:.15em;color:#1f6f78;text-transform:uppercase}</style></head><body><main class="panel"><small>Para refletir · Poder, direitos e participação</small><h1>Quem decide? Quem pode participar?</h1><p>${question}</p></main></body></html>`;
- const url=URL.createObjectURL(new Blob([page],{type:'text/html;charset=utf-8'}));
- link.href=url;
-})();
+window.__questaoTexto='Em toda comunidade existem decisões que chegam prontas: alguém com autoridade decide e os demais cumprem. Escolha uma decisão assim que mexa com o seu dia a dia, na escola ou no bairro, como um horário, uma regra ou o uso de um espaço comum. Se você quisesse que a sua opinião pesasse nessa decisão, o que faria, levando em conta quem decidiu e com que autoridade, se você tem o direito de opinar por fazer parte daquela comunidade ou só porque alguém permite, e quais caminhos além do voto estariam ao seu alcance?';
+function _esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var _eduCache={};
+function _blobUrl(key,html){_eduCache[key]=html;return '#popup-'+encodeURIComponent(key)}
+function closePopup(){var p=document.getElementById('popupLayer');if(p){p.remove();document.body.style.overflow=''}}
+function _openTab(token){
+  var key=decodeURIComponent(String(token).replace(/^#popup-/,'')),html=_eduCache[key];
+  if(!html)return;
+  closePopup();
+  var p=document.createElement('div');p.id='popupLayer';
+  p.style.cssText='position:fixed;inset:0;z-index:99999;background:#08121c;display:flex;flex-direction:column';
+  var f=document.createElement('iframe');f.title='Conte\u00fado ampliado';f.style.cssText='flex:1;border:0;width:100%;background:#fff';
+  f.srcdoc=html;
+  p.appendChild(f);document.body.appendChild(p);document.body.style.overflow='hidden';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closePopup()});
+function _eduPage(title,content){
+  return '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#12304a"><title>'+_esc(title)+'</title><style>'
+  +'*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:#f2f0e9;color:#20313e;font:clamp(18px,2.1vw,25px)/1.65 Georgia,serif;-webkit-tap-highlight-color:transparent;overflow-wrap:break-word}'
+  +'.top{background:#12304a;color:#fff;padding:calc(22px + env(safe-area-inset-top)) max(32px,env(safe-area-inset-right)) 22px max(32px,env(safe-area-inset-left));border-bottom:5px solid #e3b45a}'
+  +'.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.xt{flex:none;border:1px solid #ffffff66;border-radius:10px;background:#ffffff1f;color:#fff;font:700 14px Arial,sans-serif;min-height:44px;padding:0 16px;cursor:pointer;touch-action:manipulation}'
+  +'.top small{font:700 12px Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#e3b45a}h1{font:700 29px/1.2 Georgia,serif;margin:7px 0}'
+  +'.page{width:calc(100% - 32px);margin:16px auto;padding:28px clamp(20px,4vw,64px);background:#fff;border-radius:14px;box-shadow:0 10px 30px #12304a14}'
+  +'p{margin:12px 0}li{margin:12px 0}a{color:#1768b3}.hint{background:#e6f1f1;border-left:4px solid #1f6f78;padding:12px 16px;border-radius:6px}'
+  +'.help{display:inline-grid;place-items:center;vertical-align:middle;margin-left:8px;width:36px;height:36px;border:0;border-radius:50%;background:#1f6f78;color:#fff;font:800 20px Arial,sans-serif;cursor:pointer;box-shadow:0 3px 9px #12304a33}.help:hover{background:#12304a}'
+  +'.arrow{display:inline-flex;align-items:center;justify-content:center;background:#1768b3;color:#fff;text-decoration:none;border-radius:8px;min-width:36px;min-height:36px;font:bold 17px Arial;vertical-align:middle;margin-left:7px}.arrow:hover{background:#0b4175}'
+  +'.actions{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.actions button{border:0;border-radius:10px;min-height:44px;padding:10px 18px;background:#12304a;color:#fff;font:700 14px Arial;cursor:pointer;touch-action:manipulation}.actions span{font:14px Arial;color:#5d6a74}'
+  +'@media(max-width:600px){.top{padding:calc(18px + env(safe-area-inset-top)) 18px 18px}.page{width:calc(100% - 20px);margin:10px auto;padding:20px 16px}h1{font-size:23px}}'
+  +'</style></head><body><header class="top"><div><small>História · Cidadania</small><h1>'+_esc(title)+'</h1></div><button type="button" class="xt" onclick="parent.closePopup()">Fechar</button></header><main class="page">'+content
+  +'<div class="actions"><button type="button" onclick="parent.closePopup()">Fechar aba</button><span id="h"></span></div></main></body></html>';
+}
+function _eduUrl(title,content){return _blobUrl('edu:'+title,_eduPage(title,content))}
+function openEducationalPopup(title,content){_openTab(_eduUrl(title,content))}
+function _guiaCss(){
+  return '<style>.g{display:flex;gap:12px;align-items:flex-start;margin:0 0 10px;padding:11px 14px;border-radius:10px;border-left:6px solid}.g i{flex:none;width:30px;height:30px;border-radius:50%;color:#fff;display:grid;place-items:center;font:700 15px Arial,sans-serif;font-style:normal}.g b{display:block;font:700 16px Arial,sans-serif;margin:0 0 2px}.g span{display:block;font-size:16px;line-height:1.45}'
+ +'.g1{background:#e3eefa;border-color:#1768b3}.g1 i{background:#1768b3}.g2{background:#e2f3e8;border-color:#2e8b57}.g2 i{background:#2e8b57}.g3{background:#fdf0d2;border-color:#c98a00}.g3 i{background:#c98a00}.g4{background:#efe6f7;border-color:#7b4ea3}.g4 i{background:#7b4ea3}'
+ +'.ex{margin:8px 0 12px;padding:16px 18px;border:1px solid #d9e0e4;border-radius:12px;background:#fff;line-height:1.9;font-size:17px}.ex mark{padding:2px 4px;border-radius:5px;color:#12304a;-webkit-box-decoration-break:clone;box-decoration-break:clone}.ex .m1{background:#cfe2f7}.ex .m2{background:#c9ebd5}.ex .m3{background:#fbe2a3}.ex .m4{background:#e1d0f0}'
+ +'.leg{display:flex;flex-wrap:wrap;gap:6px 10px;font:700 13px Arial,sans-serif;margin:0 0 6px}.leg span{padding:3px 9px;border-radius:20px}.leg .m1{background:#cfe2f7}.leg .m2{background:#c9ebd5}.leg .m3{background:#fbe2a3}.leg .m4{background:#e1d0f0}'
+ +'h3.t{font:700 13px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#1f6f78;margin:20px 0 8px}.tip{font:15px/1.5 Arial,sans-serif;color:#41525e;background:#f3f5f6;border-radius:8px;padding:10px 14px;margin:12px 0 0}'
+ +'@media(max-width:600px){body{font-size:16px!important}.top{padding:14px!important}.top h1{font-size:18px!important}.page{width:calc(100% - 16px)!important;margin:8px auto!important;padding:16px 14px!important}.g{padding:10px 12px}.ex{font-size:16px;padding:14px}.actions{display:none}}</style>';
+}
+
+function openQuestaoReflexao(e){
+ if(e&&e.preventDefault)e.preventDefault();
+ var q=window.__questaoTexto||'';
+ var css='<style>body{font-size:19px!important}.page{max-width:820px}.help{display:inline-grid;place-items:center;vertical-align:middle;margin-left:8px;width:38px;height:38px;border:0;border-radius:50%;background:#1f6f78;color:#fff;font:800 21px Arial,sans-serif;cursor:pointer;box-shadow:0 3px 9px #12304a33}.help:hover{background:#12304a}@media(max-width:600px){body{font-size:17px!important}.top{padding:14px!important}.top h1{font-size:19px!important}.page{width:calc(100% - 16px)!important;margin:8px auto!important;padding:18px 14px!important}.actions{display:none}}</style>';
+ openEducationalPopup('Quem decide? Quem pode participar?',css+'<p>'+_esc(q)+' <button type="button" class="help" onclick="parent.openQuestaoGuia()" title="Como responder? Veja o passo a passo" aria-label="Abrir o passo a passo para responder a questão">?</button></p>');
+ return false;
+}
+function openQuestaoGuia(){
+ var steps='<h3 class="t">Passo a passo</h3>'
+ +'<div class="g g1"><i>1</i><div><b>Escolha a decisão e quem decidiu</b><span>Descreva uma decisão que chegou pronta (horário, regra ou uso de um espaço comum) e diga quem a tomou e com que autoridade.</span></div></div>'
+ +'<div class="g g2"><i>2</i><div><b>Direito ou permissão?</b><span>Explique se você tem o direito de opinar por fazer parte da comunidade (como estudante ou morador) ou se só opina quando alguém permite, como um favor.</span></div></div>'
+ +'<div class="g g3"><i>3</i><div><b>Mostre caminhos além do voto</b><span>Cite formas de fazer sua opinião pesar: conversar com representantes, grêmio, abaixo-assinado, reunião ou conselho, ouvidoria, associação de moradores.</span></div></div>'
+ +'<div class="g g4"><i>4</i><div><b>Feche com a conclusão</b><span>Mostre que participar vai além de votar e que, quando as pessoas se organizam, suas opiniões passam a ser levadas em conta.</span></div></div>';
+ var ex='<h3 class="t">Exemplo de resposta</h3><div class="leg"><span class="m1">1 Decisão e autoridade</span><span class="m2">2 Direito ou permissão</span><span class="m3">3 Caminhos</span><span class="m4">4 Conclusão</span></div>'
+ +'<div class="ex"><mark class="m1">Na minha escola, a direção mudou o horário do intervalo sem consultar os alunos; ela tem autoridade para organizar o funcionamento da escola, mas a decisão afeta todos nós.</mark> <mark class="m2">Como estudante, tenho o direito de opinar por fazer parte da comunidade escolar, e isso não deveria depender de a direção permitir, como se fosse um favor.</mark> <mark class="m3">Para fazer minha opinião pesar, eu poderia conversar com o representante de turma, levar o assunto ao grêmio, organizar um abaixo-assinado e pedir um espaço na reunião do conselho escolar.</mark> <mark class="m4">Assim, a participação vai além do voto: quando as pessoas se organizam e usam esses caminhos, suas opiniões passam a ser levadas em conta.</mark></div>'
+ +'<p class="tip"><b>Lembre-se:</b> escreva um único parágrafo que una os quatro pontos, usando uma decisão que realmente afeta você. O exemplo serve de modelo de estrutura, não para copiar.</p>';
+ openEducationalPopup('Como responder: quem decide e quem participa',_guiaCss()+steps+ex);
+}
+
+(function(){var l=document.getElementById('questao-reflexao-link');if(l){l.setAttribute('href','#');l.removeAttribute('target');l.setAttribute('aria-label','Abrir questão para reflexão');l.title='Questão para reflexão';l.addEventListener('click',openQuestaoReflexao)}})();
 </script>
 </body>
 </html>
